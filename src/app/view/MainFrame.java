@@ -4,19 +4,31 @@
  */
 package app.view;
 
-import app.view.order.ImportOrderView;
+import app.listener.ContentListener;
+import app.listener.IImportOrderListener;
+import app.view.order.ImportOrderContent;
+import app.view.order.ImportOrderForm;
+import app.view.order.ImportOrderTable;
+import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Administrator
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements ContentListener{
+
+    private ImportOrderContent importOrderContent;
+
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        importOrderContent = new ImportOrderContent();
+        importOrderContent.setListener(this);
+        importOrderContent.init();
+        this.add(importOrderContent, BorderLayout.CENTER);
     }
 
     /**
@@ -28,10 +40,9 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        importOrder1 = new app.view.order.ImportOrderView();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().add(importOrder1, java.awt.BorderLayout.CENTER);
+        setTitle("Showroom Management");
+        setMinimumSize(new java.awt.Dimension(500, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -66,13 +77,18 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               MainFrame mainframe= new MainFrame();
-               mainframe.setVisible(true);
-               mainframe.setLocationRelativeTo(null);
+                MainFrame mainframe = new MainFrame();
+                mainframe.setVisible(true);
+                mainframe.setLocationRelativeTo(null);
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.order.ImportOrderView importOrder1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void changepanel() {
+        this.revalidate();
+        this.repaint();
+    }
 }
