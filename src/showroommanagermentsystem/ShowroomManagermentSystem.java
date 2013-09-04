@@ -6,7 +6,9 @@ package showroommanagermentsystem;
 
 import app.model.Vehicle;
 import app.service.VehicleService;
+import app.view.MainFrame;
 import java.util.List;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,12 +19,13 @@ public class ShowroomManagermentSystem {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        VehicleService service=new VehicleService();
-        List<Vehicle> lst= service.getAll();
-        for (int i = 0; i < lst.size(); i++) {
-            System.out.println(lst.get(i).getName());
-        }
-    }
+//    public static void main(String[] args) {
+//        // TODO code application logic here
+//        MainFrame mainFrame = new MainFrame();
+//        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        
+//        mainFrame.setLocationRelativeTo(null);
+//        mainFrame.pack();
+//        mainFrame.setVisible(true);
+//    }
 }

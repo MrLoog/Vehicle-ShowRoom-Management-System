@@ -8,7 +8,7 @@ package app.model;
  *
  * @author Administrator
  */
-public class Vehicle {
+public class ImportOrder {
     private Integer id;
     private String name;
     private String brand;
