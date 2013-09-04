@@ -38,6 +38,22 @@ public abstract class BaseService {
         }
     }
 
+    public <T> T getById(int id) {
+        List<T> output = new ArrayList<T>();
+        try {
+            stmt = conn.createStatement();
+            String sql = "select * from " + getTableName() + " where ID=" + id;
+            ResultSet rs = stmt.executeQuery(sql);
+            output = ResultSetToList(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (output.size() > 0) {
+            return output.get(0);
+        }
+        return null;
+    }
+
     public <T> List<T> getAll() {
         List<T> output = new ArrayList<T>();
         try {
