@@ -5,9 +5,13 @@
 package app.service;
 
 import app.model.Order;
+import app.utility.AppUtility;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,5 +105,18 @@ public class OrderService extends BaseService {
         } catch (SQLException ex) {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public int create(int dealerId,int customerId,int vehicleId, int price){
+        int flag = 0;
+        
+        String created = "05/09/2013";
+        String sql = "INSERT INTO Orders VALUES ("+dealerId+", "+customerId+", "+vehicleId+", "+price+", 0, '"+created+"', '"+created+"')";
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            flag = stm.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return flag;
     }
 }
