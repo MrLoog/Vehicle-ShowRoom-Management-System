@@ -5,8 +5,10 @@
 package app.service;
 
 import app.model.Vehicle;
+import app.utility.AppUtility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -103,5 +105,24 @@ public class VehicleService extends BaseService {
     @Override
     protected String getQueryDelete() {
         return "delete from " + getTableName() + " where ID=?";
+    }
+    public Vehicle getVehicleById(String id){
+        Vehicle v = null;
+        String sql = "SELECT * FROM Vehicles WHERE id = "+id;
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            v = new Vehicle();
+            while(rs.next()){
+                v.setName(rs.getString("name"));
+                v.setBrand(rs.getString("brand"));
+                v.setModelNumber(rs.getString("modelNumber"));
+                v.setPrice(rs.getInt("price"));
+                v.setQuantity(rs.getInt("quantity"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return v;
     }
 }

@@ -7,7 +7,8 @@ package app.view.vehicle;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.utility.AppUtility;
-
+import app.service.VehicleService;
+import app.model.Vehicle;
 /**
  *
  * @author kiendv
@@ -21,13 +22,14 @@ public class Purchase extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    public void showme(String id, String vname,String brand, String model, String price, String quantity){
-        lbVName.setText(vname);
-        lbModel.setText(model);
-        lbBrand.setText(brand);
-        lbPrice.setText(price);
+    public void showme(String id){
+        Vehicle v = new VehicleService().getVehicleById(id);
+        lbVName.setText(v.getName());
+        lbModel.setText(v.getModelNumber());
+        lbBrand.setText(v.getBrand());
+        lbPrice.setText(v.getPrice().toString());
         lbID.setText(id);
-        lbQuantity.setText(quantity);
+        lbQuantity.setText(v.getQuantity()+"");
         show();
     }
 
@@ -118,17 +120,17 @@ public class Purchase extends javax.swing.JDialog {
             }
         });
 
+        txtQuantity.setEditable(false);
+
         lbID.setText("...");
 
         lbQuantity.setText("...");
 
         lbOK.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lbOK.setForeground(new java.awt.Color(0, 204, 102));
-        lbOK.setText("...");
 
         lbError.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lbError.setForeground(new java.awt.Color(255, 0, 0));
-        lbError.setText("...");
 
         lbEQuantity.setForeground(new java.awt.Color(255, 0, 0));
 
@@ -249,7 +251,7 @@ public class Purchase extends javax.swing.JDialog {
                                 .addComponent(lbOK)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lbError)
-                        .addGap(0, 111, Short.MAX_VALUE))
+                        .addGap(0, 128, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -277,10 +279,10 @@ public class Purchase extends javax.swing.JDialog {
         String addr = txtAddress.getText();
         String phone = txtPhone.getText();
         boolean flag = true;
-        if (quantity == "") {
-            lbEName.setText("Quantity Invalid.");
-            flag = false;
-        }
+//        if (quantity == "") {
+//            lbEName.setText("Quantity Invalid.");
+//            flag = false;
+//        }
         if (name == "" || name.length() < 4 || name.length()>100) {
             lbEName.setText("Name invalid, min: 5 chars, max: 100 chars");
             flag = false;
@@ -295,18 +297,29 @@ public class Purchase extends javax.swing.JDialog {
         }
         if (flag == true) {
             //
+            lbEName.setText("");
+            lbEAddr.setText("");
+            lbEPhone.setText("");
+            if(Integer.parseInt(lbQuantity.getText())>0){
             int x = new CustomerService().create(name, addr, phone);
             if(x==-1){
                 lbError.setText("Cannot pusrchase at this time.");
             }else{
-                int y = new OrderService().create(1, x, Integer.parseInt(lbID.getText()), Integer.parseInt(lbPrice.getText()));
+                int y = new OrderService().create(1, x, Integer.parseInt(lbID.getText()), Integer.parseInt(lbPrice.getText()), Integer.parseInt(lbQuantity.getText()));
                 if(y==0){
                     lbError.setText("Error for create Order");
                 }else{
                     lbOK.setText("Purchase Successful!");
                     btnPurchase.setText("Purchased");
+                    lbError.setText("");
                 }
             }
+            }else{
+                lbError.setText("No Vehicles (quantity: 0)");
+            }
+        }else{
+            btnPurchase.setText("Purchase");
+            btnPurchase.setEnabled(true);
         }
     }//GEN-LAST:event_btnPurchaseActionPerformed
 

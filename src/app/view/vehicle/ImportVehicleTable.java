@@ -29,6 +29,9 @@ public class ImportVehicleTable extends javax.swing.JPanel {
      */
     public ImportVehicleTable() {
         initComponents();
+        IncludeData();
+    }
+    public void IncludeData(){
         orderService = new VehicleService();
         String[] colName = {""};
         DefaultTableModel model = new DefaultTableModel();
@@ -73,6 +76,11 @@ public class ImportVehicleTable extends javax.swing.JPanel {
         txtQuantity = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(1000, 500));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         tableVehicle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -172,7 +180,7 @@ public class ImportVehicleTable extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(15, Short.MAX_VALUE))
+                        .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
@@ -234,9 +242,15 @@ public class ImportVehicleTable extends javax.swing.JPanel {
     }//GEN-LAST:event_tableVehicleMouseClicked
 
     private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
+        IncludeData();
         Purchase p = new Purchase(null, true);
-        p.showme(txtID.getText(), txtName.getText(), txtBrand.getText(), txtModel.getText(), txtPrice.getText(), txtQuantity.getText());
+        p.showme(txtID.getText());
+        IncludeData();
     }//GEN-LAST:event_btnPurchaseActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        IncludeData();
+    }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;

@@ -52,6 +52,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        btnConfirm = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
@@ -71,6 +72,9 @@ public class ImportOrderTable extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        btnConfirm.setText("Confirm");
+        jPanel1.add(btnConfirm);
+
         jButton1.setText("Return Menu");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,6 +91,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         listener.viewImportOrderMenu();
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConfirm;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
