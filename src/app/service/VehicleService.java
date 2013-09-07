@@ -106,14 +106,15 @@ public class VehicleService extends BaseService {
     protected String getQueryDelete() {
         return "delete from " + getTableName() + " where ID=?";
     }
-    public Vehicle getVehicleById(String id){
+
+    public Vehicle getVehicleById(String id) {
         Vehicle v = null;
-        String sql = "SELECT * FROM Vehicles WHERE id = "+id;
+        String sql = "SELECT * FROM Vehicles WHERE id = " + id;
         try {
             Statement stm = AppUtility.getConnection().createStatement();
             ResultSet rs = stm.executeQuery(sql);
             v = new Vehicle();
-            while(rs.next()){
+            while (rs.next()) {
                 v.setName(rs.getString("name"));
                 v.setBrand(rs.getString("brand"));
                 v.setModelNumber(rs.getString("modelNumber"));
@@ -124,5 +125,111 @@ public class VehicleService extends BaseService {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return v;
+    }
+
+    public int update(String name, String brand, String modelnumber, String price, String quantity, String id) {
+        String sql = "UPDATE Vehicles SET name = N'" + name.replace("'", "''") + "', brand = N'" + brand.replace("'", "''") + "', modelNumber=" + modelnumber.replace("'", "''") + ", price=" + price.replace("'", "''") + ", quantity=" + quantity.replace("'", "''") + " WHERE id=" + id;
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            return stm.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+
+    public int create(String name, String brand, String modelnumber, String price, String quantity) {
+        int x = 0;
+        if (isExisted(modelnumber, name, brand) > 0) {
+            x = 0;
+        } else {
+            String sql = "INSERT INTO Vehicles VALUES(N'" + name.replace("'", "''") + "', N'" + brand.replace("'", "''") + "', " + price.replace("'", "''") + ", " + modelnumber.replace("'", "''") + ", " + quantity.replace("'", "''") + ")";
+            try {
+                Statement stm = AppUtility.getConnection().createStatement();
+                x = stm.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+                x = -1;
+            }
+        }
+        return x;
+    }
+
+    public int isExisted(String model, String name, String brand) {
+        String sql = "SELECT * FROM Vehicles WHERE modelNumber = " + model.replace("'", "''") + " and name = N'" + name.replace("'", "''") + "' and brand=N'" + brand.replace("'", "''") + "'";
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            if (rs.next()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+
+    public int remove(String id) {
+        int x = 0;
+        String sql = "DELETE FROM Vehicles WHERE id=" + id.replace("'", "''");
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            x = stm.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+        return x;
+    }
+
+    public List<Vehicle> search(String key, String sort, int getall) {
+        if (getall != 0) {
+            List<Vehicle> l = new ArrayList<Vehicle>();
+            String sql = "";
+            if (sort.equals("Name") || sort.equals("Brand")) {
+                sql = "SELECT * FROM Vehicles WHERE " + sort + " like '%" + key + "%'";
+            } else {
+                sql = "SELECT * FROM Vehicles WHERE " + sort + " = " + key + "";
+            }
+            try {
+                Statement stm = AppUtility.getConnection().createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                while (rs.next()) {
+                    Vehicle v = new Vehicle();
+                    v.setId(rs.getInt("id"));
+                    v.setName(rs.getString("name"));
+                    v.setBrand(rs.getString("brand"));
+                    v.setModelNumber(rs.getString("modelNumber"));
+                    v.setPrice(rs.getInt("price"));
+                    v.setQuantity(rs.getInt("quantity"));
+                    l.add(v);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return l;
+        } else {
+            List<Vehicle> l = new ArrayList<Vehicle>();
+            String sql = "SELECT * FROM Vehicles";
+            try {
+                Statement stm = AppUtility.getConnection().createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                while (rs.next()) {
+                    Vehicle v = new Vehicle();
+                    v.setId(rs.getInt("id"));
+                    v.setName(rs.getString("name"));
+                    v.setBrand(rs.getString("brand"));
+                    v.setModelNumber(rs.getString("modelNumber"));
+                    v.setPrice(rs.getInt("price"));
+                    v.setQuantity(rs.getInt("quantity"));
+                    l.add(v);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return l;
+        }
     }
 }

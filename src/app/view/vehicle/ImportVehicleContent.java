@@ -8,6 +8,7 @@ import app.view.order.*;
 import app.listener.ContentListener;
 import app.listener.*;
 import java.awt.BorderLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -61,12 +62,12 @@ public class ImportVehicleContent extends javax.swing.JPanel implements IImportV
 
     @Override
     public void viewImportVehicleForm() {
-        if (importVehicleMenu == null) {
-            importVehicleMenu = new ImportVehicleMenu();
-            importVehicleMenu.setListener(this);
+        if (importVehicleForm == null) {
+            importVehicleForm = new ImportVehicleForm();
+            importVehicleForm.setListener(this);
         }
         this.removeAll();
-        this.add(importVehicleMenu, BorderLayout.CENTER);
+        this.add(importVehicleForm, BorderLayout.CENTER);
         listener.changepanel();
     }
 

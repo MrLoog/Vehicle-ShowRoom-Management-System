@@ -7,6 +7,9 @@ package app.utility;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,5 +63,11 @@ public class AppUtility {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flag;
+    }
+    //get time
+    public static String getDateTime(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        return dateFormat.format(cal.getTime());
     }
 }
