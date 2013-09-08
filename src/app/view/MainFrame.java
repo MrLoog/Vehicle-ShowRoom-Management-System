@@ -9,7 +9,10 @@ import app.listener.IImportOrderListener;
 import app.view.order.ImportOrderContent;
 import app.view.order.ImportOrderForm;
 import app.view.order.ImportOrderTable;
+import app.view.invoice.ImportOrderPlusContent;
+import app.view.vehicle.ImportVehicleContent;
 import java.awt.BorderLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -18,19 +21,30 @@ import javax.swing.JPanel;
  */
 public class MainFrame extends javax.swing.JFrame implements ContentListener{
 
-    private ImportOrderContent importOrderContent;
+    //private ImportVehicleContent importOrderContent;
+    private ImportOrderPlusContent importOrderContent;
+    private ImportVehicleContent importVehicleContent;
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
-        importOrderContent = new ImportOrderContent();
+        callInvoice();
+        callVehicle();
+    }
+    public void callInvoice(){
+        importOrderContent = new ImportOrderPlusContent();
         importOrderContent.setListener(this);
         importOrderContent.init();
-        this.add(importOrderContent, BorderLayout.CENTER);
+        panelInvoice.add(importOrderContent);
     }
-
+    public void callVehicle(){
+        importVehicleContent = new ImportVehicleContent();
+        importVehicleContent.setListener(this);
+        importVehicleContent.init();
+        panelVehicle.add(importVehicleContent);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,9 +54,19 @@ public class MainFrame extends javax.swing.JFrame implements ContentListener{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tabPanel = new javax.swing.JTabbedPane();
+        panelVehicle = new javax.swing.JPanel();
+        panelInvoice = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Showroom Management");
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+
+        tabPanel.setMinimumSize(new java.awt.Dimension(800, 1000));
+        tabPanel.addTab("Vehicle", panelVehicle);
+        tabPanel.addTab("Invoice", panelInvoice);
+
+        getContentPane().add(tabPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -84,6 +108,9 @@ public class MainFrame extends javax.swing.JFrame implements ContentListener{
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel panelInvoice;
+    private javax.swing.JPanel panelVehicle;
+    private javax.swing.JTabbedPane tabPanel;
     // End of variables declaration//GEN-END:variables
 
     @Override
