@@ -29,20 +29,12 @@ public class SalesService extends javax.swing.JPanel implements ISalesService{
     public SalesService() {
         initComponents();
         callInvoice();
-        callVehicle();
     }
 
     public void callInvoice() {
         importOrderContent = new ImportOrderPlusContent();
         importOrderContent.init();
         panelInvoice.add(importOrderContent);
-        BodyChanged();
-    }
-
-    public void callVehicle() {
-        importVehicleContent = new ImportVehicleContent();
-        importVehicleContent.init();
-        panelVehicle.add(importVehicleContent);
         BodyChanged();
     }
 
@@ -55,22 +47,13 @@ public class SalesService extends javax.swing.JPanel implements ISalesService{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabPanel = new javax.swing.JTabbedPane();
-        panelVehicle = new javax.swing.JPanel();
         panelInvoice = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
-
-        tabPanel.setMinimumSize(new java.awt.Dimension(800, 1000));
-        tabPanel.addTab("Vehicle", panelVehicle);
-        tabPanel.addTab("Invoice", panelInvoice);
-
-        add(tabPanel, java.awt.BorderLayout.CENTER);
+        add(panelInvoice, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel panelInvoice;
-    private javax.swing.JPanel panelVehicle;
-    private javax.swing.JTabbedPane tabPanel;
     // End of variables declaration//GEN-END:variables
 
     @Override

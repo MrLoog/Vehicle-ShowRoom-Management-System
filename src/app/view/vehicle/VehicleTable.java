@@ -2,41 +2,44 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.order;
+package app.view.vehicle;
 
-import app.model.ImportOrder;
-import app.view.model.TableImportOrderModel;
+import app.model.Vehicle;
+import app.service.VehicleService;
+import app.view.model.TableVehicleModel;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Administrator
  */
-public class ImportOrderTable extends javax.swing.JPanel {
+public class VehicleTable extends javax.swing.JPanel {
 
-    private List<ImportOrder> model;
+    private List<Vehicle> model;
 
     /**
-     * Creates new form ImportOrderTable
+     * Creates new form VehicleTable
      */
-    public ImportOrderTable() {
+    public VehicleTable() {
         initComponents();
     }
 
-    public void setModel(List<ImportOrder> model) {
+    public void setModel(List<Vehicle> model) {
         this.model = model;
-        TableImportOrderModel tablemodel = new TableImportOrderModel(model);
+        TableVehicleModel tablemodel = new TableVehicleModel(model);
         jTable1.setModel(tablemodel);
         jTable1.revalidate();
         jTable1.repaint();
     }
 
-    public ImportOrder getSelectedImportOrder() {
+    public Vehicle getSelectedVehicle() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
             return null;
         } else {
-            return ((TableImportOrderModel) jTable1.getModel()).getData(index);
+            return ((TableVehicleModel) jTable1.getModel()).getData(index);
         }
     }
 

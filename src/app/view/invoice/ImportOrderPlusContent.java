@@ -4,30 +4,22 @@
  */
 package app.view.invoice;
 
-import app.view.order.*;
-import app.listener.ContentListener;
-import app.listener.IImportOrderPlusListener;
+import app.listener.IImportOrderPlusContent;
 import java.awt.BorderLayout;
 
 /**
  *
  * @author Administrator
  */
-public class ImportOrderPlusContent extends javax.swing.JPanel implements IImportOrderPlusListener {
+public class ImportOrderPlusContent extends javax.swing.JPanel implements IImportOrderPlusContent {
 
     private ImportOrderPlusTable importOrderPlusTable;
-    private ContentListener listener;
-
-    public void setListener(ContentListener listener) {
-        this.listener = listener;
-    }
 
     /**
      * Creates new form ImportOrderContent
      */
     public ImportOrderPlusContent() {
         initComponents();
-        
     }
     public void init(){
         viewImportOrderPlusTable();
@@ -51,11 +43,9 @@ public class ImportOrderPlusContent extends javax.swing.JPanel implements IImpor
     public void viewImportOrderPlusTable() {
         if (importOrderPlusTable == null) {
             importOrderPlusTable = new ImportOrderPlusTable();
-            importOrderPlusTable.setListener(this);
         }
         this.removeAll();
         this.add(importOrderPlusTable, BorderLayout.CENTER);
-        listener.changepanel();
     }
 
     @Override
@@ -65,6 +55,11 @@ public class ImportOrderPlusContent extends javax.swing.JPanel implements IImpor
 
     @Override
     public void viewImportOrderPlusMenu() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void BodyChanged() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

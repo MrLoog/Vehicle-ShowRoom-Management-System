@@ -4,6 +4,7 @@
  */
 package app.view.invoice;
 
+import app.listener.IImportOrderPlusContent;
 import app.listener.IImportOrderPlusListener;
 import javax.swing.JOptionPane;
 import app.service.OrderService;
@@ -15,12 +16,12 @@ import app.service.OrderService;
 public class ImportOrderPlusTable extends javax.swing.JPanel {
 
     private TableOrderModel model;
-    IImportOrderPlusListener listener;
+    IImportOrderPlusContent listener;
 
     /**
      * Creates new form ImportOrderPlusTable
      */
-    public void setListener(IImportOrderPlusListener listener) {
+    public void setListener(IImportOrderPlusContent listener) {
         this.listener = listener;
     }
 

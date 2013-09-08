@@ -4,12 +4,15 @@
  */
 package app.view.order;
 
-import app.listener.IImportOrderListener;
+import app.listener.IImportOrderContent;
+import app.listener.IImportOrderManage;
+import app.model.Brand;
 import app.model.ImportOrder;
 import app.model.Vehicle;
+import app.service.BrandService;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +23,26 @@ public class ImportOrderForm extends javax.swing.JPanel {
 
     private VehicleService vehicleService;
     private ImportOrderService importOrderService;
-    private IImportOrderListener listener;
+    private IImportOrderManage listener;
+    private BrandService brandService;
+    private List<Brand> lstBrands = new ArrayList<Brand>();
+    private List<String> lstBrandsName = new ArrayList<String>();
+    private ImportOrder model;
+    private boolean isEdit = false;
 
-    public void setListener(IImportOrderListener listener) {
+    public ImportOrder getModel() {
+        return model;
+    }
+
+    public void setModel(ImportOrder model) {
+        this.model = model;
+        jTextField1.setText(model.getModelNumber());
+        jTextField2.setText(model.getName());
+        jComboBox1.setSelectedItem(model.getBrand());
+        jTextField4.setText(model.getPrice().toString());
+    }
+
+    public void setListener(IImportOrderManage listener) {
         this.listener = listener;
     }
 
@@ -33,6 +53,12 @@ public class ImportOrderForm extends javax.swing.JPanel {
         initComponents();
         vehicleService = new VehicleService();
         importOrderService = new ImportOrderService();
+        brandService = new BrandService();
+        lstBrands = brandService.getAll();
+        for (Brand item : lstBrands) {
+            jComboBox1.addItem(item.getName());
+            lstBrandsName.add(item.getName());
+        }
     }
 
     /**
@@ -51,14 +77,12 @@ public class ImportOrderForm extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
 
         jLabel2.setText("Model Number :");
 
@@ -76,7 +100,9 @@ public class ImportOrderForm extends javax.swing.JPanel {
 
         jLabel6.setText("Quantity :");
 
-        jButton1.setText("Create Order");
+        jComboBox1.setEditable(true);
+
+        jButton1.setText("Save");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -90,20 +116,6 @@ public class ImportOrderForm extends javax.swing.JPanel {
             }
         });
 
-        jButton3.setText("List");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Menu");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,29 +126,23 @@ public class ImportOrderForm extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel4))
-                                    .addGap(88, 88, 88)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jTextField3)
-                                        .addComponent(jTextField2)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                                        .addComponent(jTextField1))))
+                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(36, 36, 36)
-                                .addComponent(jButton2)
-                                .addGap(32, 32, 32)
-                                .addComponent(jButton3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jButton1))
+                                .addGap(50, 50, 50)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTextField5)
+                                        .addComponent(jTextField4)
+                                        .addComponent(jComboBox1, 0, 129, Short.MAX_VALUE)
+                                        .addComponent(jTextField2)
+                                        .addComponent(jTextField1)))))
                         .addGap(0, 39, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -156,98 +162,144 @@ public class ImportOrderForm extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addComponent(jButton2))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    private void clear() {
+        if (isEdit) {
+            setModel(model);
+        } else {
+            Vehicle v = new Vehicle();
+            v.setBrand("");
+            v.setName("");
+            v.setPrice(0);
+            v.setModelNumber("");
+            setModel(v);
+        }
+    }
     private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
         // TODO add your handling code here:
         String modelnumber = jTextField1.getText();
         List<Vehicle> lst = vehicleService.executeQuery(vehicleService.getByModelNumberQuery(modelnumber));
         if (lst.size() > 0) {
             Vehicle vehicle = lst.get(0);
-            jTextField2.setText(vehicle.getName());
-            jTextField3.setText(vehicle.getBrand());
-            jTextField4.setText(vehicle.getPrice().toString());
+            setModel(vehicle);
+            setEditMode(true);
         }
     }//GEN-LAST:event_jTextField1FocusLost
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        createOrder();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        clear();
+    }//GEN-LAST:event_jButton2ActionPerformed
+    private void createOrder() {
         if (validateImportOrder()) {
+            //auto create new brand
             String modelnumber = jTextField1.getText();
             List<Vehicle> lst = vehicleService.executeQuery(vehicleService.getByModelNumberQuery(modelnumber));
+            String selectbrand = jComboBox1.getSelectedItem().toString();
+            if (!selectbrand.equals("")) {
+                if (lstBrands.size() <= 0 || !lstBrandsName.contains(selectbrand)) {
+                    Brand brand = new Brand();
+                    brand.setName(selectbrand);
+                    brand.setId(brandService.add(brand));
+                    lstBrands.add(brand);
+                    lstBrandsName.add(selectbrand);
+                    jComboBox1.addItem(selectbrand);
+                    jComboBox1.revalidate();
+                    jComboBox1.repaint();
+                }
+            }
+            //auto create new vehicle or update quantity
             if (lst.size() > 0) {
                 Vehicle vehicle = lst.get(0);
                 vehicle.setName(jTextField2.getText());
-                vehicle.setBrand(jTextField3.getText());
+                vehicle.setBrand(selectbrand);
                 vehicle.setPrice(Integer.parseInt(jTextField4.getText()));
-                vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
+                if (isEdit) {
+                    int dif = model.getQuantity() - Integer.parseInt(jTextField5.getText());
+                    vehicle.setQuantity(vehicle.getQuantity() - dif);
+                } else {
+                    vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
+                }
                 vehicleService.update(vehicle);
             } else {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setModelNumber(modelnumber);
                 vehicle.setName(jTextField2.getText());
-                vehicle.setBrand(jTextField3.getText());
+                vehicle.setBrand(selectbrand);
                 vehicle.setPrice(Integer.parseInt(jTextField4.getText()));
+                //if new vehicle so new order and quantity input first time
                 vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
                 vehicleService.add(vehicle);
             }
-            ImportOrder order = new ImportOrder();
-            order.setName(jTextField2.getText());
-            order.setBrand(jTextField3.getText());
-            order.setPrice(Integer.parseInt(jTextField4.getText()));
-            order.setQuantity(Integer.parseInt(jTextField5.getText()));
-            order.setModelNumber(modelnumber);
-            importOrderService.add(order);
-            jLabel1.setText("Create Order Success.");
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        if (listener != null) {
-            listener.viewImportOrderTable();
+            loadDataToModel();
+            if (isEdit) {
+                importOrderService.update(model);
+            } else {
+                importOrderService.add(model);
+            }
+            jLabel1.setText("Save Order Success.");
+            listener.reloadTableImportOrder();
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        listener.viewImportOrderMenu();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }
 
     private boolean validateImportOrder() {
         return true;
     }
+
+    public void setEditMode(boolean b) {
+        isEdit = b;
+    }
+
+    public void clearForm() {
+        if (isEdit) {
+            setModel(model);
+        } else {
+            ImportOrder v = new ImportOrder();
+            v.setBrand("");
+            v.setName("");
+            v.setPrice(0);
+            v.setModelNumber("");
+            v.setQuantity(0);
+            setModel(v);
+        }
+    }
+
+    private void loadDataToModel() {
+        if (model == null) {
+            model = new ImportOrder();
+        }
+        model.setBrand(jComboBox1.getSelectedItem().toString());
+        model.setModelNumber(jTextField1.getText());
+        model.setName(jTextField2.getText());
+        model.setPrice(Integer.parseInt(jTextField4.getText()));
+        model.setQuantity(Integer.parseInt(jTextField5.getText()));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -256,8 +308,17 @@ public class ImportOrderForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
+
+    public void setModel(Vehicle v) {
+        ImportOrder o = new ImportOrder();
+        o.setBrand(v.getBrand());
+        o.setName(v.getName());
+        o.setModelNumber(v.getModelNumber());
+        o.setPrice(v.getPrice());
+        o.setQuantity(0);
+        setModel(o);
+    }
 }

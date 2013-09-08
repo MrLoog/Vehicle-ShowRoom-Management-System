@@ -20,7 +20,8 @@ import java.util.logging.Logger;
 public class AppUtility {
 
     private static Connection conn;
-    private static final String username = "admin";
+//    private static final String username = "admin";
+     private static final String username = "sa";
     private static final String password = "123456";
 
     public static Connection getConnection() {

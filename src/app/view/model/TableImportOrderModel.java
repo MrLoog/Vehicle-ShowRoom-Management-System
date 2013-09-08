@@ -4,7 +4,7 @@
  */
 package app.view.model;
 
-import app.model.Vehicle;
+import app.model.ImportOrder;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -12,17 +12,17 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Administrator
  */
-public class TableVehicleModel extends AbstractTableModel{
-    List<Vehicle> data;
+public class TableImportOrderModel extends AbstractTableModel{
+    List<ImportOrder> data;
 
-    public TableVehicleModel(List<Vehicle> data) {
+    public TableImportOrderModel(List<ImportOrder> data) {
         this.data=data;
     }
-    public Vehicle getData(int index){
+    public ImportOrder getData(int index){
         return data.get(index);
     }
 
-    public void setData(List<Vehicle> data) {
+    public void setData(List<ImportOrder> data) {
         this.data = data;
     }
     
@@ -38,7 +38,7 @@ public class TableVehicleModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int i, int i1) {
-       Vehicle c = data.get(i);
+       ImportOrder c = data.get(i);
         switch(i1){
             case 0: return c.getId();
             case 1: return c.getName();

@@ -4,6 +4,7 @@
  */
 package app.view.vehicle;
 
+import app.listener.IImportVehicleContent;
 import app.listener.IImportVehicleListener;
 import app.model.Vehicle;
 import app.service.ImportOrderService;
@@ -18,14 +19,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ImportVehicleTable extends javax.swing.JPanel {
 
-    private IImportVehicleListener listener;
+    private IImportVehicleContent listener;
     VehicleService vehicleService;
     private int getall = 0;
     private int p=15;
     int cur = 1;
     int from = 0;
 
-    public void setListener(IImportVehicleListener listener) {
+    public void setListener(IImportVehicleContent listener) {
         this.listener = listener;
     }
 

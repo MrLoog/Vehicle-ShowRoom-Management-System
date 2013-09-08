@@ -4,27 +4,18 @@
  */
 package app.view.vehicle;
 
-import app.view.order.*;
-import app.listener.ContentListener;
-import app.listener.*;
+import app.listener.IImportVehicleContent;
 import java.awt.BorderLayout;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Administrator
  */
-public class ImportVehicleContent extends javax.swing.JPanel implements IImportVehicleListener {
+public class ImportVehicleContent extends javax.swing.JPanel implements  IImportVehicleContent{
 
     private ImportVehicleTable importVehicleTable;
     private ImportVehicleForm importVehicleForm;
     private ImportVehicleMenu importVehicleMenu;
-    private ContentListener listener;
-
-    public void setListener(ContentListener listener) {
-        this.listener = listener;
-    }
-
     /**
      * Creates new form ImportOrderContent
      */
@@ -49,7 +40,6 @@ public class ImportVehicleContent extends javax.swing.JPanel implements IImportV
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-    @Override
     public void viewImportVehicleTable() {
         if (importVehicleTable == null) {
             importVehicleTable = new ImportVehicleTable();
@@ -57,21 +47,16 @@ public class ImportVehicleContent extends javax.swing.JPanel implements IImportV
         }
         this.removeAll();
         this.add(importVehicleTable, BorderLayout.CENTER);
-        listener.changepanel();
     }
 
-    @Override
     public void viewImportVehicleForm() {
         if (importVehicleForm == null) {
             importVehicleForm = new ImportVehicleForm();
-            importVehicleForm.setListener(this);
         }
         this.removeAll();
         this.add(importVehicleForm, BorderLayout.CENTER);
-        listener.changepanel();
     }
 
-    @Override
     public void viewImportVehicleMenu() {
         if (importVehicleMenu == null) {
             importVehicleMenu = new ImportVehicleMenu();
@@ -79,6 +64,11 @@ public class ImportVehicleContent extends javax.swing.JPanel implements IImportV
         }
         this.removeAll();
         this.add(importVehicleMenu, BorderLayout.CENTER);
-        listener.changepanel();
+    }
+
+    @Override
+    public void BodyChanged() {
+        this.revalidate();
+        this.repaint();
     }
 }

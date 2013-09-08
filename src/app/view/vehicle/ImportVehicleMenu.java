@@ -4,6 +4,7 @@
  */
 package app.view.vehicle;
 
+import app.listener.IImportVehicleContent;
 import app.listener.IImportVehicleListener;
 import javax.swing.JOptionPane;
 
@@ -12,7 +13,13 @@ import javax.swing.JOptionPane;
  * @author kiendv
  */
 public class ImportVehicleMenu extends javax.swing.JPanel {
-private IImportVehicleListener listener;
+
+    private IImportVehicleContent listener;
+
+    public void setListener(IImportVehicleContent listener) {
+        this.listener = listener;
+    }
+
     /**
      * Creates new form ImportVehicleMenu
      */
@@ -81,14 +88,10 @@ private IImportVehicleListener listener;
     private void btnViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllActionPerformed
         listener.viewImportVehicleTable();
     }//GEN-LAST:event_btnViewAllActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnViewAll;
     // End of variables declaration//GEN-END:variables
 
-    void setListener(IImportVehicleListener listener) {
-        this.listener = listener;
-    }
 }

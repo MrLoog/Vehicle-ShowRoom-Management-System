@@ -107,6 +107,7 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public int create(int dealerId,int customerId,int vehicleId, int price, int q){
         int flag = 0;
         String updateQuantity = "UPDATE Vehicles SET quantity = "+(q-1)+" WHERE id = "+vehicleId;
