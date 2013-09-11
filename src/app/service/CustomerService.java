@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -94,6 +95,43 @@ public class CustomerService extends BaseService {
         }
     }
 
+    @Override
+    public Customer getById(int id) {
+        return super.getById(id);
+    }
+
+    @Override
+    public <Customer> boolean update(Customer updateobject) {
+        return super.update(updateobject);
+    }
+    
+    public List<Customer> paging(String query) {
+        Statement stm = null;
+        List<Customer> customers = new ArrayList<Customer>();
+        Connection con = AppUtility.getConnection();
+        try {
+            stm = con.createStatement();
+            stm.executeQuery(query);
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next()){
+                Customer c = new Customer();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setAddress(rs.getString("address"));
+                c.setPhone(rs.getString("phone"));
+                customers.add(c);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customers;
+    }
+    
     public int create(String name, String addr, String phone) {
         //if existed customer, not create new
         Statement stm;
