@@ -40,6 +40,7 @@ public class ImportOrderService extends BaseService {
                 temp.setPrice(rs.getInt("Price"));
                 temp.setModelNumber(rs.getString("ModelNumber"));
                 temp.setQuantity(rs.getInt("Quantity"));
+                temp.setDealerId(rs.getInt("DealerID"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -50,7 +51,7 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?)";
     }
 
     @Override
@@ -62,6 +63,7 @@ public class ImportOrderService extends BaseService {
             insertStmt.setString(3, order.getBrand());
             insertStmt.setInt(4, order.getPrice());
             insertStmt.setInt(5, order.getQuantity());
+            insertStmt.setInt(6, order.getDealerId());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,7 +71,7 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,Brand=?,Price=?,ModelNumber=?,Quantity=? where ID=?";
+        return "update " + getTableName() + " set Name=?,Brand=?,Price=?,ModelNumber=?,Quantity=?,DealerID=? where ID=?";
     }
 
     @Override
@@ -81,7 +83,8 @@ public class ImportOrderService extends BaseService {
             updateStmt.setInt(3, order.getPrice());
             updateStmt.setString(4, order.getModelNumber());
             updateStmt.setInt(5, order.getQuantity());
-            updateStmt.setInt(6, order.getId());
+            updateStmt.setInt(6, order.getDealerId());
+            updateStmt.setInt(7, order.getId());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }

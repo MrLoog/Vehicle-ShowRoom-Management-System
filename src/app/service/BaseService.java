@@ -122,7 +122,7 @@ public abstract class BaseService {
         return output;
     }
 
-    protected abstract String getTableName();
+    public abstract String getTableName();
 
     protected abstract <T> List<T> ResultSetToList(ResultSet rs);
 

@@ -6,15 +6,32 @@ package app.view;
 
 import app.listener.IContainer;
 import app.listener.IMainFrame;
+import app.listener.IPersonalDialogListener;
+import app.model.Dealer;
+import app.view.subview.DealerManage;
+import app.view.subview.PersonalDialog;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Administrator
  */
-public class MainFrame extends javax.swing.JFrame implements IMainFrame{
-
+public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPersonalDialogListener {
+    
+    public static Dealer activeUser;
     private SalesService viewsales;
     private ManageShowroom viewshowroom;
+    private DealerManage dealerManage;
+    private LoginFrame loginFrame;
+    
+    public static void setActiveUser(Dealer d) {
+        MainFrame.activeUser = d;
+    }
+    
+    public void setLoginFrame(LoginFrame frame) {
+        loginFrame = frame;
+    }
 
     /**
      * Creates new form MainFrame
@@ -36,10 +53,13 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Showroom Management");
@@ -49,9 +69,27 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("File");
+
+        jMenuItem4.setText("Logout");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        jMenuItem5.setText("Changed My Information");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Navigate");
@@ -72,6 +110,14 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         });
         jMenu3.add(jMenuItem1);
 
+        jMenuItem3.setText("Admin Manage");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -83,11 +129,41 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         // TODO add your handling code here:
         ViewManageShowroom();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         ViewSalesService();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+    
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        if (MainFrame.activeUser.isIsAdmin()) {
+            ViewDealerManage();
+        } else {
+            JOptionPane.showMessageDialog(this, "You don't have permission for this action.");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        if (loginFrame == null) {
+            loginFrame = new LoginFrame();
+            loginFrame.setLocationRelativeTo(null);
+        }
+        loginFrame.setVisible(true);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        PersonalDialog personalDialog = new PersonalDialog(this, true);
+        personalDialog.setLocationRelativeTo(this);
+        personalDialog.setResizable(false);
+        personalDialog.setModel(MainFrame.activeUser);
+        personalDialog.setListener(this);
+        personalDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,6 +208,9 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
@@ -145,7 +224,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         jPanel1.add(viewsales);
         BodyChanged();
     }
-
+    
     @Override
     public void ViewManageShowroom() {
         if (viewshowroom == null) {
@@ -156,10 +235,25 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame{
         jPanel1.add(viewshowroom);
         BodyChanged();
     }
-
+    
+    public void ViewDealerManage() {
+        if (dealerManage == null) {
+            dealerManage = new DealerManage();
+            dealerManage.init();
+        }
+        jPanel1.removeAll();
+        jPanel1.add(dealerManage);
+        BodyChanged();
+    }
+    
     @Override
     public void BodyChanged() {
         jPanel1.revalidate();
         jPanel1.repaint();
+    }
+    
+    @Override
+    public void onEditSuccess(Dealer newdealer) {
+        MainFrame.setActiveUser(newdealer);
     }
 }

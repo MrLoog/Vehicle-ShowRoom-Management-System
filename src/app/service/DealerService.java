@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class DealerService extends BaseService{
     @Override
-    protected String getTableName() {
+    public String getTableName() {
         return "Dealers";
     }
     
@@ -32,6 +32,7 @@ public class DealerService extends BaseService{
                 temp.setName(rs.getString("Name"));
                 temp.setLoginName(rs.getString("LoginName"));
                 temp.setPassword(rs.getString("Password"));
+                temp.setIsAdmin(rs.getBoolean("IsManager"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -42,7 +43,7 @@ public class DealerService extends BaseService{
     
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?)";
     }
     
     @Override
@@ -52,6 +53,7 @@ public class DealerService extends BaseService{
             insertStmt.setString(1, brand.getName());
             insertStmt.setString(2, brand.getLoginName());
             insertStmt.setString(3, brand.getPassword());
+            insertStmt.setBoolean(4, brand.isIsAdmin());
         } catch (SQLException ex) {
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,7 +61,7 @@ public class DealerService extends BaseService{
     
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,LoginName=?,Password=? where ID=?";
+        return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=? where ID=?";
     }
     
     @Override
@@ -69,7 +71,8 @@ public class DealerService extends BaseService{
             updateStmt.setString(1, brand.getName());
             updateStmt.setString(2, brand.getLoginName());
             updateStmt.setString(3, brand.getPassword());
-            updateStmt.setInt(4, brand.getId());
+            updateStmt.setBoolean(4, brand.isIsAdmin());
+            updateStmt.setInt(5, brand.getId());
         } catch (SQLException ex) {
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }

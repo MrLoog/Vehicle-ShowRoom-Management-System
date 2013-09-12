@@ -15,6 +15,15 @@ public class ImportOrder {
     private Integer price;
     private String modelNumber;
     private int quantity;
+    private int dealerId;
+
+    public int getDealerId() {
+        return dealerId;
+    }
+
+    public void setDealerId(int dealerId) {
+        this.dealerId = dealerId;
+    }
 
     public String getModelNumber() {
         return modelNumber;

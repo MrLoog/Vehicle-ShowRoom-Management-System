@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class CustomerService extends BaseService {
 
     @Override
-    protected String getTableName() {
+    public String getTableName() {
         return "Customers";
     }
 
@@ -37,6 +37,7 @@ public class CustomerService extends BaseService {
                 temp.setName(rs.getString("Name"));
                 temp.setAddress(rs.getString("Address"));
                 temp.setPhone(rs.getString("Phone"));
+                temp.setDealerId(rs.getInt("DealerID"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -47,7 +48,7 @@ public class CustomerService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?)";
     }
 
     @Override
@@ -57,6 +58,7 @@ public class CustomerService extends BaseService {
             insertStmt.setString(1, brand.getName());
             insertStmt.setString(2, brand.getAddress());
             insertStmt.setString(3, brand.getPhone());
+            insertStmt.setInt(4, brand.getDealerId());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,7 +66,7 @@ public class CustomerService extends BaseService {
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,Address=?,Phone=? where ID=?";
+        return "update " + getTableName() + " set Name=?,Address=?,Phone=?,DealerID=? where ID=?";
     }
 
     @Override
@@ -74,7 +76,8 @@ public class CustomerService extends BaseService {
             updateStmt.setString(1, brand.getName());
             updateStmt.setString(2, brand.getAddress());
             updateStmt.setString(3, brand.getPhone());
-            updateStmt.setInt(4, brand.getId());
+             updateStmt.setInt(4, brand.getDealerId());
+            updateStmt.setInt(5, brand.getId());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
         }

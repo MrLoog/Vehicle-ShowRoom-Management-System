@@ -13,6 +13,15 @@ public class Customer {
     private String name;
     private String address;
     private String phone;
+    private int dealerId;
+
+    public int getDealerId() {
+        return dealerId;
+    }
+
+    public void setDealerId(int dealerId) {
+        this.dealerId = dealerId;
+    }
 
     public int getId() {
         return id;

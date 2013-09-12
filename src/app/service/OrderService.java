@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class OrderService extends BaseService {
 
     @Override
-    protected String getTableName() {
+    public String getTableName() {
         return "Orders";
     }
 

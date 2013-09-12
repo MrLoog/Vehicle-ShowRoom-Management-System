@@ -13,6 +13,15 @@ public class Dealer {
     private String name;
     private String loginName;
     private String password;
+    private boolean isManager;
+
+    public boolean isIsAdmin() {
+        return isManager;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isManager = isAdmin;
+    }
 
     public int getId() {
         return id;
