@@ -6,6 +6,7 @@ package app.view.customer;
 
 import app.service.CustomerService;
 import app.model.Customer;
+import app.utility.AppUtility;
 import java.awt.Panel;
 import javax.swing.JOptionPane;
 
@@ -218,18 +219,24 @@ Customer cu = null;
             flag = false;
         }
         if (phone == "" || phone.length() < 5 || phone.length()>20) {
-            ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars. (not alphabet chars)");
+            ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars.");
             flag = false;
         }
         if (flag == true) {
+            reset();
+            boolean r = AppUtility.isExistAnObject("SELECT * FROM Customers WHERE name = N'" + name + "' and phone = '" + phone + "'", AppUtility.getConnection());
+            System.out.println("K: "+r);
+            if (r) {
+                JOptionPane.showMessageDialog(rootPane, "Existed "+name+" with phone number: "+phone+"! Can not update.");
+            }else{
             cu.setName(name);
             cu.setAddress(addr);
             cu.setPhone(phone);
             if(sv.update(cu)){
-                reset();
                 lbOK.setText("Changed to: "+name);
             }else{
-                JOptionPane.showMessageDialog(rootPane, "Error! Can not update.");
+                JOptionPane.showMessageDialog(rootPane, "Error! Can not update.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
             }
         }
     }//GEN-LAST:event_btnChangeActionPerformed

@@ -28,6 +28,12 @@ public class CustomerService extends BaseService {
     }
 
     @Override
+    public <Customer> List<Customer> executeQuery(String query) {
+        return super.executeQuery(query);
+    }
+    
+
+    @Override
     protected List<Customer> ResultSetToList(ResultSet rs) {
         List<Customer> output = new ArrayList<Customer>();
         try {
@@ -107,7 +113,7 @@ public class CustomerService extends BaseService {
     public <Customer> boolean update(Customer updateobject) {
         return super.update(updateobject);
     }
-    
+
     public List<Customer> paging(String query) {
         Statement stm = null;
         List<Customer> customers = new ArrayList<Customer>();
@@ -116,7 +122,7 @@ public class CustomerService extends BaseService {
             stm = con.createStatement();
             stm.executeQuery(query);
             ResultSet rs = stm.executeQuery(query);
-            while(rs.next()){
+            while (rs.next()) {
                 Customer c = new Customer();
                 c.setId(rs.getInt("id"));
                 c.setName(rs.getString("name"));
@@ -134,7 +140,7 @@ public class CustomerService extends BaseService {
         }
         return customers;
     }
-    
+
     public int create(String name, String addr, String phone) {
         //if existed customer, not create new
         Statement stm;
@@ -156,6 +162,7 @@ public class CustomerService extends BaseService {
                 while (r.next()) {
                     cID = r.getInt("id");
                 }
+                cID = -2;
             }
             stm.close();
         } catch (SQLException ex) {
