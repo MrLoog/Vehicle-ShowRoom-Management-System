@@ -7,6 +7,7 @@ package app.view.customer;
 import app.model.Customer;
 import javax.swing.table.DefaultTableModel;
 import app.service.CustomerService;
+import java.awt.TrayIcon;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -17,49 +18,59 @@ import javax.swing.plaf.basic.BasicArrowButton;
  * @author kiendv
  */
 public class CustomerTable extends javax.swing.JPanel {
-int itemsPerPage = 5;
-int total = 0;
-static int cur = 1;
-CustomerService service;
+
+    float itemsPerPage = 5;
+    float total = 0;
+    static int cur = 1;
+    CustomerService service;
+
     /**
      * Creates new form CustomerTable
      */
+    DefaultTableModel model;
     public CustomerTable() {
         initComponents();
-        includeData();
+        //includeData();
+        model = new DefaultTableModel();
     }
-    public void includeData(){
-        if(cur==0||cur==-1){
-            cur=1;
+
+    public void includeData() {
+        if (cur == 0 || cur == -1) {
+            cur = 1;
         }
         service = new CustomerService();
         total = service.getAll().size();
         String[] colName = {""};
-        DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(new String[]{"ID", "Name", "Address", "Phone"});
-        List<Customer> lst = service.executeQuery("exec pagingcustomers "+cur+","+itemsPerPage);
-        if(model==null){
-        model = new DefaultTableModel();
+        List<Customer> lst = service.executeQuery("exec pagingcustomers " + cur + "," + itemsPerPage);
+        if (model == null) {
+            model = new DefaultTableModel();
         }
-        for (int i=0; i<lst.size(); i++) {
+        for (int i = 0; i < lst.size(); i++) {
             model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
         }
         tableCustomer.setModel(model);
-        if(cur==1){
         paging();
-        }
     }
-    public void paging(){
+
+    public void paging() {
         comboCustomer.removeAllItems();
         comboCustomer.addItem("Go to page:");
-        int pages = total/itemsPerPage;
-        if(pages%2!=0){
-            pages+=1;
-        }
-        for(int i=0; i<pages; i++){
-            comboCustomer.addItem(i+1);
+        float pages = (total / itemsPerPage);
+        for (int i = 0; i < pages; i++) {
+            comboCustomer.addItem(i + 1);
         }
     }
+
+    public boolean isNumeric(String str) {
+        try {
+            double d = Double.parseDouble(str);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,6 +91,7 @@ CustomerService service;
         btnDelete = new javax.swing.JButton();
         btnOrdered = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        btnNew = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -122,10 +134,15 @@ CustomerService service;
 
         txtKeyword.setText(" ");
         txtKeyword.setMinimumSize(new java.awt.Dimension(6, 80));
-        txtKeyword.setPreferredSize(new java.awt.Dimension(80, 20));
+        txtKeyword.setPreferredSize(new java.awt.Dimension(80, 30));
         jPanel1.add(txtKeyword);
 
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnSearch);
 
         btnEdit.setText("Edit");
@@ -137,9 +154,19 @@ CustomerService service;
         jPanel1.add(btnEdit);
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnDelete);
 
         btnOrdered.setText("Ordered");
+        btnOrdered.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrderedActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnOrdered);
 
         btnRefresh.setText("Refresh");
@@ -150,43 +177,55 @@ CustomerService service;
         });
         jPanel1.add(btnRefresh);
 
+        btnNew.setText("Create New");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNew);
+
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCustomerActionPerformed
         String s = "";
-        try{
-        s = comboCustomer.getSelectedItem().toString();
-        cur = Integer.parseInt(s);
-        comboCustomer.removeItem(comboCustomer.getSelectedItem());
-        }catch(Exception ex){
+        try {
+            s = comboCustomer.getSelectedItem().toString();
+            cur = Integer.parseInt(s);
+            comboCustomer.removeItem(comboCustomer.getSelectedItem());
+        } catch (Exception ex) {
             cur = 1;
         }
-        lbCur.setText(cur+"");
+        lbCur.setText(cur + "");
         includeData();
     }//GEN-LAST:event_comboCustomerActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        Edit ed = new Edit(null, true);
-        int row = tableCustomer.getSelectedRow();
-        int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
-        ed.callme(id);
+
+        try {
+            Edit ed = new Edit(null, true);
+            int row = tableCustomer.getSelectedRow();
+            int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
+            ed.callme(id);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(tableCustomer, "Please choose item to edit");
+        }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void tableCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCustomerMouseClicked
-        
     }//GEN-LAST:event_tableCustomerMouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         String s = "";
-        try{
-        s = comboCustomer.getSelectedItem().toString();
-        cur = Integer.parseInt(s);
-        comboCustomer.removeItem(comboCustomer.getSelectedItem());
-        }catch(Exception ex){
+        try {
+            s = comboCustomer.getSelectedItem().toString();
+            cur = Integer.parseInt(s);
+            comboCustomer.removeItem(comboCustomer.getSelectedItem());
+        } catch (Exception ex) {
             cur = 1;
         }
-        lbCur.setText(cur+"");
+        lbCur.setText(cur + "");
         includeData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
@@ -195,9 +234,81 @@ CustomerService service;
         includeData();
     }//GEN-LAST:event_comboCustomerPropertyChange
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        try {
+            int row = tableCustomer.getSelectedRow();
+            int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
+            String name = tableCustomer.getValueAt(row, 1).toString();
+            int x = JOptionPane.showConfirmDialog(tableCustomer, "Do you want to delete: " + name + " (" + id + ")");
+            if (x == 0) {
+                Customer c = new Customer();
+                c.setId(id);
+                c.setName(name);
+                boolean r = service.delete(c);
+                if (r) {
+                    JOptionPane.showMessageDialog(tableCustomer, "Removed: " + name + " (" + id + "), click refresh.");
+                } else {
+                    JOptionPane.showMessageDialog(tableCustomer, "Error, cannot delete " + name, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(tableCustomer, "Please choose item to delete");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        for(int i=0; i<model.getRowCount(); i++){
+            model.removeRow(i);
+        }
+        String kw = txtKeyword.getText();
+        if(isNumeric(kw)){
+            DefaultTableModel model = new DefaultTableModel();
+            model.setColumnIdentifiers(new String[]{"ID", "Name", "Address", "Phone"});
+            List<Customer> lst = service.executeQuery("searchcustomerbyid "+kw);
+            System.out.println("KQ: "+lst.size());
+            if (model == null) {
+                model = new DefaultTableModel();
+            }
+            for (int i = 0; i < lst.size(); i++) {
+                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
+            }
+            tableCustomer.setModel(model);
+            comboCustomer.removeAllItems();
+            System.out.println("ID: "+kw);
+        }else{
+            if (cur == 0 || cur == -1) {
+            cur = 1;
+        }
+        service = new CustomerService();
+        List<Customer> lst = service.executeQuery("exec searchcustomer '"+kw+"'");
+        total = lst.size();
+        System.out.println("KQ: "+lst.size());
+        String[] colName = {""};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new String[]{"ID", "Name", "Address", "Phone"});
+        if (model == null) {
+            model = new DefaultTableModel();
+        }
+        for (int i = 0; i < lst.size(); i++) {
+            model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
+        }
+        tableCustomer.setModel(model);
+        paging();
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        CreateCustomer newcustomer = new CreateCustomer(null, true);
+        newcustomer.show();
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnOrderedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderedActionPerformed
+        JOptionPane.showMessageDialog(tableCustomer, "Go to orders of this customer.");
+    }//GEN-LAST:event_btnOrderedActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnNew;
     private javax.swing.JButton btnOrdered;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
