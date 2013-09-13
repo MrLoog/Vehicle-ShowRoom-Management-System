@@ -122,6 +122,17 @@ public abstract class BaseService {
         return output;
     }
 
+    public <T> List<T> executePrepareStmt(PreparedStatement ps) {
+        List<T> output = new ArrayList<T>();
+        try {
+            ResultSet rs = ps.executeQuery();
+            output = ResultSetToList(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
     public abstract String getTableName();
 
     protected abstract <T> List<T> ResultSetToList(ResultSet rs);

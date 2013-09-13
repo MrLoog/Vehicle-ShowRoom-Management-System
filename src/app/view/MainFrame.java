@@ -8,27 +8,31 @@ import app.listener.IContainer;
 import app.listener.IMainFrame;
 import app.listener.IPersonalDialogListener;
 import app.model.Dealer;
-import app.view.subview.DealerManage;
-import app.view.subview.PersonalDialog;
+import app.view.composite.DealerManage;
+import app.view.composite.PersonalDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
  * @author Administrator
  */
 public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPersonalDialogListener {
-    
+
+    private Timer time;
     public static Dealer activeUser;
     private SalesService viewsales;
     private ManageShowroom viewshowroom;
     private DealerManage dealerManage;
     private LoginFrame loginFrame;
-    
+
     public static void setActiveUser(Dealer d) {
         MainFrame.activeUser = d;
     }
-    
+
     public void setLoginFrame(LoginFrame frame) {
         loginFrame = frame;
     }
@@ -129,12 +133,12 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         // TODO add your handling code here:
         ViewManageShowroom();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-    
+
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         ViewSalesService();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-    
+
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         if (MainFrame.activeUser.isIsAdmin()) {
@@ -143,7 +147,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
             JOptionPane.showMessageDialog(this, "You don't have permission for this action.");
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-    
+
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         if (loginFrame == null) {
@@ -154,7 +158,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         setVisible(false);
         dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-    
+
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         PersonalDialog personalDialog = new PersonalDialog(this, true);
@@ -224,7 +228,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         jPanel1.add(viewsales);
         BodyChanged();
     }
-    
+
     @Override
     public void ViewManageShowroom() {
         if (viewshowroom == null) {
@@ -235,7 +239,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         jPanel1.add(viewshowroom);
         BodyChanged();
     }
-    
+
     public void ViewDealerManage() {
         if (dealerManage == null) {
             dealerManage = new DealerManage();
@@ -245,13 +249,13 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         jPanel1.add(dealerManage);
         BodyChanged();
     }
-    
+
     @Override
     public void BodyChanged() {
         jPanel1.revalidate();
         jPanel1.repaint();
     }
-    
+
     @Override
     public void onEditSuccess(Dealer newdealer) {
         MainFrame.setActiveUser(newdealer);

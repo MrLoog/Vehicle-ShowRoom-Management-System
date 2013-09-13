@@ -6,10 +6,10 @@ package app.view;
 
 import app.listener.IMainFrame;
 import app.listener.IManageShowroom;
-import app.view.subview.ImportOrderManage;
-import app.view.subview.VehicleManage;
-import app.view.vehicle.ImportVehicleContent;
-import app.view.vehicle.VehicleTable;
+import app.view.composite.ImportOrderManage;
+import app.view.composite.VehicleManage;
+import app.view.component.vehicle.ImportVehicleContent;
+import app.view.component.vehicle.VehicleTable;
 import java.awt.BorderLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

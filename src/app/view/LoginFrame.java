@@ -8,6 +8,7 @@ import app.model.Dealer;
 import app.service.DealerService;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.Timer;
 
 /**
  *
@@ -15,6 +16,7 @@ import javax.swing.JButton;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
+  
     /**
      * Creates new form LoginFrame
      */
@@ -31,7 +33,7 @@ public class LoginFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dealerLogin1 = new app.view.dealer.DealerLogin();
+        dealerLogin1 = new app.view.component.dealer.DealerLogin();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
@@ -124,7 +126,7 @@ public class LoginFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.dealer.DealerLogin dealerLogin1;
+    private app.view.component.dealer.DealerLogin dealerLogin1;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

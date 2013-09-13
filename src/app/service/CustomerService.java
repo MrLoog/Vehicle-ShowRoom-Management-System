@@ -7,6 +7,7 @@ package app.service;
 import app.model.Customer;
 import app.utility.AppUtility;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -169,5 +170,16 @@ public class CustomerService extends BaseService {
             System.out.println("KQ: " + ex.getMessage());
         }
         return cID;
+    }
+    
+    public PreparedStatement getPStmtFindCustomer(String phone){
+        PreparedStatement ps=null;
+        try {
+             ps=conn.prepareStatement("select * from "+getTableName()+" where Phone=?");
+             ps.setString(1, phone);
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
     }
 }
