@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 public class AppUtility {
 
     private static Connection conn;
-//    private static final String username = "admin";
-     private static final String username = "sa";
+    private static final String username = "admin";
+     //private static final String username = "sa";
     private static final String password = "123456";
 
     public static Connection getConnection() {
@@ -33,7 +33,7 @@ public class AppUtility {
     private static void loadConnection() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ShowRoom", username, password);
+            conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ShowRoom1", username, password);
         } catch (SQLException ex) {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

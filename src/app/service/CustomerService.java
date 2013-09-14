@@ -115,33 +115,6 @@ public class CustomerService extends BaseService {
         return super.update(updateobject);
     }
 
-    public List<Customer> paging(String query) {
-        Statement stm = null;
-        List<Customer> customers = new ArrayList<Customer>();
-        Connection con = AppUtility.getConnection();
-        try {
-            stm = con.createStatement();
-            stm.executeQuery(query);
-            ResultSet rs = stm.executeQuery(query);
-            while (rs.next()) {
-                Customer c = new Customer();
-                c.setId(rs.getInt("id"));
-                c.setName(rs.getString("name"));
-                c.setAddress(rs.getString("address"));
-                c.setPhone(rs.getString("phone"));
-                customers.add(c);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            stm.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return customers;
-    }
-
     public int create(String name, String addr, String phone) {
         //if existed customer, not create new
         Statement stm;
@@ -150,7 +123,7 @@ public class CustomerService extends BaseService {
         try {
             stm = con.createStatement();
             if (!AppUtility.isExistAnObject("SELECT * FROM Customers WHERE name = N'" + name + "' and phone = '" + phone + "'", con)) {
-                String sql = "insert into Customers values (N'" + name + "', N'" + addr + "', '" + phone + "')";
+                String sql = "insert into Customers values (N'" + name + "', N'" + addr + "', '" + phone + "', 1)";
                 int rs = stm.executeUpdate(sql);
                 String sql2 = "SELECT TOP(1) * FROM Customers WHERE name = '" + name + "' order by(id) DESC";
                 ResultSet r = stm.executeQuery(sql2);
@@ -182,4 +155,32 @@ public class CustomerService extends BaseService {
         }
         return ps;
     }
+
+    public List<Customer> paging(String query) {
+        Statement stm = null;
+        List<Customer> customers = new ArrayList<Customer>();
+        Connection con = AppUtility.getConnection();
+        try {
+            stm = con.createStatement();
+            stm.executeQuery(query);
+            ResultSet rs = stm.executeQuery(query);
+            while (rs.next()) {
+                Customer c = new Customer();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setAddress(rs.getString("address"));
+                c.setPhone(rs.getString("phone"));
+                customers.add(c);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customers;
+    }
+    
 }

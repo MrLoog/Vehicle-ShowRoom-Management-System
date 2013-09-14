@@ -8,12 +8,15 @@ import javax.swing.JOptionPane;
 import app.service.CustomerService;
 import app.model.Customer;
 import java.awt.Color;
+
 /**
  *
  * @author kiendv
  */
 public class CreateCustomer extends javax.swing.JDialog {
-CustomerService sv;
+
+    CustomerService sv;
+
     /**
      * Creates new form CreateCustomer
      */
@@ -22,6 +25,15 @@ CustomerService sv;
         initComponents();
         reset();
         lbAlert.setText("");
+    }
+
+    public boolean isNumeric(String str) {
+        try {
+            double d = Double.parseDouble(str);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -150,41 +162,41 @@ CustomerService sv;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void reset(){
+
+    public void reset() {
         eName.setText("");
         eAddress.setText("");
         ePhone.setText("");
     }
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-       sv =new CustomerService();
+        sv = new CustomerService();
         String name = txtName.getText();
         String addr = txtAddress.getText();
         String phone = txtPhone.getText();
         boolean flag = true;
-        if (name == "" || name.length() < 4 || name.length()>100) {
+        if (name == "" || name.length() < 4 || name.length() > 100) {
             eName.setText("Name invalid, min: 5 chars, max: 100 chars");
             flag = false;
         }
-        if (addr == "" || addr.length() < 6 || addr.length()>100) {
+        if (addr == "" || addr.length() < 6 || addr.length() > 100) {
             eAddress.setText("Address invalid, min 6 chars, max: 100 chars");
             flag = false;
         }
-        if (phone == "" || phone.length() < 5 || phone.length()>20) {
+        if (phone == "" || phone.length() < 5 || phone.length() > 20 || !isNumeric(phone)) {
             ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars.");
             flag = false;
         }
         if (flag == true) {
             reset();
             int r = sv.create(name, addr, phone);
-            System.out.println("K: "+r);
-            if(r>0){
+            System.out.println("K: " + r);
+            if (r > 0) {
                 lbAlert.setForeground(Color.blue);
-                lbAlert.setText("Created: "+name);
-            }
-            else if(r==-2){
+                lbAlert.setText("Created: " + name);
+            } else if (r == -2) {
                 lbAlert.setForeground(Color.red);
-                lbAlert.setText("Exited: "+name+" with this phone.");
-            }else{
+                lbAlert.setText("Exited: " + name + " with this phone.");
+            } else {
                 lbAlert.setText("");
                 JOptionPane.showMessageDialog(rootPane, "Error! Can not create Customer.");
             }
