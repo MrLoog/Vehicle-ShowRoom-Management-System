@@ -32,7 +32,6 @@ public class CustomerService extends BaseService {
     public <Customer> List<Customer> executeQuery(String query) {
         return super.executeQuery(query);
     }
-    
 
     @Override
     protected List<Customer> ResultSetToList(ResultSet rs) {
@@ -83,7 +82,7 @@ public class CustomerService extends BaseService {
             updateStmt.setString(1, brand.getName());
             updateStmt.setString(2, brand.getAddress());
             updateStmt.setString(3, brand.getPhone());
-             updateStmt.setInt(4, brand.getDealerId());
+            updateStmt.setInt(4, brand.getDealerId());
             updateStmt.setInt(5, brand.getId());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
@@ -171,14 +170,25 @@ public class CustomerService extends BaseService {
         }
         return cID;
     }
-    
-    public PreparedStatement getPStmtFindCustomer(String phone){
-        PreparedStatement ps=null;
+
+    public PreparedStatement getPStmtFindCustomer(String phone) {
+        PreparedStatement ps = null;
         try {
-             ps=conn.prepareStatement("select * from "+getTableName()+" where Phone=?");
-             ps.setString(1, phone);
+            ps = conn.prepareStatement("select * from " + getTableName() + " where Phone=?");
+            ps.setString(1, phone);
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getPrepareStmtCountByDealer(int id) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select COUNT(*) as total from " + getTableName() + " where DealerID=?");
+            ps.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ps;
     }

@@ -8,6 +8,7 @@ import app.model.OrderPlus;
 import app.model.Order;
 import app.utility.AppUtility;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -107,12 +108,12 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public int create(int dealerId,int customerId,int vehicleId, int price, int q){
+
+    public int create(int dealerId, int customerId, int vehicleId, int price, int q) {
         int flag = 0;
-        String updateQuantity = "UPDATE Vehicles SET quantity = "+(q-1)+" WHERE id = "+vehicleId;
+        String updateQuantity = "UPDATE Vehicles SET quantity = " + (q - 1) + " WHERE id = " + vehicleId;
         String created = "05/09/2013";
-        String sql = "INSERT INTO Orders VALUES ("+dealerId+", "+customerId+", "+vehicleId+", "+price+", 0, '"+created+"', '"+created+"')";
+        String sql = "INSERT INTO Orders VALUES (" + dealerId + ", " + customerId + ", " + vehicleId + ", " + price + ", 0, '" + created + "', '" + created + "')";
         try {
             Statement stm = AppUtility.getConnection().createStatement();
             stm.executeUpdate(updateQuantity);
@@ -122,13 +123,14 @@ public class OrderService extends BaseService {
         }
         return flag;
     }
-    public List<OrderPlus> getAllOrder(){
+
+    public List<OrderPlus> getAllOrder() {
         String sql = "select o.ID as oid, c.Name as cname, o.Price as op, d.Name as dname, v.Name as vname, v.Brand as vbrand, o.Status as stt from Orders o join Dealers d on o.DealerID = d.ID join Customers c on o.CustomerID = c.ID join Vehicles v on o.VehicleID = v.ID order by (oid) DESC";
         List<OrderPlus> l = new ArrayList<OrderPlus>();
         try {
             Statement statement = AppUtility.getConnection().createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 OrderPlus o = new OrderPlus();
                 o.setOid(rs.getInt("oid"));
                 o.setCname(rs.getString("cname"));
@@ -144,25 +146,26 @@ public class OrderService extends BaseService {
         }
         return l;
     }
-    public int confirmOrder(int id){
-        String sql1 = "SELECT * FROM Orders WHERE id="+id;
+
+    public int confirmOrder(int id) {
+        String sql1 = "SELECT * FROM Orders WHERE id=" + id;
         int stt = 0;
         try {
             Statement stm = AppUtility.getConnection().createStatement();
             ResultSet rs = stm.executeQuery(sql1);
             int stt2 = -1;
-            while(rs.next()){
+            while (rs.next()) {
                 stt2 = rs.getInt("status");
             }
-            if(stt2==0){
+            if (stt2 == 0) {
                 Statement stm2 = AppUtility.getConnection().createStatement();
-                String sql2 = "UPDATE Orders SET Status = 1 WHERE id = "+id;
+                String sql2 = "UPDATE Orders SET Status = 1 WHERE id = " + id;
                 int xx = stm2.executeUpdate(sql2);
                 stt = 1;
             }
-            if(stt2==1){
+            if (stt2 == 1) {
                 Statement stm3 = AppUtility.getConnection().createStatement();
-                String sql2 = "UPDATE Orders SET Status = 0 WHERE id = "+id;
+                String sql2 = "UPDATE Orders SET Status = 0 WHERE id = " + id;
                 int xx = stm3.executeUpdate(sql2);
                 stt = 1;
             }
@@ -170,5 +173,39 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return stt;
+    }
+
+    public PreparedStatement getPrepareStmtFindByDealerID(int id) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select * from " + getTableName() + " where DealerID=?");
+            ps.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getPrepareStmtCountOrder(int dealerid) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select COUNT(*) as total from " + getTableName() + " where DealerID=?");
+            ps.setInt(1, dealerid);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getPrepareStmtCountOrderWithStatus(int dealerid, int status) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select COUNT(*) as total from " + getTableName() + " where DealerID=? and Status=?");
+            ps.setInt(1, dealerid);
+            ps.setInt(2, status);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
     }
 }

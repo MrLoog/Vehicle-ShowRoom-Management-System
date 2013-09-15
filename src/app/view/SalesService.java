@@ -9,7 +9,10 @@ import app.listener.ISalesService;
 import app.service.OrderService;
 import app.service.VehicleService;
 import app.view.component.invoice.ImportOrderPlusContent;
+import app.view.component.invoice.ImportOrderPlusTable;
+import app.view.component.report.DealerReport;
 import app.view.component.vehicle.ImportVehicleContent;
+import app.view.composite.SalesOrder;
 import app.view.composite.SalesVehicle;
 import javax.swing.JPanel;
 
@@ -24,6 +27,8 @@ public class SalesService extends javax.swing.JPanel implements ISalesService {
     private IMainFrame listener;
     private JPanel activePanel;
     private SalesVehicle salesVehicle;
+    private SalesOrder salesOrder;
+    private DealerReport report;
 
     public void setListener(IMainFrame listener) {
         this.listener = listener;
@@ -45,6 +50,29 @@ public class SalesService extends javax.swing.JPanel implements ISalesService {
         activePanel = salesVehicle;
         jPanel2.removeAll();
         jPanel2.add(salesVehicle);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
+
+    public void showInvoiceView() {
+        if (salesOrder == null) {
+            salesOrder = new SalesOrder();
+        }
+        activePanel = salesOrder;
+        jPanel2.removeAll();
+        jPanel2.add(salesOrder);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
+
+    public void showDealerReportView() {
+        if (report == null) {
+            report = new DealerReport();
+        }
+        report.setModel(MainFrame.activeUser);
+        activePanel = report;
+        jPanel2.removeAll();
+        jPanel2.add(report);
         jPanel2.revalidate();
         jPanel2.repaint();
     }
@@ -123,10 +151,12 @@ public class SalesService extends javax.swing.JPanel implements ISalesService {
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         // TODO add your handling code here:
+        showInvoiceView();
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
+        showDealerReportView();
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked

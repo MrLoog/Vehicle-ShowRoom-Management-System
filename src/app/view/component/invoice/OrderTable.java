@@ -2,47 +2,48 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.component.vehicle;
+package app.view.component.invoice;
 
-import app.icomponent.IPanelTable;
-import app.model.Vehicle;
-import app.view.model.TableVehicleModel;
+import app.model.Order;
+import app.view.model.TableOrderModelV2;
 import java.util.List;
 
 /**
  *
  * @author Administrator
  */
-public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
+public class OrderTable extends javax.swing.JPanel {
 
-    private List<Vehicle> model;
+    private List<Order> model;
 
-    /**
-     * Creates new form VehicleTable
-     */
-    public VehicleTable() {
-        initComponents();
-    }
-
-    public void setModel(List<Vehicle> model) {
+    public void setModel(List<Order> model) {
         this.model = model;
-        TableVehicleModel tablemodel = new TableVehicleModel(model);
+        TableOrderModelV2 tablemodel = new TableOrderModelV2(model);
         jTable1.setModel(tablemodel);
         jTable1.revalidate();
         jTable1.repaint();
     }
 
-    public Vehicle getSelectedVehicle() {
+    public Order getSelectedOrder() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
             return null;
         } else {
-            return ((TableVehicleModel) jTable1.getModel()).getData(index);
+            return ((TableOrderModelV2) jTable1.getModel()).getData(index);
         }
     }
-    public Object getSelectedObject(){
-        return getSelectedVehicle();
+
+    public Object getSelectedObject() {
+        return getSelectedOrder();
     }
+
+    /**
+     * Creates new form OrderTable
+     */
+    public OrderTable() {
+        initComponents();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

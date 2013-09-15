@@ -11,10 +11,11 @@ import java.sql.Date;
  * @author Administrator
  */
 public class Order {
-    public static final int STATUS_WAIT_CREATE=0;
-    public static final int STATUS_NEW=1;
-    public static final int STATUS_CANCEL=2;
-    public static final int STATUS_DONE=3;
+
+    public static final int STATUS_WAIT_CREATE = 0;
+    public static final int STATUS_NEW = 1;
+    public static final int STATUS_CANCEL = 2;
+    public static final int STATUS_DONE = 3;
     private int id;
     private int dealerId;
     private int customerId;
@@ -25,6 +26,15 @@ public class Order {
     private Date modified;
     private Customer customer;
     private Vehicle vehicle;
+    private Dealer dealer;
+
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
 
     public Customer getCustomer() {
         return customer;
@@ -41,7 +51,7 @@ public class Order {
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -105,5 +115,4 @@ public class Order {
     public void setModified(Date modified) {
         this.modified = modified;
     }
-    
 }

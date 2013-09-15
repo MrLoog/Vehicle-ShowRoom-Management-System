@@ -133,6 +133,19 @@ public abstract class BaseService {
         return output;
     }
 
+    public int executePrepareStmtCount(PreparedStatement ps) {
+        int output = 0;
+        try {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                output = rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
     public abstract String getTableName();
 
     protected abstract <T> List<T> ResultSetToList(ResultSet rs);

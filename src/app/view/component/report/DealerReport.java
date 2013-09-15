@@ -4,17 +4,42 @@
  */
 package app.view.component.report;
 
+import app.model.Dealer;
+import app.model.Order;
+import app.service.CustomerService;
+import app.service.OrderService;
+
 /**
  *
  * @author Administrator
  */
 public class DealerReport extends javax.swing.JPanel {
 
+    private OrderService orderService;
+    private CustomerService customerService;
+    private Dealer model;
+
+    public void setModel(Dealer model) {
+        this.model = model;
+        showReport();
+    }
+
+    private void showReport() {
+        jLabel2.setText(orderService.executePrepareStmtCount(orderService.getPrepareStmtCountOrder(model.getId())) + "");
+        jLabel4.setText(orderService.executePrepareStmtCount(orderService.getPrepareStmtCountOrderWithStatus(model.getId(), Order.STATUS_NEW)) + "");
+        jLabel6.setText(orderService.executePrepareStmtCount(orderService.getPrepareStmtCountOrderWithStatus(model.getId(), Order.STATUS_DONE)) + "");
+        jLabel8.setText(orderService.executePrepareStmtCount(orderService.getPrepareStmtCountOrderWithStatus(model.getId(), Order.STATUS_CANCEL)) + "");
+        jLabel10.setText(orderService.executePrepareStmtCount(orderService.getPrepareStmtCountOrder(model.getId())) + "");
+        jLabel12.setText(customerService.executePrepareStmtCount(customerService.getPrepareStmtCountByDealer(model.getId())) + "");
+    }
+
     /**
      * Creates new form DealerReport
      */
     public DealerReport() {
         initComponents();
+        orderService = new OrderService();
+        customerService = new CustomerService();
     }
 
     /**
@@ -26,17 +51,108 @@ public class DealerReport extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+
+        jLabel1.setText("Total Order :");
+
+        jLabel2.setText("jLabel2");
+
+        jLabel3.setText("Order Wait :");
+
+        jLabel4.setText("jLabel4");
+
+        jLabel5.setText("Order Done :");
+
+        jLabel6.setText("jLabel6");
+
+        jLabel7.setText("Order Cancel :");
+
+        jLabel8.setText("jLabel8");
+
+        jLabel9.setText("Vehicle :");
+
+        jLabel10.setText("jLabel10");
+
+        jLabel11.setText("Customer :");
+
+        jLabel12.setText("jLabel12");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel11))
+                .addGap(61, 61, 61)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel2))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel12))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }
