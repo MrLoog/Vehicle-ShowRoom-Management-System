@@ -6,6 +6,7 @@ package app.view.component.invoice;
 
 import app.model.Order;
 import app.service.OrderService;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -14,6 +15,16 @@ import app.service.OrderService;
 public class OrderUpdateStatus extends javax.swing.JPanel {
 
     private OrderService orderService;
+    private ActionListener purchaseListener;
+
+    public void setPurchaseListener(ActionListener purchaseListener) {
+        this.purchaseListener = purchaseListener;
+    }
+    private ActionListener cancelListener;
+
+    public void setCancelListener(ActionListener cancelListener) {
+        this.cancelListener = cancelListener;
+    }
 
     /**
      * Creates new form OrderUpdateStatus
@@ -229,6 +240,9 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         model.setStatus(Order.STATUS_DONE);
         orderService.update(model);
         setDisplayData(model);
+        if (purchaseListener != null) {
+            purchaseListener.actionPerformed(evt);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -236,6 +250,9 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         model.setStatus(Order.STATUS_CANCEL);
         orderService.update(model);
         setDisplayData(model);
+        if (cancelListener != null) {
+            cancelListener.actionPerformed(evt);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

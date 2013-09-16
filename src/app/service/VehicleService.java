@@ -6,6 +6,7 @@ package app.service;
 
 import app.model.Vehicle;
 import app.utility.AppUtility;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -231,5 +232,15 @@ public class VehicleService extends BaseService {
             }
             return l;
         }
+    }
+
+    public PreparedStatement getPrepareStmtAllAvaiable() {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select * from " + getTableName() + " where Quantity>0");
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
     }
 }

@@ -41,6 +41,14 @@ Customer cu = null;
         eAddress.setText("");
         ePhone.setText("");
     }
+    public boolean isNumeric(String str) {
+        try {
+            double d = Double.parseDouble(str);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -218,7 +226,7 @@ Customer cu = null;
             eAddress.setText("Address invalid, min 6 chars, max: 100 chars");
             flag = false;
         }
-        if (phone == "" || phone.length() < 5 || phone.length()>20) {
+        if (phone == "" || phone.length() < 5 || phone.length()>20 || !isNumeric(phone)) {
             ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars.");
             flag = false;
         }
