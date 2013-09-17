@@ -7,6 +7,7 @@ package app.service;
 import app.model.Vehicle;
 import app.utility.AppUtility;
 import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -129,17 +130,22 @@ public class VehicleService extends BaseService {
     }
 
     public int update(String name, String brand, String modelnumber, String price, String quantity, String id) {
+        int x = -1;
+        if (isExisted(modelnumber, name, brand) > 0) {
+            x = 0;
+        } else {
         String sql = "UPDATE Vehicles SET name = N'" + name.replace("'", "''") + "', brand = N'" + brand.replace("'", "''") + "', modelNumber=" + modelnumber.replace("'", "''") + ", price=" + price.replace("'", "''") + ", quantity=" + quantity.replace("'", "''") + " WHERE id=" + id;
         try {
             Statement stm = AppUtility.getConnection().createStatement();
-            return stm.executeUpdate(sql);
+            x = stm.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
         }
+        }
+        return x;
     }
 
-    public int create(String name, String brand, String modelnumber, String price, String quantity) {
+    public int create(String name, String brand, String price, String modelnumber, String quantity) {
         int x = 0;
         if (isExisted(modelnumber, name, brand) > 0) {
             x = 0;
@@ -242,5 +248,34 @@ public class VehicleService extends BaseService {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ps;
+    }
+    //PROCEDURE BY KIENDV
+    public List<Vehicle> paging(String query) {
+        Statement stm = null;
+        List<Vehicle> customers = new ArrayList<Vehicle>();
+        Connection con = AppUtility.getConnection();
+        try {
+            stm = con.createStatement();
+            stm.executeQuery(query);
+            ResultSet rs = stm.executeQuery(query);
+            while (rs.next()) {
+                Vehicle c = new Vehicle();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setBrand(rs.getString("brand"));
+                c.setPrice(rs.getInt("price"));
+                c.setModelNumber(rs.getString("modelnumber"));
+                c.setQuantity(rs.getInt("quantity"));
+                customers.add(c);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customers;
     }
 }

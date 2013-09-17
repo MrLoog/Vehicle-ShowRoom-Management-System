@@ -14,6 +14,7 @@ import app.view.component.customer.CustomerTable;
 import app.view.component.customer.CustomerTableForSales;
 import app.view.component.vehicle.VehicleTable;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -146,6 +147,13 @@ public class SalesVehicle extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Object selectobj = activeTable.getSelectedObject();
+        if (selectobj instanceof Vehicle) {
+            Vehicle temp = (Vehicle) selectobj;
+            if (temp.getQuantity() <= 0) {
+                JOptionPane.showMessageDialog(this, "This Model Number is not avaiable.");
+                return;
+            }
+        }
         if (selectobj != null) {
             orderForm1.setDataModel(selectobj);
         }

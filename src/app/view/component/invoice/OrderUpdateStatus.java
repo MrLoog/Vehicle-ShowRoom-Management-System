@@ -5,7 +5,9 @@
 package app.view.component.invoice;
 
 import app.model.Order;
+import app.model.Vehicle;
 import app.service.OrderService;
+import app.service.VehicleService;
 import java.awt.event.ActionListener;
 
 /**
@@ -15,6 +17,7 @@ import java.awt.event.ActionListener;
 public class OrderUpdateStatus extends javax.swing.JPanel {
 
     private OrderService orderService;
+    private VehicleService vehicleService;
     private ActionListener purchaseListener;
 
     public void setPurchaseListener(ActionListener purchaseListener) {
@@ -32,6 +35,7 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
     public OrderUpdateStatus() {
         initComponents();
         orderService = new OrderService();
+        vehicleService=new VehicleService();
     }
 
     /**
@@ -239,6 +243,9 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         // TODO add your handling code here:
         model.setStatus(Order.STATUS_DONE);
         orderService.update(model);
+        Vehicle v=vehicleService.getById(model.getVehicleId());
+        v.setQuantity(v.getQuantity()-1);
+        vehicleService.update(v);
         setDisplayData(model);
         if (purchaseListener != null) {
             purchaseListener.actionPerformed(evt);

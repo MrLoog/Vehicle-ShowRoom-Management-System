@@ -14,6 +14,7 @@ import app.service.ImportOrderService;
 import app.service.VehicleService;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -232,9 +233,6 @@ public class ImportOrderForm extends javax.swing.JPanel {
             //auto create new vehicle or update quantity
             if (lst.size() > 0) {
                 Vehicle vehicle = lst.get(0);
-                vehicle.setName(jTextField2.getText());
-                vehicle.setBrand(selectbrand);
-                vehicle.setPrice(Integer.parseInt(jTextField4.getText()));
                 if (isEdit) {
                     int dif = model.getQuantity() - Integer.parseInt(jTextField5.getText());
                     vehicle.setQuantity(vehicle.getQuantity() - dif);
@@ -243,14 +241,20 @@ public class ImportOrderForm extends javax.swing.JPanel {
                 }
                 vehicleService.update(vehicle);
             } else {
-                Vehicle vehicle = new Vehicle();
-                vehicle.setModelNumber(modelnumber);
-                vehicle.setName(jTextField2.getText());
-                vehicle.setBrand(selectbrand);
-                vehicle.setPrice(Integer.parseInt(jTextField4.getText()));
-                //if new vehicle so new order and quantity input first time
-                vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
-                vehicleService.add(vehicle);
+                int choice = JOptionPane.showConfirmDialog(this, "Vehicle not exists, create new?", "Confirm Create new vehicle", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    Vehicle vehicle = new Vehicle();
+                    vehicle.setModelNumber(modelnumber);
+                    vehicle.setName(jTextField2.getText());
+                    vehicle.setBrand(selectbrand);
+                    vehicle.setPrice(Integer.parseInt(jTextField4.getText()));
+                    //if new vehicle so new order and quantity input first time
+                    vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
+                    vehicleService.add(vehicle);
+                }else{
+                    JOptionPane.showMessageDialog(this, "No Vehicle to create import order. Cannot create.");
+                    return;
+                }
             }
 
             loadDataToModel();

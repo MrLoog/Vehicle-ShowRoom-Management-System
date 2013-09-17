@@ -26,6 +26,7 @@ public abstract class BaseService {
     protected PreparedStatement insertStmt;
     protected PreparedStatement updateStmt;
     protected PreparedStatement deleteStmt;
+    protected ResultSet rs;
 
     public BaseService() {
         conn = AppUtility.getConnection();
@@ -43,10 +44,21 @@ public abstract class BaseService {
         try {
             stmt = conn.createStatement();
             String sql = "select * from " + getTableName() + " where ID=" + id;
-            ResultSet rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sql);
             output = ResultSetToList(rs);
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (output.size() > 0) {
             return output.get(0);
@@ -59,10 +71,21 @@ public abstract class BaseService {
         try {
             stmt = conn.createStatement();
             String sql = "select * from " + getTableName();
-            ResultSet rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sql);
             output = ResultSetToList(rs);
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return output;
     }
@@ -72,12 +95,20 @@ public abstract class BaseService {
         try {
             setParameterForInsert(newobject);
             insertStmt.executeUpdate();
-            ResultSet rs = insertStmt.getGeneratedKeys();
+            rs = insertStmt.getGeneratedKeys();
             if (rs.next()) {
                 newId = rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return newId;
     }
@@ -114,10 +145,21 @@ public abstract class BaseService {
         List<T> output = new ArrayList<T>();
         try {
             stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            rs = stmt.executeQuery(query);
             output = ResultSetToList(rs);
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return output;
     }
@@ -125,10 +167,21 @@ public abstract class BaseService {
     public <T> List<T> executePrepareStmt(PreparedStatement ps) {
         List<T> output = new ArrayList<T>();
         try {
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             output = ResultSetToList(rs);
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return output;
     }
@@ -136,12 +189,23 @@ public abstract class BaseService {
     public int executePrepareStmtCount(PreparedStatement ps) {
         int output = 0;
         try {
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 output = rs.getInt("total");
             }
         } catch (SQLException ex) {
             Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return output;
     }
