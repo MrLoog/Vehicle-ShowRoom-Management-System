@@ -24,15 +24,10 @@ public class SalesService extends javax.swing.JPanel implements ISalesService {
 
     private VehicleService vehicleService;
     private OrderService orderService;
-    private IMainFrame listener;
     private JPanel activePanel;
     private SalesVehicle salesVehicle;
     private SalesOrder salesOrder;
     private DealerReport report;
-
-    public void setListener(IMainFrame listener) {
-        this.listener = listener;
-    }
 
     /**
      * Creates new form SalesService

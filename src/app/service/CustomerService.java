@@ -109,11 +109,6 @@ public class CustomerService extends BaseService {
         return super.getById(id);
     }
 
-    @Override
-    public <Customer> boolean update(Customer updateobject) {
-        return super.update(updateobject);
-    }
-
     public int create(String name, String addr, String phone) {
         //if existed customer, not create new
         Statement stm;

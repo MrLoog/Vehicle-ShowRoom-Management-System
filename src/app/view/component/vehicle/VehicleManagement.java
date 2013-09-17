@@ -6,6 +6,8 @@ package app.view.component.vehicle;
 
 import app.model.Vehicle;
 import app.service.VehicleService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author kiendv
  */
 public class VehicleManagement extends javax.swing.JPanel {
-
+    
     float itemsPerPage = 10;
     float total = 0;
     static int cur = 1;
@@ -33,7 +35,7 @@ public class VehicleManagement extends javax.swing.JPanel {
         initComponents();
         includeData();
     }
-
+    
     public void includeData() {
         DefaultTableModel model = new DefaultTableModel();
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -95,7 +97,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             paging();
         }
     }
-
+    
     public void paging() {
         if (isSearch) {
             comboVehicle.removeAllItems();
@@ -113,7 +115,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             }
         }
     }
-
+    
     public boolean isNumeric(String str) {
         try {
             double d = Double.parseDouble(str);
@@ -263,7 +265,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             includeData();
         }
     }//GEN-LAST:event_comboVehicleActionPerformed
-
+    
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String kw = txtKeyword.getText().trim();
         if (kw == "" || kw.equals("") || kw == null || kw.length() < 1) {
@@ -284,7 +286,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             includeData();
         }
     }//GEN-LAST:event_btnSearchActionPerformed
-
+    
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         try {
             int row = tableVehicle.getSelectedRow();
@@ -307,30 +309,37 @@ public class VehicleManagement extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(tableVehicle, "Please choose item to delete");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+    
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         VehicleCreateNew newv = new VehicleCreateNew(null, false);
+        newv.setSaveListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                reload();
+            }
+        });
         newv.show();
     }//GEN-LAST:event_btnNewActionPerformed
-
+    
     private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
-        try{    
-        int row = tableVehicle.getSelectedRow();
+        try {            
+            int row = tableVehicle.getSelectedRow();
             String id = tableVehicle.getValueAt(row, 0).toString();
             Purchase p = new Purchase(null, true);
             p.showme(id);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             
         }
     }//GEN-LAST:event_btnPurchaseActionPerformed
-
+    
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-       reload();
+        reload();
     }//GEN-LAST:event_btnRefreshActionPerformed
-
+    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        try{    
-        int row = tableVehicle.getSelectedRow();
+        try {            
+            int row = tableVehicle.getSelectedRow();
             String id = tableVehicle.getValueAt(row, 0).toString();
             String name = tableVehicle.getValueAt(row, 1).toString();
             String brand = tableVehicle.getValueAt(row, 2).toString();
@@ -339,7 +348,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             String quantity = tableVehicle.getValueAt(row, 5).toString();
             VehicleEdit vh = new VehicleEdit(null, isSearch);
             vh.showme(id, name, brand, price, model, quantity);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             
         }
     }//GEN-LAST:event_btnEditActionPerformed

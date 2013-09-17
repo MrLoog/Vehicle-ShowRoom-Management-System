@@ -4,8 +4,12 @@
  */
 package app.view;
 
+import app.model.Dealer;
 import app.view.component.vehicle.VehicleManagement;
 import app.view.composite.CustomerManage;
+import app.view.composite.DealerManage;
+import app.view.composite.PersonalDialog;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
 /**
@@ -13,14 +17,28 @@ import javax.swing.border.Border;
  * @author kiendv
  */
 public class Main extends javax.swing.JFrame {
-VehicleManagement vpanel = new VehicleManagement();
-CustomerManage cpanel = new CustomerManage();
+
+    public static Dealer activeUser;
+    private SalesServiceV2 viewsales;
+    private ManageShowroomV2 viewshowroom;
+    private DealerManage dealerManage;
+    private LoginFrame loginFrame;
+    private AdminManageV2 adminManage;
+
+    public static void setActiveUser(Dealer d) {
+        MainFrame.activeUser = d;
+    }
+
+    public void setLoginFrame(LoginFrame frame) {
+        loginFrame = frame;
+    }
+
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
-        mainpanel.add(vpanel);
+        ViewSalesService();
     }
 
     /**
@@ -32,69 +50,26 @@ CustomerManage cpanel = new CustomerManage();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        btnVehicle = new javax.swing.JButton();
-        btnOrders = new javax.swing.JButton();
-        btnCustomer = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        mainpanel = new javax.swing.JPanel();
-        lbTitle = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        btnVehicle.setText("Vehicles");
-        btnVehicle.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnVehicle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVehicleActionPerformed(evt);
-            }
-        });
-
-        btnOrders.setText("Orders");
-        btnOrders.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnOrders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdersActionPerformed(evt);
-            }
-        });
-
-        btnCustomer.setText("Customers");
-        btnCustomer.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnCustomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCustomerActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(254, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
+        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setMaximumSize(new java.awt.Dimension(32767, 100));
+        jPanel2.setMinimumSize(new java.awt.Dimension(100, 100));
+        jPanel2.setName(""); // NOI18N
+        jPanel2.setPreferredSize(new java.awt.Dimension(699, 70));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -104,39 +79,155 @@ CustomerManage cpanel = new CustomerManage();
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 96, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
 
-        mainpanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        mainpanel.setLayout(new java.awt.BorderLayout());
+        jPanel3.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        lbTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lbTitle.setForeground(new java.awt.Color(0, 102, 0));
-        lbTitle.setText("Vehicle Showroom Management");
-        mainpanel.add(lbTitle, java.awt.BorderLayout.PAGE_START);
+        jMenu1.setText("File");
 
-        getContentPane().add(mainpanel, java.awt.BorderLayout.CENTER);
+        jMenuItem4.setText("Logout");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+
+        jMenuItem5.setText("Changed My Information");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Navigate");
+
+        jMenuItem2.setText("Sales Service");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem2);
+
+        jMenuItem1.setText("Manage Showroom");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuItem3.setText("Admin Manage");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehicleActionPerformed
-        this.remove(cpanel);
-        mainpanel.add(vpanel);
-        lbTitle.setText("Vehicle Management");
-    }//GEN-LAST:event_btnVehicleActionPerformed
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        if (loginFrame == null) {
+            loginFrame = new LoginFrame();
+            loginFrame.setLocationRelativeTo(null);
+        }
+        loginFrame.setVisible(true);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
-        
-    }//GEN-LAST:event_btnOrdersActionPerformed
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        PersonalDialog personalDialog = new PersonalDialog(this, true);
+        personalDialog.setLocationRelativeTo(this);
+        personalDialog.setResizable(false);
+        personalDialog.setModel(MainFrame.activeUser);
+        personalDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        this.remove(vpanel);
-        mainpanel.add(cpanel);
-        lbTitle.setText("Customer Management");
-    }//GEN-LAST:event_btnCustomerActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        ViewSalesService();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        ViewManageShowroom();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        if (MainFrame.activeUser.isIsAdmin()) {
+            viewAdminManage();
+        } else {
+            JOptionPane.showMessageDialog(this, "You don't have permission for this action.");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    public void ViewSalesService() {
+        if (viewsales == null) {
+            viewsales = new SalesServiceV2();
+        }
+        jPanel3.removeAll();
+        jPanel3.add(viewsales);
+        BodyChanged();
+    }
+
+    public void ViewManageShowroom() {
+        if (viewshowroom == null) {
+            viewshowroom = new ManageShowroomV2();
+        }
+        jPanel3.removeAll();
+        jPanel3.add(viewshowroom);
+        BodyChanged();
+    }
+
+    public void ViewDealerManage() {
+        if (dealerManage == null) {
+            dealerManage = new DealerManage();
+            dealerManage.init();
+        }
+        jPanel3.removeAll();
+        jPanel3.add(dealerManage);
+        BodyChanged();
+    }
+
+    public void viewAdminManage() {
+        if (adminManage == null) {
+            adminManage = new AdminManageV2();
+        }
+        jPanel3.removeAll();
+        jPanel3.add(adminManage);
+        BodyChanged();
+    }
+
+    public void BodyChanged() {
+        jPanel3.revalidate();
+        jPanel3.repaint();
+    }
+
+    public void onEditSuccess(Dealer newdealer) {
+        MainFrame.setActiveUser(newdealer);
+    }
 
     /**
      * @param args the command line arguments
@@ -173,12 +264,16 @@ CustomerManage cpanel = new CustomerManage();
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCustomer;
-    private javax.swing.JButton btnOrders;
-    private javax.swing.JButton btnVehicle;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lbTitle;
-    private javax.swing.JPanel mainpanel;
+    private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
 }

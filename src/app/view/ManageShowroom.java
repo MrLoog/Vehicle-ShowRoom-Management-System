@@ -6,6 +6,7 @@ package app.view;
 
 import app.listener.IMainFrame;
 import app.listener.IManageShowroom;
+import app.view.component.customer.CustomerTable;
 import app.view.composite.ImportOrderManage;
 import app.view.composite.VehicleManage;
 import app.view.component.vehicle.ImportVehicleContent;
@@ -23,6 +24,7 @@ public class ManageShowroom extends javax.swing.JPanel implements IManageShowroo
     private IMainFrame listener;
     private VehicleManage vehicleManage;
     private ImportOrderManage importOrderManage;
+    private CustomerTable customerTable;
 
     public void setListener(IMainFrame listener) {
         this.listener = listener;
@@ -78,15 +80,15 @@ public class ManageShowroom extends javax.swing.JPanel implements IManageShowroo
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         // TODO add your handling code here:
-        int index=jTabbedPane1.getSelectedIndex();
-        if(index==0){
+        int index = jTabbedPane1.getSelectedIndex();
+        if (index == 0) {
             callViewVehicleManage();
-        }
-        else if(index==1){
+        } else if (index == 1) {
             callViewImportOrderManage();
+        } else if (index == 2) {
+            callViewCustomerManager();
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -95,22 +97,32 @@ public class ManageShowroom extends javax.swing.JPanel implements IManageShowroo
     // End of variables declaration//GEN-END:variables
 
     private void callViewVehicleManage() {
-        if(vehicleManage==null){
-            vehicleManage=new VehicleManage();
+        if (vehicleManage == null) {
+            vehicleManage = new VehicleManage();
             jPanel1.removeAll();
-            jPanel1.add(vehicleManage,BorderLayout.CENTER);
+            jPanel1.add(vehicleManage, BorderLayout.CENTER);
             jPanel1.revalidate();
             jPanel1.repaint();
         }
     }
 
     private void callViewImportOrderManage() {
-        if(importOrderManage==null){
-            importOrderManage=new ImportOrderManage();
+        if (importOrderManage == null) {
+            importOrderManage = new ImportOrderManage();
             jPanel2.removeAll();
-            jPanel2.add(importOrderManage,BorderLayout.CENTER);
+            jPanel2.add(importOrderManage, BorderLayout.CENTER);
             jPanel2.revalidate();
             jPanel2.repaint();
+        }
+    }
+
+    private void callViewCustomerManager() {
+        if (customerTable == null) {
+            customerTable = new CustomerTable();
+            jPanel3.removeAll();
+            jPanel3.add(customerTable, BorderLayout.CENTER);
+            jPanel3.revalidate();
+            jPanel3.repaint();
         }
     }
 }

@@ -75,7 +75,7 @@ public class LoginFrame extends javax.swing.JFrame {
         if (d == null) {
             return;
         } else {
-            MainFrame mainframe = new MainFrame();
+            Main mainframe = new Main();
             mainframe.setVisible(true);
             mainframe.setLocationRelativeTo(null);
             mainframe.setLoginFrame(this);

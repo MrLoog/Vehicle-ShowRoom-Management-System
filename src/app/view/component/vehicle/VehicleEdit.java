@@ -6,6 +6,7 @@ package app.view.component.vehicle;
 
 import app.model.Vehicle;
 import app.service.VehicleService;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -14,7 +15,10 @@ import javax.swing.JOptionPane;
  * @author kiendv
  */
 public class VehicleEdit extends javax.swing.JDialog {
-private VehicleService vehicleService;
+
+    private VehicleService vehicleService;
+    
+
     /**
      * Creates new form VehicleEdit
      */
@@ -23,7 +27,8 @@ private VehicleService vehicleService;
         initComponents();
         vehicleService = new VehicleService();
     }
-    public void showme(String id, String name, String brand, String price, String model, String quantity){
+
+    public void showme(String id, String name, String brand, String price, String model, String quantity) {
         lbID.setText(id);
         txtName.setText(name);
         txtBrand.setText(brand);
@@ -31,6 +36,7 @@ private VehicleService vehicleService;
         txtModel.setText(model);
         this.show();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -239,17 +245,15 @@ private VehicleService vehicleService;
             String modelNumber = (txtModel.getText());
             String quantity = txtModel.getText();
             int r = vehicleService.update(name, brand, modelNumber, price, quantity, price);
-                if (r>0) {
-                    lbResult.setText("Save Vehicle Success");
-                    reset();
-                }
-                else if(r==0){
-                    JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
-                }
-                else {
-                    JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
-                    lbResult.setText("");
-                }
+            if (r > 0) {
+                lbResult.setText("Save Vehicle Success");
+                reset();
+            } else if (r == 0) {
+                JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
+            } else {
+                JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
+                lbResult.setText("");
+            }
             btnChange.setText("Save");
         }
     }//GEN-LAST:event_btnChangeActionPerformed

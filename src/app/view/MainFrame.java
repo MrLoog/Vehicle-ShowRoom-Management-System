@@ -28,6 +28,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
     private ManageShowroom viewshowroom;
     private DealerManage dealerManage;
     private LoginFrame loginFrame;
+    private AdminManage adminManage;
 
     public static void setActiveUser(Dealer d) {
         MainFrame.activeUser = d;
@@ -142,7 +143,7 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         if (MainFrame.activeUser.isIsAdmin()) {
-            ViewDealerManage();
+            viewAdminManage();
         } else {
             JOptionPane.showMessageDialog(this, "You don't have permission for this action.");
         }
@@ -222,7 +223,6 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
     public void ViewSalesService() {
         if (viewsales == null) {
             viewsales = new SalesService();
-            viewsales.setListener(this);
         }
         jPanel1.removeAll();
         jPanel1.add(viewsales);
@@ -249,7 +249,14 @@ public class MainFrame extends javax.swing.JFrame implements IMainFrame, IPerson
         jPanel1.add(dealerManage);
         BodyChanged();
     }
-
+    public void viewAdminManage(){
+         if (adminManage == null) {
+            adminManage = new AdminManage();
+        }
+        jPanel1.removeAll();
+        jPanel1.add(adminManage);
+        BodyChanged();
+    }
     @Override
     public void BodyChanged() {
         jPanel1.revalidate();

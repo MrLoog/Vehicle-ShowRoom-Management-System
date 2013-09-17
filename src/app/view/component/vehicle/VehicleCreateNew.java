@@ -6,6 +6,7 @@ package app.view.component.vehicle;
 
 import app.model.Vehicle;
 import app.service.VehicleService;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -15,6 +16,12 @@ import javax.swing.JOptionPane;
  */
 public class VehicleCreateNew extends javax.swing.JDialog {
     private VehicleService vehicleService;
+    private ActionListener saveListener;
+
+    public void setSaveListener(ActionListener saveListener) {
+        this.saveListener = saveListener;
+    }
+    
     /**
      * Creates new form VehicleCreateNew
      */
@@ -216,6 +223,9 @@ public class VehicleCreateNew extends javax.swing.JDialog {
                 }
             }
             btnCreate.setText("Save");
+            if(saveListener!=null){
+                saveListener.actionPerformed(evt);
+            }
     }//GEN-LAST:event_btnCreateActionPerformed
     public void reset() {
         eName.setText("");

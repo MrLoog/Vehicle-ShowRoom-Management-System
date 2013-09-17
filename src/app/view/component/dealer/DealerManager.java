@@ -164,6 +164,7 @@ public class DealerManager extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
+        jPanel1.setLayout(new java.awt.FlowLayout(0));
 
         lbCur.setText(".");
         jPanel1.add(lbCur);

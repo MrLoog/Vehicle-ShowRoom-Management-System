@@ -145,7 +145,6 @@ public class CustomerTable extends javax.swing.JPanel {
         btnSearch = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnOrdered = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnNew = new javax.swing.JButton();
 
@@ -226,14 +225,6 @@ public class CustomerTable extends javax.swing.JPanel {
             }
         });
         jPanel1.add(btnDelete);
-
-        btnOrdered.setText("Ordered");
-        btnOrdered.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrderedActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnOrdered);
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -370,10 +361,6 @@ public class CustomerTable extends javax.swing.JPanel {
         newcustomer.show();
     }//GEN-LAST:event_btnNewActionPerformed
 
-    private void btnOrderedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderedActionPerformed
-        JOptionPane.showMessageDialog(tableCustomer, "Go to orders of this customer.");
-    }//GEN-LAST:event_btnOrderedActionPerformed
-
     private void comboCustomerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCustomerItemStateChanged
     }//GEN-LAST:event_comboCustomerItemStateChanged
 
@@ -383,7 +370,6 @@ public class CustomerTable extends javax.swing.JPanel {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
-    private javax.swing.JButton btnOrdered;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox comboCustomer;
