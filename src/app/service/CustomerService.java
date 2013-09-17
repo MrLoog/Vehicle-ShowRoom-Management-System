@@ -143,7 +143,6 @@ public class CustomerService extends BaseService {
         }
         return cID;
     }
-
     public PreparedStatement getPStmtFindCustomer(String phone) {
         PreparedStatement ps = null;
         try {
@@ -164,6 +163,7 @@ public class CustomerService extends BaseService {
         }
         return ps;
     }
+   
     public List<Customer> paging(String query) {
         Statement stm = null;
         List<Customer> customers = new ArrayList<Customer>();
@@ -190,4 +190,5 @@ public class CustomerService extends BaseService {
         }
         return customers;
     }
+    
 }

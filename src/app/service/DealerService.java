@@ -5,8 +5,11 @@
 package app.service;
 
 import app.model.Dealer;
+import app.utility.AppUtility;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -63,7 +66,16 @@ public class DealerService extends BaseService{
     protected String getQueryUpdate() {
         return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=? where ID=?";
     }
-    
+    public int updaterole(String status, int id) {
+        String sql = "update Dealers set IsManager='"+status+"' where ID="+id;
+        try {
+            Statement stm = AppUtility.getConnection().createStatement();
+            return stm.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
@@ -92,4 +104,32 @@ public class DealerService extends BaseService{
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    //
+    public List<Dealer> paging(String query) {
+        Statement stm = null;
+        List<Dealer> customers = new ArrayList<Dealer>();
+        Connection con = AppUtility.getConnection();
+        try {
+            stm = con.createStatement();
+            stm.executeQuery(query);
+            ResultSet rs = stm.executeQuery(query);
+            while (rs.next()) {
+                Dealer c = new Dealer();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                c.setLoginName(rs.getString("loginName"));
+                c.setIsAdmin(rs.getBoolean("isManager"));
+                customers.add(c);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customers;
+    }
+    
 }
