@@ -134,13 +134,13 @@ public class VehicleService extends BaseService {
         if (isExisted(modelnumber, name, brand) > 0) {
             x = 0;
         } else {
-        String sql = "UPDATE Vehicles SET name = N'" + name.replace("'", "''") + "', brand = N'" + brand.replace("'", "''") + "', modelNumber=" + modelnumber.replace("'", "''") + ", price=" + price.replace("'", "''") + ", quantity=" + quantity.replace("'", "''") + " WHERE id=" + id;
-        try {
-            Statement stm = AppUtility.getConnection().createStatement();
-            x = stm.executeUpdate(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            String sql = "UPDATE Vehicles SET name = N'" + name.replace("'", "''") + "', brand = N'" + brand.replace("'", "''") + "', modelNumber=" + modelnumber.replace("'", "''") + ", price=" + price.replace("'", "''") + ", quantity=" + quantity.replace("'", "''") + " WHERE id=" + id;
+            try {
+                Statement stm = AppUtility.getConnection().createStatement();
+                x = stm.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return x;
     }
@@ -250,6 +250,7 @@ public class VehicleService extends BaseService {
         return ps;
     }
     //PROCEDURE BY KIENDV
+
     public List<Vehicle> paging(String query) {
         Statement stm = null;
         List<Vehicle> customers = new ArrayList<Vehicle>();
