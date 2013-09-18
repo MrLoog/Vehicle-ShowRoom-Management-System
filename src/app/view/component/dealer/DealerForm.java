@@ -4,9 +4,9 @@
  */
 package app.view.component.dealer;
 
-import app.listener.IFormListener;
 import app.model.Dealer;
 import app.service.DealerService;
+import app.utility.AppUtility;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,35 +15,30 @@ import java.util.List;
  * @author Administrator
  */
 public class DealerForm extends javax.swing.JPanel {
-
+    
     private DealerService dealerService;
     private boolean isEdit = false;
     private Dealer model;
-    private List<IFormListener> listeners = new ArrayList<IFormListener>();
 
     public void setEditMode(boolean isEdit) {
         this.isEdit = isEdit;
     }
-
-    public void registerListen(IFormListener ls) {
-        this.listeners.add(ls);
-    }
-
+    
     public Dealer getModel() {
         return model;
     }
-
+    
     public void setModel(Dealer model) {
         this.model = model;
         setDefaultValue(model);
     }
-
+    
     private void setDefaultValue(Dealer d) {
         jTextField1.setText(d.getName());
         jTextField2.setText(d.getLoginName());
         jCheckBox1.setSelected(d.isIsAdmin());
     }
-
+    
     private void clear() {
         if (isEdit) {
             setModel(model);
@@ -55,7 +50,7 @@ public class DealerForm extends javax.swing.JPanel {
             setModel(v);
         }
     }
-
+    
     private void loadDataToModel() {
         if (model == null) {
             model = new Dealer();
@@ -64,7 +59,7 @@ public class DealerForm extends javax.swing.JPanel {
         model.setLoginName(jTextField2.getText());
         model.setIsAdmin(jCheckBox1.isSelected());
     }
-
+    
     private boolean isFormValid() {
         boolean output = true;
         String name = jTextField1.getText();
@@ -85,7 +80,7 @@ public class DealerForm extends javax.swing.JPanel {
         }
         return output;
     }
-
+    
     private void clearErrorMes() {
         jLabel4.setText("");
         jLabel5.setText("");
@@ -215,24 +210,21 @@ public class DealerForm extends javax.swing.JPanel {
                 if (isEdit) {
                     dealerService.update(model);
                 } else {
-                    model.setPassword("123456");
+                    model.setPassword(AppUtility.EncryptPassword("123456"));
                     dealerService.add(model);
                 }
             } catch (Exception e) {
                 jLabel6.setText("Error");
             }
             jLabel6.setText("<html>Save Success<br>Password is default '123456'</html>");
-            for(IFormListener l : listeners){
-                l.onCreateNewSuccess();
-            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
     private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
         // TODO add your handling code here:
         String inputln = jTextField2.getText();

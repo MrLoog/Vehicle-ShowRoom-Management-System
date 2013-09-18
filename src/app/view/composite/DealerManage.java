@@ -4,7 +4,6 @@
  */
 package app.view.composite;
 
-import app.listener.IFormListener;
 import app.model.Dealer;
 import app.service.DealerService;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  *
  * @author Administrator
  */
-public class DealerManage extends javax.swing.JPanel implements IFormListener{
+public class DealerManage extends javax.swing.JPanel{
 
     private DealerService dealerService;
 
@@ -25,7 +24,6 @@ public class DealerManage extends javax.swing.JPanel implements IFormListener{
         dealerService = new DealerService();
     }
     public void init(){
-        dealerForm1.registerListen(this);
         reloadTableData();
     }
     public void reloadTableData() {
@@ -75,13 +73,4 @@ public class DealerManage extends javax.swing.JPanel implements IFormListener{
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void onCreateNewSuccess() {
-        reloadTableData();
-    }
-
-    @Override
-    public void onEditSuccess() {
-        reloadTableData();
-    }
 }

@@ -5,6 +5,7 @@
 package app.view.model;
 
 import app.model.Customer;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -17,6 +18,10 @@ public class TableCustomerModel extends AbstractTableModel{
 
     public TableCustomerModel(List<Customer> data) {
         this.data=data;
+    }
+
+    public TableCustomerModel() {
+        data=new ArrayList<Customer>();
     }
     public Customer getData(int index){
         return data.get(index);
@@ -33,7 +38,7 @@ public class TableCustomerModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-         return 6;
+         return 4;
     }
 
     @Override

@@ -76,4 +76,8 @@ public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    public void setDataModel(List<Vehicle> lst) {
+        
+    }
 }

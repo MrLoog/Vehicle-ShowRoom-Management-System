@@ -2,26 +2,42 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.composite;
+package app.view.component.order;
 
-import app.model.Dealer;
+import app.model.ImportOrder;
+import app.model.Vehicle;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author Administrator
  */
-public class PersonalDialog extends javax.swing.JDialog {
+public class DialogImportOrderForm extends javax.swing.JDialog {
 
     /**
-     * Creates new form PersonalDialog
+     * Creates new form DialogImportOrderForm
      */
-    public PersonalDialog(java.awt.Frame parent, boolean modal) {
+    public DialogImportOrderForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    public void setModel(Dealer d){
-        personalForm1.setModel(d);
+
+    public void setModel(ImportOrder model) {
+        importOrderForm2.setModel(model);
     }
+
+    public void setModel(Vehicle model) {
+        importOrderForm2.setModel(model);
+    }
+
+    public void setEditMode(boolean isedit) {
+        importOrderForm2.setEditMode(isedit);
+    }
+
+    public void setListener(ActionListener ls) {
+        importOrderForm2.setSaveListener(ls);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,11 +47,10 @@ public class PersonalDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        personalForm1 = new app.view.component.dealer.PersonalForm();
+        importOrderForm2 = new app.view.component.order.ImportOrderForm();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(391, 300));
-        getContentPane().add(personalForm1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(importOrderForm2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -57,20 +72,20 @@ public class PersonalDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogImportOrderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogImportOrderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogImportOrderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DialogImportOrderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PersonalDialog dialog = new PersonalDialog(new javax.swing.JFrame(), true);
+                DialogImportOrderForm dialog = new DialogImportOrderForm(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -82,6 +97,6 @@ public class PersonalDialog extends javax.swing.JDialog {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.component.dealer.PersonalForm personalForm1;
+    private app.view.component.order.ImportOrderForm importOrderForm2;
     // End of variables declaration//GEN-END:variables
 }

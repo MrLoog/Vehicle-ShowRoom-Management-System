@@ -2,25 +2,33 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.composite;
+package app.view.component.vehicle;
 
-import app.model.Dealer;
+import app.model.Vehicle;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author Administrator
  */
-public class PersonalDialog extends javax.swing.JDialog {
+public class CreateVehicleDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form PersonalDialog
+     * Creates new form CreateVehicleDialog
      */
-    public PersonalDialog(java.awt.Frame parent, boolean modal) {
+    public CreateVehicleDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    public void setModel(Dealer d){
-        personalForm1.setModel(d);
+
+    public void setEditMode(boolean value){
+        importVehicleForm1.setEditMode(value);
+    }
+    public void setModel(Vehicle v){
+        importVehicleForm1.setModel(v);
+    }
+    public void setSaveListener(ActionListener listener){
+        importVehicleForm1.setCreateListener(listener);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,11 +39,10 @@ public class PersonalDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        personalForm1 = new app.view.component.dealer.PersonalForm();
+        importVehicleForm1 = new app.view.component.vehicle.ImportVehicleForm();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(391, 300));
-        getContentPane().add(personalForm1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(importVehicleForm1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -57,20 +64,20 @@ public class PersonalDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateVehicleDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateVehicleDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateVehicleDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PersonalDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateVehicleDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PersonalDialog dialog = new PersonalDialog(new javax.swing.JFrame(), true);
+                CreateVehicleDialog dialog = new CreateVehicleDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -82,6 +89,6 @@ public class PersonalDialog extends javax.swing.JDialog {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.component.dealer.PersonalForm personalForm1;
+    private app.view.component.vehicle.ImportVehicleForm importVehicleForm1;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,14 +4,13 @@
  */
 package app.view.component.order;
 
-import app.listener.IImportOrderContent;
-import app.listener.IImportOrderManage;
 import app.model.Brand;
 import app.model.ImportOrder;
 import app.model.Vehicle;
 import app.service.BrandService;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -24,7 +23,6 @@ public class ImportOrderForm extends javax.swing.JPanel {
 
     private VehicleService vehicleService;
     private ImportOrderService importOrderService;
-    private IImportOrderManage listener;
     private BrandService brandService;
     private List<Brand> lstBrands = new ArrayList<Brand>();
     private List<String> lstBrandsName = new ArrayList<String>();
@@ -41,10 +39,6 @@ public class ImportOrderForm extends javax.swing.JPanel {
         jTextField2.setText(model.getName());
         jComboBox1.setSelectedItem(model.getBrand());
         jTextField4.setText(model.getPrice().toString());
-    }
-
-    public void setListener(IImportOrderManage listener) {
-        this.listener = listener;
     }
 
     /**
@@ -251,7 +245,7 @@ public class ImportOrderForm extends javax.swing.JPanel {
                     //if new vehicle so new order and quantity input first time
                     vehicle.setQuantity(vehicle.getQuantity() + Integer.parseInt(jTextField5.getText()));
                     vehicleService.add(vehicle);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "No Vehicle to create import order. Cannot create.");
                     return;
                 }
@@ -263,8 +257,10 @@ public class ImportOrderForm extends javax.swing.JPanel {
             } else {
                 importOrderService.add(model);
             }
+            if(saveListener!=null){
+                saveListener.actionPerformed(null);
+            }
             jLabel1.setText("Save Order Success.");
-            listener.reloadTableImportOrder();
         }
     }
 
@@ -324,5 +320,10 @@ public class ImportOrderForm extends javax.swing.JPanel {
         o.setPrice(v.getPrice());
         o.setQuantity(0);
         setModel(o);
+    }
+    private ActionListener saveListener;
+
+    void setSaveListener(ActionListener ls) {
+        this.saveListener = ls;
     }
 }

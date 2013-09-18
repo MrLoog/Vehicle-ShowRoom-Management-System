@@ -279,4 +279,10 @@ public class VehicleService extends BaseService {
         }
         return customers;
     }
+
+    public String getConditionSearch(String search) {
+        String pre = "Name like '%search%' or Brand like '%search%' or ModelNumber like '%search%'";
+        String result = pre.replaceAll("search", search);
+        return result;
+    }
 }

@@ -7,117 +7,83 @@ package app.view.component.customer;
 import app.model.Customer;
 import javax.swing.table.DefaultTableModel;
 import app.service.CustomerService;
+import app.view.Main;
+import app.view.model.TableCustomerModel;
 import java.awt.TrayIcon;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author kiendv
  */
 public class CustomerTable extends javax.swing.JPanel {
-
-    float itemsPerPage = 10;
-    float total = 0;
-    static int cur = 1;
-    static boolean isSearch = false;
-    CustomerService service;
-    String kword = "";
-    String sql = "exec pagingcustomers " + cur + "," + itemsPerPage;
-    String getTotal = "";
-    int from, to;
+    
+    CustomerService customerService;
+    AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
+    int curpage = 1;
+    String search = "";
+    TableCustomerModel model = new TableCustomerModel();
+    
+    public void setTotalpage(Integer totalpage) {
+        this.totalpage.set(totalpage);
+        fillPage();
+    }
+    
+    public void setCurpage(int curpage) {
+        this.curpage = curpage;
+        fillDataCustomer(curpage);
+    }
+    
+    private void fillDataCustomer(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = customerService.BuildPagingSql(customerService.getTableName(), null, Main.PerPage, page, totalpage);
+        } else {
+            pagingsql = customerService.BuildPagingSql(customerService.getTableName(), customerService.getConditionSearch(search), Main.PerPage, page, totalpage);
+        }
+        List<Customer> lst = customerService.executeQuery(pagingsql);
+        model.setData(lst);
+        tableCustomer.setModel(model);
+        tableCustomer.revalidate();
+        tableCustomer.repaint();
+    }
+    
+    private void fillPage() {
+        comboCustomer.removeAllItems();
+        for (int i = 1; i <= totalpage.get(); i++) {
+            comboCustomer.addItem(i);
+        }
+        comboCustomer.setSelectedItem(curpage);
+        comboCustomer.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ie) {
+                Object temppage = comboCustomer.getSelectedItem();
+                if (temppage != null) {
+                    setCurpage((Integer) temppage);
+                }
+            }
+        });
+        comboCustomer.revalidate();
+        comboCustomer.repaint();
+    }
 
     /**
      * Creates new form CustomerTable
      */
     public CustomerTable() {
         initComponents();
-        includeData();
+        customerService = new CustomerService();
+        fillDataCustomer(1);
+        fillPage();
     }
-
-    public void includeData() {
-        DefaultTableModel model = new DefaultTableModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            model.removeRow(i);
-        }
-        if (cur == 0 || cur == -1) {
-            cur = 1;
-        }
-        service = new CustomerService();
-        if (isSearch) {
-            try {
-                total = service.executeQuery(getTotal).size();
-            } catch (Exception ex) {
-                total = 0;
-            }
-            String[] colName = {""};
-            model.setColumnIdentifiers(new String[]{"ID", "Name", "Address", "Phone"});
-            List<Customer> lst = service.executeQuery(sql);
-            if (model == null) {
-                model = new DefaultTableModel();
-            }
-            if(cur>1){
-            from = Math.round(itemsPerPage*(cur-1));
-            to = Math.round((cur * itemsPerPage));
-            }else{
-                from = 0;
-                to = Math.round(itemsPerPage);
-            }
-            if(to>=total){
-                to=Math.round(total)-1;
-            }
-            if(total<itemsPerPage){
-                from = 0;
-                to = to=Math.round(total)-1;
-            }
-            if(lst.size()<2){
-                for (int i = 0; i <lst.size(); i++) {
-                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
-            }
-            }
-            else{
-            for (int i = from; i <=to; i++) {
-                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
-            }
-            }
-            tableCustomer.setModel(model);
-            paging();
-        } else {
-            total = service.getAll().size();
-            String[] colName = {""};
-            model.setColumnIdentifiers(new String[]{"ID", "Name", "Address", "Phone"});
-            List<Customer> lst = service.executeQuery(sql);
-            if (model == null) {
-                model = new DefaultTableModel();
-            }
-            for (int i = 0; i < lst.size(); i++) {
-                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getAddress(), lst.get(i).getPhone()});
-            }
-            tableCustomer.setModel(model);
-            paging();
-        }
-    }
-
-    public void paging() {
-        if (isSearch) {
-            comboCustomer.removeAllItems();
-            comboCustomer.addItem("Go to page:");
-            float pages = (total / itemsPerPage);
-            for (int i = 0; i < pages; i++) {
-                comboCustomer.addItem(i + 1);
-            }
-        } else {
-            comboCustomer.removeAllItems();
-            comboCustomer.addItem("Go to page:");
-            float pages = (total / itemsPerPage);
-            for (int i = 0; i < pages; i++) {
-                comboCustomer.addItem(i + 1);
-            }
-        }
-    }
-
+    
     public boolean isNumeric(String str) {
         try {
             double d = Double.parseDouble(str);
@@ -246,44 +212,12 @@ public class CustomerTable extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCustomerActionPerformed
-        if (!isSearch) {
-            String s = "";
-            try {
-                s = comboCustomer.getSelectedItem().toString();
-                cur = Integer.parseInt(s);
-                comboCustomer.removeItem(comboCustomer.getSelectedItem());
-            } catch (Exception ex) {
-                cur = 1;
-            }
-            lbCur.setText(cur + "");
-            sql = "exec pagingcustomers " + cur + "," + itemsPerPage;
-            includeData();
-        } else {
-            String s = "";
-            try {
-                s = comboCustomer.getSelectedItem().toString();
-                cur = Integer.parseInt(s);
-                comboCustomer.removeItem(comboCustomer.getSelectedItem());
-            } catch (Exception ex) {
-                cur = 1;
-            }
-            lbCur.setText(cur + "");
-            String kw = txtKeyword.getText().trim();
-            if (isNumeric(kw)) {
-                sql = "exec searchcustomer '" + kw + "', " + cur + ", " + itemsPerPage + ", 1";
-                getTotal = "exec searchcustomerall '" + kword + "', 1";
-            } else {
-                sql = "exec searchcustomer '" + kw + "', " + cur + ", " + itemsPerPage + ", 0";
-                getTotal = "exec searchcustomerall '" + kword + "', 0";
-            }
-            includeData();
-        }
     }//GEN-LAST:event_comboCustomerActionPerformed
-
+    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-
         try {
             Edit ed = new Edit(null, true);
+            ed.setLocationRelativeTo(null);
             int row = tableCustomer.getSelectedRow();
             int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
             ed.callme(id);
@@ -291,28 +225,20 @@ public class CustomerTable extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(tableCustomer, "Please choose item to edit");
         }
     }//GEN-LAST:event_btnEditActionPerformed
-
+    
     private void tableCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCustomerMouseClicked
     }//GEN-LAST:event_tableCustomerMouseClicked
-
+    
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        isSearch = false;
-        String s = "";
-        try {
-            s = comboCustomer.getSelectedItem().toString();
-            cur = Integer.parseInt(s);
-            comboCustomer.removeItem(comboCustomer.getSelectedItem());
-        } catch (Exception ex) {
-            cur = 1;
-        }
-        lbCur.setText(cur + "");
-        sql = "exec pagingcustomers " + cur + "," + itemsPerPage;
-        includeData();
+        search = "";
+        txtKeyword.setText(search);
+        fillDataCustomer(1);
+        fillPage();
     }//GEN-LAST:event_btnRefreshActionPerformed
-
+    
     private void comboCustomerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboCustomerPropertyChange
     }//GEN-LAST:event_comboCustomerPropertyChange
-
+    
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         try {
             int row = tableCustomer.getSelectedRow();
@@ -323,7 +249,7 @@ public class CustomerTable extends javax.swing.JPanel {
                 Customer c = new Customer();
                 c.setId(id);
                 c.setName(name);
-                boolean r = service.delete(c);
+                boolean r = customerService.delete(c);
                 if (r) {
                     JOptionPane.showMessageDialog(tableCustomer, "Removed: " + name + " (" + id + "), click refresh.");
                 } else {
@@ -334,36 +260,22 @@ public class CustomerTable extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(tableCustomer, "Please choose item to delete");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+    
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String kw = txtKeyword.getText().trim();
-        if(kw == "" ||kw.equals("")||kw==null||kw.length()<1) {
-            isSearch = false;
-            sql = "exec pagingcustomers 1," + itemsPerPage;
-            includeData();
-        } else {
-            isSearch = true;
-            kword = kw;
-            cur = 1;
-            if (isNumeric(kw)) {
-                sql = "exec searchcustomer '" + kw + "', " + cur + ", " + itemsPerPage + ", 1";
-                getTotal = "exec searchcustomerall '" + kword + "', 1";
-            } else {
-                sql = "exec searchcustomer '" + kw + "', " + cur + ", " + itemsPerPage + ", 0";
-                getTotal = "exec searchcustomerall '" + kword + "', 0";
-            }
-            includeData();
-        }
+        search = txtKeyword.getText();
+        fillDataCustomer(1);
+        fillPage();
     }//GEN-LAST:event_btnSearchActionPerformed
-
+    
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         CreateCustomer newcustomer = new CreateCustomer(null, true);
-        newcustomer.show();
+        newcustomer.setLocationRelativeTo(null);
+        newcustomer.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
-
+    
     private void comboCustomerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCustomerItemStateChanged
     }//GEN-LAST:event_comboCustomerItemStateChanged
-
+    
     private void comboCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboCustomerMouseClicked
     }//GEN-LAST:event_comboCustomerMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables

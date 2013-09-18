@@ -79,7 +79,7 @@ public class LoginFrame extends javax.swing.JFrame {
             mainframe.setVisible(true);
             mainframe.setLocationRelativeTo(null);
             mainframe.setLoginFrame(this);
-            MainFrame.setActiveUser(d);
+            Main.setActiveUser(d);
             this.setVisible(false);
 
         }

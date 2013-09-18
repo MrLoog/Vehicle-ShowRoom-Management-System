@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -225,4 +226,36 @@ public abstract class BaseService {
     protected abstract String getQueryDelete();
 
     protected abstract void setParameterForDelete(Object obj);
+
+    public String BuildPagingSql(String tablename, String condition, int perpage, int page, AtomicReference<Integer> total) {
+        String output = "";
+        output = "select * from ( select *,ROW_NUMBER() OVER (ORDER BY ID) AS RowNum from "
+                + tablename;
+        String count = "select COUNT(*) as total from " + tablename;
+        if (condition != null) {
+            output += " where " + condition;
+            count += " where " + condition;
+        }
+        output += " ) as SOD Where SOD.RowNum BETWEEN ((" + page + "-1)*" + perpage + ")+1 AND " + perpage + "*" + page;
+        try {
+            total.set(executePrepareStmtCount(conn.prepareStatement(count)));
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
+    public String BuildPagingSql(String how, int perpage, int page, AtomicReference<Integer> total) {
+        String output = "";
+        output = "select * from ( select *,ROW_NUMBER() OVER (ORDER BY ID) AS RowNum "
+                + how;
+        String count = "select COUNT(*) as total " + how;
+        output += " ) as SOD Where SOD.RowNum BETWEEN ((" + page + "-1)*" + perpage + ")+1 AND " + perpage + "*" + page;
+        try {
+            total.set(executePrepareStmtCount(conn.prepareStatement(count)));
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
 }

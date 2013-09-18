@@ -104,4 +104,9 @@ public class ImportOrderService extends BaseService {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public String getConditionSearch(String search) {
+        String pre = "Name like '%search%' or Brand like '%search%' or ModelNumber like '%search%'";
+        String result = pre.replaceAll("search", search);
+        return result;
+    }
 }

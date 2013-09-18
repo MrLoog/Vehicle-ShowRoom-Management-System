@@ -5,6 +5,7 @@
 package app.view.model;
 
 import app.model.Vehicle;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -14,6 +15,10 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TableVehicleModel extends AbstractTableModel{
     List<Vehicle> data;
+
+    public TableVehicleModel() {
+        data=new ArrayList<Vehicle>();
+    }
 
     public TableVehicleModel(List<Vehicle> data) {
         this.data=data;
@@ -25,7 +30,14 @@ public class TableVehicleModel extends AbstractTableModel{
     public void setData(List<Vehicle> data) {
         this.data = data;
     }
-    
+    public void addData(Vehicle v){
+        if(data!=null){
+            data.add(v);
+        }
+    }
+    public void clear(){
+       data=new ArrayList<Vehicle>();
+    }
     @Override
     public int getRowCount() {
         return data.size();

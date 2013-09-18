@@ -4,8 +4,6 @@
  */
 package app.view.component.vehicle;
 
-import app.listener.IImportVehicleContent;
-import app.listener.IImportVehicleListener;
 import app.model.Vehicle;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
@@ -19,16 +17,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ImportVehicleTable extends javax.swing.JPanel {
 
-    private IImportVehicleContent listener;
     VehicleService vehicleService;
     private int getall = 0;
     private int p=15;
     int cur = 1;
     int from = 0;
 
-    public void setListener(IImportVehicleContent listener) {
-        this.listener = listener;
-    }
 
     /**
      * Creates new form ImportVehicleTable
@@ -457,7 +451,7 @@ public class ImportVehicleTable extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void btnHomeVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeVehicleActionPerformed
-        listener.viewImportVehicleMenu();
+       
     }//GEN-LAST:event_btnHomeVehicleActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed

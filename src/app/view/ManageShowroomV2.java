@@ -5,8 +5,8 @@
 package app.view;
 
 import app.view.component.customer.CustomerTable;
+import app.view.component.importorder.ImportOrderTable;
 import app.view.component.vehicle.VehicleManagement;
-import app.view.composite.ImportOrderManage;
 
 /**
  *
@@ -15,7 +15,7 @@ import app.view.composite.ImportOrderManage;
 public class ManageShowroomV2 extends javax.swing.JPanel {
 
     private VehicleManagement vehicleManagement;
-    private ImportOrderManage importOrderManage;
+    private ImportOrderTable importOrderManage;
     private CustomerTable customerTable;
 
     /**
@@ -134,7 +134,7 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
     private void viewImportOrderManagement() {
         mainpanel.removeAll();
         if (importOrderManage == null) {
-            importOrderManage = new ImportOrderManage();
+            importOrderManage = new ImportOrderTable();
         }
         mainpanel.add(importOrderManage);
         lbTitle.setText("Import Order Management");

@@ -4,10 +4,9 @@
  */
 package app.view.component.vehicle;
 
-import app.listener.IImportOrderWithVehicle;
-import app.listener.IImportVehicleContent;
 import app.model.Vehicle;
 import app.service.VehicleService;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -18,12 +17,12 @@ import javax.swing.JOptionPane;
 public class ImportVehicleForm extends javax.swing.JPanel {
 
     private VehicleService vehicleService;
-    private IImportOrderWithVehicle listener;
     private boolean isEdit = false;
     private Vehicle model;
+    private ActionListener saveListener;
 
-    public void setListener(IImportOrderWithVehicle listener) {
-        this.listener = listener;
+    public void setCreateListener(ActionListener createListener) {
+        this.saveListener = createListener;
     }
 
     public Vehicle getModel() {
@@ -44,7 +43,6 @@ public class ImportVehicleForm extends javax.swing.JPanel {
     public ImportVehicleForm() {
         initComponents();
         vehicleService = new VehicleService();
-        initcom();
         lbResult.setText("");
     }
 
@@ -69,7 +67,7 @@ public class ImportVehicleForm extends javax.swing.JPanel {
             flag = false;
         }
         if (txtModel.getText().equals("")) {
-            emodel.setText("Model invalid");
+            emodel.setText("Model is required");
             flag = false;
         }
         if (!(isEdit && (model.getModelNumber() != null && model.getModelNumber() != "" && model.getModelNumber().equals(txtModel.getText())))) {
@@ -243,41 +241,30 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtModelFocusLost
 
-    public void initcom() {
-        eName.setText("");
-        eBrand.setText("");
-        emodel.setText("");
-        ePrice.setText("");
-    }
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if (valid()) {
             btnCreate.setText("Saving Data...");
+            loadDataToModel();
             if (isEdit) {
-                loadDataToModel();
                 if (vehicleService.update(model)) {
                     lbResult.setText("Save Vehicle Success");
-                    initcom();
-                    listener.reloadTableVehicle();
                 } else {
                     JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
                     lbResult.setText("");
                 }
             } else {
-                int x = vehicleService.create(txtName.getText(), txtBrand.getText(), txtPrice.getText(), txtModel.getText(), "0");
+                int x = vehicleService.add(model);
                 if (x > 0) {
-                    lbResult.setText("Created Vehicle: " + txtName.getText());
-                    initcom();
-                    listener.reloadTableVehicle();
-                } else if (x == 0) {
-                    JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
-                    initcom();
-                    lbResult.setText("");
+                    lbResult.setText("Created Vehicle Success");
                 } else {
-                    JOptionPane.showMessageDialog(emodel, "Error, cannot create vehicle: " + txtName.getText());
+                    JOptionPane.showMessageDialog(null, "Error, cannot create vehicle");
                     lbResult.setText("");
                 }
             }
             btnCreate.setText("Save");
+            if (saveListener != null) {
+                saveListener.actionPerformed(evt);
+            }
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
@@ -285,7 +272,6 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         clearForm();
     }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JLabel eBrand;

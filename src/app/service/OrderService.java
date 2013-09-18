@@ -23,12 +23,12 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class OrderService extends BaseService {
-
+    
     @Override
     public String getTableName() {
         return "Orders";
     }
-
+    
     @Override
     protected List<Order> ResultSetToList(ResultSet rs) {
         List<Order> output = new ArrayList<Order>();
@@ -50,12 +50,12 @@ public class OrderService extends BaseService {
         }
         return output;
     }
-
+    
     @Override
     protected String getQueryInsert() {
         return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
     }
-
+    
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
@@ -71,12 +71,12 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     protected String getQueryUpdate() {
         return "update " + getTableName() + " set DealerID=?,CustomerID=?,VehicleID=?,Price=?,Status=?,Created=?,Modified=? where ID=?";
     }
-
+    
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
@@ -93,12 +93,12 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     protected String getQueryDelete() {
         return "delete from " + getTableName() + " where ID=?";
     }
-
+    
     @Override
     protected void setParameterForDelete(Object obj) {
         try {
@@ -108,7 +108,7 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public int create(int dealerId, int customerId, int vehicleId, int price, int q) {
         int flag = 0;
         String updateQuantity = "UPDATE Vehicles SET quantity = " + (q - 1) + " WHERE id = " + vehicleId;
@@ -123,7 +123,7 @@ public class OrderService extends BaseService {
         }
         return flag;
     }
-
+    
     public List<OrderPlus> getAllOrder() {
         String sql = "select o.ID as oid, c.Name as cname, o.Price as op, d.Name as dname, v.Name as vname, v.Brand as vbrand, o.Status as stt from Orders o join Dealers d on o.DealerID = d.ID join Customers c on o.CustomerID = c.ID join Vehicles v on o.VehicleID = v.ID order by (oid) DESC";
         List<OrderPlus> l = new ArrayList<OrderPlus>();
@@ -146,7 +146,7 @@ public class OrderService extends BaseService {
         }
         return l;
     }
-
+    
     public int confirmOrder(int id) {
         String sql1 = "SELECT * FROM Orders WHERE id=" + id;
         int stt = 0;
@@ -174,7 +174,7 @@ public class OrderService extends BaseService {
         }
         return stt;
     }
-
+    
     public PreparedStatement getPrepareStmtFindByDealerID(int id) {
         PreparedStatement ps = null;
         try {
@@ -185,7 +185,7 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
-
+    
     public PreparedStatement getPrepareStmtCountOrder(int dealerid) {
         PreparedStatement ps = null;
         try {
@@ -196,7 +196,7 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
-
+    
     public PreparedStatement getPrepareStmtCountOrderWithStatus(int dealerid, int status) {
         PreparedStatement ps = null;
         try {
@@ -207,5 +207,34 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ps;
+    }
+    
+    public String getConditionSearchWithStatus(int id, String search, boolean selected) {
+        String pre = "(CustomerID=search or VehicleID=search) and DealerID=id ";
+        if (selected) {
+            pre += "and Status=" + Order.STATUS_NEW;
+        }
+        String result = pre.replaceAll("search", search);
+        result = result.replaceAll("id", id + "");
+        return result;
+    }
+    
+    public String getConditionSearchWithStatusAndJoin(int id, List<Integer> restrictVehicle, List<Integer> restrictCustomer, boolean selected) {
+        String pre = "";
+        String search = "";
+        if (!(restrictVehicle.size() <= 0 && restrictCustomer.size() <= 0)) {
+            pre = "(CustomerID in paraCustomer or VehicleID in paraVehicle) and ";
+        }
+        String searchCustomer = AppUtility.buildStringInSql(restrictCustomer);
+        String searchVehicle = AppUtility.buildStringInSql(restrictVehicle);
+        pre += " DealerID=id ";
+        if (selected) {
+            pre += "and [Status]=" + Order.STATUS_NEW;
+        }
+        String result = pre.replaceAll("search", search);
+        result = result.replaceAll("id", id + "");
+        result = result.replaceAll("paraCustomer", searchCustomer);
+        result = result.replaceAll("paraVehicle", searchVehicle);
+        return result;
     }
 }

@@ -2,11 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.component.order;
+package app.view.component.importorder;
 
+import app.model.Customer;
 import app.model.ImportOrder;
+import app.model.Order;
+import app.model.Vehicle;
+import app.service.DealerService;
+import app.service.ImportOrderService;
+import app.service.VehicleService;
+import app.view.Main;
+import app.view.component.order.DialogImportOrderForm;
 import app.view.model.TableImportOrderModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,21 +29,71 @@ import java.util.List;
  */
 public class ImportOrderTable extends javax.swing.JPanel {
 
-    private List<ImportOrder> model;
+    private ImportOrderService importOrderService;
+    private VehicleService vehicleService;
 
     /**
      * Creates new form ImportOrderTable
      */
     public ImportOrderTable() {
         initComponents();
+        importOrderService = new ImportOrderService();
+        fillData(1);
+        fillPage();
+    }
+    AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
+    int curpage = 1;
+    String search = "";
+    TableImportOrderModel model = new TableImportOrderModel();
+
+    public void setTotalpage(Integer totalpage) {
+        this.totalpage.set(totalpage);
+        fillPage();
     }
 
-    public void setModel(List<ImportOrder> model) {
-        this.model = model;
-        TableImportOrderModel tablemodel = new TableImportOrderModel(model);
-        jTable1.setModel(tablemodel);
+    public void setCurpage(int curpage) {
+        this.curpage = curpage;
+        fillData(curpage);
+    }
+
+    private void fillData(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), null, Main.PerPage, page, totalpage);
+        } else {
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearch(search), Main.PerPage, page, totalpage);
+        }
+        List<ImportOrder> lst = importOrderService.executeQuery(pagingsql);
+        model.setData(lst);
+        jTable1.setModel(model);
         jTable1.revalidate();
         jTable1.repaint();
+    }
+
+    private void fillPage() {
+        jComboBox1.removeAllItems();
+        for (int i = 1; i <= totalpage.get(); i++) {
+            jComboBox1.addItem(i);
+        }
+        jComboBox1.setSelectedItem(curpage);
+        jComboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ie) {
+                Object temppage = jComboBox1.getSelectedItem();
+                if (temppage != null) {
+                    setCurpage((Integer) temppage);
+                }
+            }
+        });
+        jComboBox1.revalidate();
+        jComboBox1.repaint();
+    }
+
+    public void reloadTableOrder() {
+        search = "";
+        jTextField1.setText(search);
+        fillData(1);
+        fillPage();
     }
 
     public ImportOrder getSelectedImportOrder() {
@@ -40,6 +105,10 @@ public class ImportOrderTable extends javax.swing.JPanel {
         }
     }
 
+    public Object getSelectedObject() {
+        return getSelectedImportOrder();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,10 +118,52 @@ public class ImportOrderTable extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setLayout(new java.awt.FlowLayout(0));
+        jPanel1.add(jComboBox1);
+
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
+        jPanel1.add(jTextField1);
+
+        jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+
+        jButton2.setText("New");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2);
+
+        jButton3.setText("Edit");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
+
+        jButton4.setText("Refresh");
+        jPanel1.add(jButton4);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,8 +180,57 @@ public class ImportOrderTable extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        search = jTextField1.getText();
+        fillData(1);
+        fillPage();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setEditMode(false);
+        dialog.setListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                reloadTableOrder();
+            }
+        });
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        ImportOrder io = getSelectedImportOrder();
+        if (io == null) {
+            JOptionPane.showMessageDialog(this, "Don't select a row!");
+            return;
+        } else {
+            DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
+            dialog.setLocationRelativeTo(null);
+            dialog.setModel(io);
+            dialog.setEditMode(true);
+            dialog.setListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    reloadTableOrder();
+                }
+            });
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

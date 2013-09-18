@@ -4,14 +4,13 @@
  */
 package app.view.component.invoice;
 
-import app.listener.IFormListener;
 import app.model.Customer;
 import app.model.Order;
 import app.model.Vehicle;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
-import app.view.MainFrame;
+import app.view.Main;
 import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -30,7 +29,6 @@ public class OrderForm extends javax.swing.JPanel {
 
     private boolean isEdit = false;
     private Order model;
-    private List<IFormListener> listeners = new ArrayList<IFormListener>();
     private CustomerService customerService;
     private VehicleService vehicleService;
     private OrderService orderService;
@@ -40,9 +38,6 @@ public class OrderForm extends javax.swing.JPanel {
         this.isEdit = isEdit;
     }
 
-    public void registerListen(IFormListener ls) {
-        this.listeners.add(ls);
-    }
 
     public Order getModel() {
         return model;
@@ -111,7 +106,7 @@ public class OrderForm extends javax.swing.JPanel {
             if (customers.size() <= 0 && !cusname.equals("")) {
                 int choice = JOptionPane.showConfirmDialog(this, "Customer not exists, save this?", "Confirm for save", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
-                    c.setDealerId(MainFrame.activeUser.getId());
+                    c.setDealerId(Main.activeUser.getId());
                     int returnid = customerService.add(c);
                     c.setId(returnid);
                     setModelCustomer(c);
@@ -330,7 +325,7 @@ public class OrderForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (isFormValid()) {
             jLabel13.setText("Saving...");
-            model.setDealerId(MainFrame.activeUser.getId());
+            model.setDealerId(Main.activeUser.getId());
             model.setPrice(model.getVehicle().getPrice());
             model.setStatus(Order.STATUS_NEW);
             Date date = new Date();

@@ -4,9 +4,9 @@
  */
 package app.view.component.dealer;
 
-import app.listener.IPersonalDialogListener;
 import app.model.Dealer;
 import app.service.DealerService;
+import app.utility.AppUtility;
 import java.util.List;
 
 /**
@@ -15,11 +15,6 @@ import java.util.List;
  */
 public class PersonalForm extends javax.swing.JPanel {
 
-    private IPersonalDialogListener listener;
-
-    public void setListener(IPersonalDialogListener listener) {
-        this.listener = listener;
-    }
     private DealerService dealerService;
     private Dealer model;
 
@@ -48,7 +43,7 @@ public class PersonalForm extends javax.swing.JPanel {
         }
         model.setName(jTextField1.getText());
         model.setLoginName(jTextField2.getText());
-        model.setPassword(jTextField4.getText());
+        model.setPassword(AppUtility.EncryptPassword(new String(jPasswordField2.getPassword())));
     }
 
     public void clearError() {
@@ -81,16 +76,16 @@ public class PersonalForm extends javax.swing.JPanel {
                 }
             }
         }
-        String password = jTextField3.getText();
+        String password = new String(jPasswordField1.getPassword());
         if (password.equals("")) {
             lblePW.setText("Password is required.");
             output = false;
-        } else if (!password.equals(model.getPassword())) {
+        } else if (!model.getPassword().equals(AppUtility.EncryptPassword(password))) {
             lblePW.setText("Wrong Password.");
             output = false;
         }
-        String newpassword = jTextField4.getText();
-        String repass = jTextField5.getText();
+        String newpassword = new String(jPasswordField2.getPassword());
+        String repass = new String(jPasswordField3.getPassword());
         if (newpassword.equals("")) {
             lbleNP.setText("New Password is required.");
             output = false;
@@ -129,32 +124,26 @@ public class PersonalForm extends javax.swing.JPanel {
         lblPassword = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         lblNewPassword = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
         lblReNewPassword = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         lbleName = new javax.swing.JLabel();
         lbleLoginName = new javax.swing.JLabel();
         lblePW = new javax.swing.JLabel();
         lbleNP = new javax.swing.JLabel();
         lbleReP = new javax.swing.JLabel();
         lblprocess = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jPasswordField2 = new javax.swing.JPasswordField();
+        jPasswordField3 = new javax.swing.JPasswordField();
 
         lblName.setText("Name :");
 
         lblLoginName.setText("Login Name :");
 
         lblPassword.setText("Password :");
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
 
         jButton1.setText("Save");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -195,6 +184,12 @@ public class PersonalForm extends javax.swing.JPanel {
 
         lblprocess.setText("jLabel1");
 
+        jPasswordField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,15 +213,15 @@ public class PersonalForm extends javax.swing.JPanel {
                                     .addComponent(lblReNewPassword))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lbleNP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lbleNP, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                                     .addComponent(lbleLoginName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jTextField1)
-                                    .addComponent(jTextField3)
                                     .addComponent(jTextField2)
-                                    .addComponent(jTextField4)
                                     .addComponent(lbleName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lblePW, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jPasswordField1)
+                                    .addComponent(jPasswordField2)
+                                    .addComponent(jPasswordField3)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -256,20 +251,20 @@ public class PersonalForm extends javax.swing.JPanel {
                 .addComponent(lbleLoginName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPassword))
+                    .addComponent(lblPassword)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblePW)
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNewPassword)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbleNP)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblReNewPassword))
+                    .addComponent(lblReNewPassword)
+                    .addComponent(jPasswordField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbleReP)
                 .addGap(18, 18, 18)
@@ -279,10 +274,6 @@ public class PersonalForm extends javax.swing.JPanel {
                 .addContainerGap(63, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -295,23 +286,27 @@ public class PersonalForm extends javax.swing.JPanel {
             lblprocess.setText("Saving...");
             loadDataToModel();
             try {
-            dealerService.update(model);
-            lblprocess.setText("Save Success.");
-            listener.onEditSuccess(model);
+                dealerService.update(model);
+                lblprocess.setText("Save Success.");
             } catch (Exception e) {
                 lblprocess.setText("Save Failed.");
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPasswordField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JPasswordField jPasswordField2;
+    private javax.swing.JPasswordField jPasswordField3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel lblLoginName;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNewPassword;

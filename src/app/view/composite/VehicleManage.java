@@ -4,7 +4,6 @@
  */
 package app.view.composite;
 
-import app.listener.IImportOrderWithVehicle;
 import app.model.Vehicle;
 import app.service.VehicleService;
 import app.view.component.order.ImportOrderForm;
@@ -19,7 +18,7 @@ import javax.swing.JTable;
  *
  * @author Administrator
  */
-public class VehicleManage extends javax.swing.JPanel implements IImportOrderWithVehicle {
+public class VehicleManage extends javax.swing.JPanel  {
 
     private VehicleService vehicleService;
     private ImportVehicleForm importVehicleForm;
@@ -128,7 +127,6 @@ public class VehicleManage extends javax.swing.JPanel implements IImportOrderWit
         if (importVehicleForm == null) {
             importVehicleForm = new ImportVehicleForm();
         }
-        importVehicleForm.setListener(this);
         changeDisplayForm(importVehicleForm);
     }
 
@@ -183,13 +181,13 @@ public class VehicleManage extends javax.swing.JPanel implements IImportOrderWit
     private app.view.component.vehicle.VehicleTable vehicleTable1;
     // End of variables declaration//GEN-END:variables
 
-    @Override
+    
     public void BodyChanged() {
         this.revalidate();
         this.repaint();
     }
 
-    @Override
+    
     public void reloadTableVehicle() {
         vehicleTable1.setModel(loadDataVehicle());
     }

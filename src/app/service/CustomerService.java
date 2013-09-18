@@ -138,6 +138,7 @@ public class CustomerService extends BaseService {
         }
         return cID;
     }
+
     public PreparedStatement getPStmtFindCustomer(String phone) {
         PreparedStatement ps = null;
         try {
@@ -148,6 +149,7 @@ public class CustomerService extends BaseService {
         }
         return ps;
     }
+
     public PreparedStatement getPrepareStmtCountByDealer(int id) {
         PreparedStatement ps = null;
         try {
@@ -158,7 +160,7 @@ public class CustomerService extends BaseService {
         }
         return ps;
     }
-   
+
     public List<Customer> paging(String query) {
         Statement stm = null;
         List<Customer> customers = new ArrayList<Customer>();
@@ -185,5 +187,10 @@ public class CustomerService extends BaseService {
         }
         return customers;
     }
-    
+
+    public String getConditionSearch(String search) {
+        String pre = "Name like '%search%' or Address like '%search%' or Phone like '%search%'";
+        String result = pre.replaceAll("search", search);
+        return result;
+    }
 }

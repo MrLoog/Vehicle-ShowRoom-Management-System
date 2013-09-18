@@ -5,8 +5,6 @@ package app.view.component.invoice;
  */
 
 import app.model.OrderPlus;
-import app.listener.IImportOrderPlusListener;
-import app.listener.UpdateCustomerListener;
 import app.service.OrderService;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;

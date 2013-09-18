@@ -6,7 +6,7 @@ package showroommanagermentsystem;
 
 import app.model.Vehicle;
 import app.service.VehicleService;
-import app.view.MainFrame;
+import app.view.Main;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -15,7 +15,6 @@ import javax.swing.JFrame;
  * @author ducnt_c00437
  */
 public class ShowroomManagermentSystem {
-
     /**
      * @param args the command line arguments
      */

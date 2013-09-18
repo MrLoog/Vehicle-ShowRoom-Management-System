@@ -19,6 +19,7 @@ import javax.swing.border.Border;
 public class Main extends javax.swing.JFrame {
 
     public static Dealer activeUser;
+    public static final int PerPage=1;
     private SalesServiceV2 viewsales;
     private ManageShowroomV2 viewshowroom;
     private DealerManage dealerManage;
@@ -26,7 +27,7 @@ public class Main extends javax.swing.JFrame {
     private AdminManageV2 adminManage;
 
     public static void setActiveUser(Dealer d) {
-        MainFrame.activeUser = d;
+        Main.activeUser = d;
     }
 
     public void setLoginFrame(LoginFrame frame) {
@@ -160,7 +161,7 @@ public class Main extends javax.swing.JFrame {
         PersonalDialog personalDialog = new PersonalDialog(this, true);
         personalDialog.setLocationRelativeTo(this);
         personalDialog.setResizable(false);
-        personalDialog.setModel(MainFrame.activeUser);
+        personalDialog.setModel(Main.activeUser);
         personalDialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -176,7 +177,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-        if (MainFrame.activeUser.isIsAdmin()) {
+        if (Main.activeUser.isIsAdmin()) {
             viewAdminManage();
         } else {
             JOptionPane.showMessageDialog(this, "You don't have permission for this action.");
@@ -226,7 +227,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void onEditSuccess(Dealer newdealer) {
-        MainFrame.setActiveUser(newdealer);
+        Main.setActiveUser(newdealer);
     }
 
     /**

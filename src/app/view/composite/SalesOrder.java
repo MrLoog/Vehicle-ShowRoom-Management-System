@@ -10,8 +10,12 @@ import app.model.Vehicle;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
-import app.view.MainFrame;
+import app.view.Main;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -33,17 +37,73 @@ public class SalesOrder extends javax.swing.JPanel {
         customerService = new CustomerService();
         reloadTableOrder();
     }
+    AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
+    int curpage = 1;
+    String search = "";
+
+    public void setTotalpage(Integer totalpage) {
+        this.totalpage.set(totalpage);
+        fillPage();
+    }
+
+    public void setCurpage(int curpage) {
+        this.curpage = curpage;
+        fillData(curpage);
+    }
+
+    private void fillData(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = orderService.BuildPagingSql(orderService.getTableName(), orderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), new ArrayList<Integer>(), new ArrayList<Integer>(), jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
+        } else {
+            List<Vehicle> lst1 = vehicleService.executeQuery("select * from " + vehicleService.getTableName() + " where " + vehicleService.getConditionSearch(search));
+            List<Customer> lst2 = customerService.executeQuery("select * from " + customerService.getTableName() + " where " + customerService.getConditionSearch(search));
+            List<Integer> lstintv = new ArrayList<Integer>();
+            List<Integer> lstintc = new ArrayList<Integer>();
+            for (Vehicle v : lst1) {
+                if (!lstintv.contains(v.getId())) {
+                    lstintv.add(v.getId());
+                }
+            }
+            for (Customer v : lst2) {
+                if (!lstintc.contains(v.getId())) {
+                    lstintc.add(v.getId());
+                }
+            }
+            pagingsql = orderService.BuildPagingSql(orderService.getTableName(), orderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), lstintv, lstintc, jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
+        }
+        List<Order> lst = orderService.executeQuery(pagingsql);
+        for (Order order : lst) {
+            order.setCustomer(customerService.getById(order.getCustomerId()));
+            order.setVehicle((Vehicle) vehicleService.getById(order.getVehicleId()));
+        }
+        orderTable1.setModel(lst);
+    }
+
+    private void fillPage() {
+        jComboBox1.removeAllItems();
+        for (int i = 1; i <= totalpage.get(); i++) {
+            jComboBox1.addItem(i);
+        }
+        jComboBox1.setSelectedItem(curpage);
+        jComboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ie) {
+                Object temppage = jComboBox1.getSelectedItem();
+                if (temppage != null) {
+                    setCurpage((Integer) temppage);
+                }
+            }
+        });
+        jComboBox1.revalidate();
+        jComboBox1.repaint();
+    }
 
     public void reloadTableOrder() {
-        List<Order> orders = orderService.executePrepareStmt(orderService.getPrepareStmtFindByDealerID(MainFrame.activeUser.getId()));
-        for (Order o : orders) {
-            o.setDealer(MainFrame.activeUser);
-            Customer c = customerService.getById(o.getCustomerId());
-            o.setCustomer(c);
-            Vehicle v = vehicleService.getById(o.getVehicleId());
-            o.setVehicle(v);
-        }
-        orderTable1.setModel(orders);
+        search = "";
+        jTextField1.setText(search);
+        fillData(1);
+        fillPage();
     }
 
     /**
@@ -58,13 +118,11 @@ public class SalesOrder extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         orderTable1 = new app.view.component.invoice.OrderTable();
         jPanel3 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox();
         jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         orderUpdateStatus1 = new app.view.component.invoice.OrderUpdateStatus();
@@ -75,16 +133,22 @@ public class SalesOrder extends javax.swing.JPanel {
         jPanel1.add(orderTable1, java.awt.BorderLayout.CENTER);
 
         jPanel3.setLayout(new java.awt.FlowLayout(0));
+        jPanel3.add(jComboBox1);
 
-        jTextField1.setText("jTextField1");
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel3.add(jTextField1);
 
         jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel3.add(jComboBox1);
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("Wait Only");
+        jPanel3.add(jCheckBox1);
 
         jButton2.setText("Load Data");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -93,20 +157,6 @@ public class SalesOrder extends javax.swing.JPanel {
             }
         });
         jPanel3.add(jButton2);
-
-        jButton3.setText("Delete");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton3);
-
-        jButton4.setText("Edit");
-        jPanel3.add(jButton4);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel3.add(jComboBox2);
 
         jButton5.setText("Refresh");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -121,6 +171,8 @@ public class SalesOrder extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
+
+        orderUpdateStatus1.setPreferredSize(new java.awt.Dimension(250, 343));
         jPanel2.add(orderUpdateStatus1, java.awt.BorderLayout.CENTER);
 
         add(jPanel2, java.awt.BorderLayout.EAST);
@@ -137,20 +189,18 @@ public class SalesOrder extends javax.swing.JPanel {
         reloadTableOrder();
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Order o = orderTable1.getSelectedOrder();
-        orderService.delete(o);
-        reloadTableOrder();
-    }//GEN-LAST:event_jButton3ActionPerformed
+        search = jTextField1.getText();
+        fillData(1);
+        fillPage();
+    }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

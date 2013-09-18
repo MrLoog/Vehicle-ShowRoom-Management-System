@@ -5,6 +5,7 @@
 package app.view.model;
 
 import app.model.ImportOrder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -17,6 +18,10 @@ public class TableImportOrderModel extends AbstractTableModel{
 
     public TableImportOrderModel(List<ImportOrder> data) {
         this.data=data;
+    }
+
+    public TableImportOrderModel() {
+        this.data=new ArrayList<ImportOrder>();
     }
     public ImportOrder getData(int index){
         return data.get(index);

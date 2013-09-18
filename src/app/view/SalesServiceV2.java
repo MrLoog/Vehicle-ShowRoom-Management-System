@@ -59,7 +59,7 @@ public class SalesServiceV2 extends javax.swing.JPanel {
         if (report == null) {
             report = new DealerReport();
         }
-        report.setModel(MainFrame.activeUser);
+        report.setModel(Main.activeUser);
         activePanel = report;
         mainpanel.removeAll();
         mainpanel.add(report);

@@ -10,10 +10,14 @@ import app.model.Vehicle;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
+import app.view.Main;
 import app.view.component.customer.CustomerTable;
 import app.view.component.customer.CustomerTableForSales;
 import app.view.component.vehicle.VehicleTable;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,9 +29,6 @@ public class SalesVehicle extends javax.swing.JPanel {
     private VehicleService vehicleService;
     private OrderService orderService;
     private CustomerService customerService;
-    private VehicleTable vehicleTable;
-    private CustomerTableForSales customerTable;
-    private IPanelTable activeTable;
 
     /**
      * Creates new form SalesVehicle
@@ -39,6 +40,67 @@ public class SalesVehicle extends javax.swing.JPanel {
         customerService = new CustomerService();
         viewTableVehicle();
     }
+    AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
+    int curpage = 1;
+    String search = "";
+
+    public void setTotalpage(Integer totalpage) {
+        this.totalpage.set(totalpage);
+        fillPage();
+    }
+
+    public void setCurpage(int curpage) {
+        this.curpage = curpage;
+        if (activeTable instanceof VehicleTable) {
+            fillDataVehicle(curpage);
+        } else {
+            fillDataCustomer(curpage);
+        }
+    }
+
+    private void fillDataVehicle(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), null, Main.PerPage, page, totalpage);
+        } else {
+            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionSearch(search), Main.PerPage, page, totalpage);
+        }
+        List<Vehicle> lst = vehicleService.executeQuery(pagingsql);
+        vehicleTable.setModel(lst);
+    }
+
+    private void fillDataCustomer(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = customerService.BuildPagingSql(customerService.getTableName(), null, Main.PerPage, page, totalpage);
+        } else {
+            pagingsql = customerService.BuildPagingSql(customerService.getTableName(), customerService.getConditionSearch(search), Main.PerPage, page, totalpage);
+        }
+        List<Customer> lst = customerService.executeQuery(pagingsql);
+        customerTable.setModel(lst);
+    }
+
+    private void fillPage() {
+        jComboBox1.removeAllItems();
+        for (int i = 1; i <= totalpage.get(); i++) {
+            jComboBox1.addItem(i);
+        }
+        jComboBox1.setSelectedItem(curpage);
+        jComboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ie) {
+                Object temppage = jComboBox1.getSelectedItem();
+                if (temppage != null) {
+                    setCurpage((Integer) temppage);
+                }
+            }
+        });
+        jComboBox1.revalidate();
+        jComboBox1.repaint();
+    }
+    private VehicleTable vehicleTable;
+    private CustomerTableForSales customerTable;
+    private IPanelTable activeTable;
 
     public void viewTableVehicle() {
         if (vehicleTable == null) {
@@ -53,8 +115,10 @@ public class SalesVehicle extends javax.swing.JPanel {
     }
 
     private void reloadTableVehicle() {
-        List<Vehicle> vehicles = vehicleService.getAll();
-        vehicleTable.setModel(vehicles);
+        search = "";
+        jTextField1.setText(search);
+        fillDataVehicle(1);
+        fillPage();
     }
 
     public void viewTableCustomer() {
@@ -70,8 +134,10 @@ public class SalesVehicle extends javax.swing.JPanel {
     }
 
     private void reloadTableCustomer() {
-        List<Customer> customers = customerService.getAll();
-        customerTable.setModel(customers);
+        search = "";
+        jTextField1.setText(search);
+        fillDataCustomer(1);
+        fillPage();
     }
 
     /**
@@ -86,11 +152,10 @@ public class SalesVehicle extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
         jButton2 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox();
         jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         orderForm1 = new app.view.component.invoice.OrderForm();
@@ -103,17 +168,19 @@ public class SalesVehicle extends javax.swing.JPanel {
         jPanel2.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel4.setLayout(new java.awt.FlowLayout(0));
+        jPanel4.add(jComboBox1);
 
-        jTextField1.setText("For Search");
         jTextField1.setMinimumSize(new java.awt.Dimension(10, 20));
-        jTextField1.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel4.add(jTextField1);
 
         jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton1);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel4.add(jComboBox1);
 
         jButton2.setText("Load Data");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -122,9 +189,6 @@ public class SalesVehicle extends javax.swing.JPanel {
             }
         });
         jPanel4.add(jButton2);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel4.add(jComboBox2);
 
         jButton3.setText("Refresh");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -168,12 +232,24 @@ public class SalesVehicle extends javax.swing.JPanel {
             reloadTableCustomer();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        search = jTextField1.getText();
+        if (activeTable instanceof VehicleTable) {
+            fillDataVehicle(1);
+            fillPage();
+        }
+        if (activeTable instanceof CustomerTableForSales) {
+            fillDataCustomer(1);
+            fillPage();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
