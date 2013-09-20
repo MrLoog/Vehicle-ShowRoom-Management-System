@@ -9,23 +9,14 @@ import app.model.Vehicle;
 import app.service.OrderService;
 import app.service.VehicleService;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
-import sun.misc.Cache;
 
 /**
  *
  * @author Administrator
  */
-public class OrderUpdateStatus extends javax.swing.JPanel {
+public class ConfirmOrder extends javax.swing.JPanel {
 
-    private OrderService orderService;
-    private VehicleService vehicleService;
-    private ActionListener purchaseListener;
-    private int newStatus = 0;
-
-    public int getNewStatus() {
-        return newStatus;
-    }
+   private ActionListener purchaseListener;
 
     public void setPurchaseListener(ActionListener purchaseListener) {
         this.purchaseListener = purchaseListener;
@@ -39,40 +30,8 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
     /**
      * Creates new form OrderUpdateStatus
      */
-    public OrderUpdateStatus() {
+    public ConfirmOrder() {
         initComponents();
-        orderService = new OrderService();
-        vehicleService = new VehicleService();
-        jComboBox1.removeAllItems();
-        jComboBox1.addItem(getStringOrderStatus(Order.STATUS_NEW));
-        jComboBox1.addItem(getStringOrderStatus(Order.STATUS_CANCEL));
-        jComboBox1.addItem(getStringOrderStatus(Order.STATUS_DONE));
-        jComboBox1.revalidate();
-        jComboBox1.repaint();
-    }
-
-    private String getStringOrderStatus(int status) {
-        switch (status) {
-            case Order.STATUS_NEW:
-                return "New";
-            case Order.STATUS_DONE:
-                return "Done";
-            case Order.STATUS_CANCEL:
-                return "Cancel";
-            default:
-                return "New";
-        }
-    }
-
-    private int getStatusFromString(String str) {
-        if (str.equals(getStringOrderStatus(Order.STATUS_NEW))) {
-            return Order.STATUS_NEW;
-        } else if (str.equals(getStringOrderStatus(Order.STATUS_DONE))) {
-            return Order.STATUS_DONE;
-        } else if (str.equals(getStringOrderStatus(Order.STATUS_CANCEL))) {
-            return Order.STATUS_CANCEL;
-        }
-        return Order.STATUS_NEW;
     }
 
     /**
@@ -106,9 +65,10 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
 
         jLabel1.setText("Name :");
 
@@ -148,7 +108,8 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
 
         jLabel19.setText("Status :");
 
-        jButton1.setText("Update");
+        jButton1.setText("Confirm");
+        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -158,6 +119,16 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         jLabel20.setText("No Info");
 
         jLabel21.setText("No Info");
+
+        jLabel22.setText("No Info");
+
+        jButton2.setText("Cancel");
+        jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel23.setText("Total :");
 
@@ -193,7 +164,10 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel2)))))
                     .addComponent(jLabel10)
-                    .addComponent(jButton1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
@@ -207,12 +181,12 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(173, Short.MAX_VALUE))
+                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(146, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +227,7 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(jLabel24))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(jLabel20))
@@ -264,26 +238,31 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel22))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        loadStatus();
-        int choice = JOptionPane.showConfirmDialog(this, "Are you sure to update status order to " + getStringOrderStatus(newStatus) + " ?", "Confirm Update", JOptionPane.YES_NO_OPTION);
-        if (choice == JOptionPane.YES_OPTION) {
-            if (purchaseListener != null) {
-                purchaseListener.actionPerformed(evt);
-            }
+        if (purchaseListener != null) {
+            purchaseListener.actionPerformed(evt);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        if (cancelListener != null) {
+            cancelListener.actionPerformed(evt);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -298,6 +277,7 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
@@ -315,21 +295,20 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
         setDisplayData(model);
     }
 
-    public Order getModel() {
-        return model;
-    }
-
-    private void loadStatus() {
-        newStatus = (getStatusFromString((String) jComboBox1.getSelectedItem()));
-    }
-
     public void setDisplayData(Order o) {
         jLabel14.setText(o.getPrice() + "");
-        jLabel16.setText(o.getQuantity() + "");
+        jLabel16.setText(o.getQuantity()+"");
         jLabel20.setText(o.getCreated().toString());
         jLabel21.setText(o.getModified().toString());
-        jComboBox1.setSelectedItem(getStringOrderStatus(o.getStatus()));
-        jLabel24.setText((o.getQuantity() * o.getPrice()) + "");
+        jLabel22.setText(o.getStatus() + "");
+        jLabel24.setText((o.getQuantity()*o.getPrice())+"");
+        if (o.getStatus() == Order.STATUS_NEW) {
+            jButton1.setEnabled(true);
+            jButton2.setEnabled(true);
+        } else {
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(false);
+        }
 //        else if (o.getStatus() == Order.STATUS_DONE) {
 //            jButton1.setEnabled(false);
 //            jButton2.setEnabled(true);

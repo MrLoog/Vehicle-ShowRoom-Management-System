@@ -15,30 +15,24 @@ import javax.swing.JOptionPane;
  */
 public class DialogComfirmOrder extends javax.swing.JDialog {
 
+   
+    public void setPurchaseListener(ActionListener purchaseListener) {
+        confirmOrder1.setPurchaseListener(purchaseListener);
+    }
+    public void setCancelListener(ActionListener cancelListener) {
+        confirmOrder1.setCancelListener(cancelListener);
+    }
+
     /**
      * Creates new form DialogComfirmOrder
      */
     public DialogComfirmOrder(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        orderUpdateStatus1.setPurchaseListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                JOptionPane.showMessageDialog(null, "Confirm Success, Dialog is closing.");
-                dispose();
-            }
-        });
-        orderUpdateStatus1.setCancelListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                JOptionPane.showMessageDialog(null, "Cancel Success, Dialog is closing.");
-                dispose();
-            }
-        });
     }
 
     public void setModel(Order oder) {
-        orderUpdateStatus1.setModel(oder);
+        confirmOrder1.setModel(oder);
     }
 
     /**
@@ -50,10 +44,10 @@ public class DialogComfirmOrder extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        orderUpdateStatus1 = new app.view.component.invoice.OrderUpdateStatus();
+        confirmOrder1 = new app.view.component.invoice.ConfirmOrder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().add(orderUpdateStatus1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(confirmOrder1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -100,6 +94,6 @@ public class DialogComfirmOrder extends javax.swing.JDialog {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.component.invoice.OrderUpdateStatus orderUpdateStatus1;
+    private app.view.component.invoice.ConfirmOrder confirmOrder1;
     // End of variables declaration//GEN-END:variables
 }

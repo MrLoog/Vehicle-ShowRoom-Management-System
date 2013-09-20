@@ -235,27 +235,27 @@ public class VehicleEdit extends javax.swing.JDialog {
         return flag;
     }
     private void btnChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeActionPerformed
-        if (valid()) {
-            btnChange.setText("Saving Data...");
-            Vehicle v = new Vehicle();
-            int id = Integer.parseInt(lbID.getText());
-            String name = (txtName.getText());
-            String brand = (txtBrand.getText());
-            String price = ((txtPrice.getText()));
-            String modelNumber = (txtModel.getText());
-            String quantity = txtModel.getText();
-            int r = vehicleService.update(name, brand, modelNumber, price, quantity, price);
-            if (r > 0) {
-                lbResult.setText("Save Vehicle Success");
-                reset();
-            } else if (r == 0) {
-                JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
-            } else {
-                JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
-                lbResult.setText("");
-            }
-            btnChange.setText("Save");
-        }
+//        if (valid()) {
+//            btnChange.setText("Saving Data...");
+//            Vehicle v = new Vehicle();
+//            int id = Integer.parseInt(lbID.getText());
+//            String name = (txtName.getText());
+//            String brand = (txtBrand.getText());
+//            String price = ((txtPrice.getText()));
+//            String modelNumber = (txtModel.getText());
+//            String quantity = txtModel.getText();
+//            int r = vehicleService.update(name, brand, modelNumber, price, quantity, price);
+//            if (r > 0) {
+//                lbResult.setText("Save Vehicle Success");
+//                reset();
+//            } else if (r == 0) {
+//                JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
+//            } else {
+//                JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
+//                lbResult.setText("");
+//            }
+//            btnChange.setText("Save");
+//        }
     }//GEN-LAST:event_btnChangeActionPerformed
     public void reset() {
         eName.setText("");

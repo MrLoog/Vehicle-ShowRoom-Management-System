@@ -18,7 +18,7 @@ public class TableOrderModel extends AbstractTableModel {
     List<OrderPlus> orders;
 
     public TableOrderModel() {
-        orders = new OrderService().getAllOrder();
+//        orders = new OrderService().getAllOrder();
     }
 
     public int getRowCount() {

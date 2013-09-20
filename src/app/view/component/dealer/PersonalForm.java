@@ -34,6 +34,9 @@ public class PersonalForm extends javax.swing.JPanel {
 
     private void clear() {
         setModel(model);
+        jPasswordField1.setText("");
+        jPasswordField2.setText("");
+        jPasswordField3.setText("");
         clearError();
     }
 
@@ -297,7 +300,6 @@ public class PersonalForm extends javax.swing.JPanel {
     private void jPasswordField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField3ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

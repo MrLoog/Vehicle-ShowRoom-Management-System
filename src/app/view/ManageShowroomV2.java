@@ -4,8 +4,9 @@
  */
 package app.view;
 
+import app.view.component.brand.BrandManage;
 import app.view.component.customer.CustomerTable;
-import app.view.component.importorder.ImportOrderTable;
+import app.view.component.order.ImportOrderTable;
 import app.view.component.vehicle.VehicleManagement;
 
 /**
@@ -13,10 +14,6 @@ import app.view.component.vehicle.VehicleManagement;
  * @author Administrator
  */
 public class ManageShowroomV2 extends javax.swing.JPanel {
-
-    private VehicleManagement vehicleManagement;
-    private ImportOrderTable importOrderManage;
-    private CustomerTable customerTable;
 
     /**
      * Creates new form ManageShowroomV2
@@ -41,6 +38,7 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
         btnVehicle = new javax.swing.JButton();
         btnOrders = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
+        btnBrand = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -80,6 +78,14 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
             }
         });
 
+        btnBrand.setText("Brand");
+        btnBrand.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrandActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -89,8 +95,9 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +108,9 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
                 .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         add(jPanel1, java.awt.BorderLayout.LINE_START);
@@ -121,37 +130,64 @@ public class ManageShowroomV2 extends javax.swing.JPanel {
         viewCustomerManagement();
     }//GEN-LAST:event_btnCustomerActionPerformed
 
+    private void btnBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrandActionPerformed
+        // TODO add your handling code here:
+        viewBrandManagement();
+    }//GEN-LAST:event_btnBrandActionPerformed
+    private VehicleManagement vehicleManagement;
+    private ImportOrderTable importOrderManage;
+    private CustomerTable customerTable;
+    private BrandManage brandManage;
+
+    private void viewBrandManagement() {
+        mainpanel.removeAll();
+        if (brandManage == null) {
+            brandManage = new BrandManage();
+        }
+        brandManage.reloadData();
+        mainpanel.add(brandManage);
+        lbTitle.setText("Brand Management");
+        mainpanel.revalidate();
+        mainpanel.repaint();
+    }
+
     private void viewVehicleManagement() {
         mainpanel.removeAll();
         if (vehicleManagement == null) {
             vehicleManagement = new VehicleManagement();
         }
+        vehicleManagement.reloadData();
         mainpanel.add(vehicleManagement);
         lbTitle.setText("Vehicle Management");
         mainpanel.revalidate();
         mainpanel.repaint();
     }
+
     private void viewImportOrderManagement() {
         mainpanel.removeAll();
         if (importOrderManage == null) {
             importOrderManage = new ImportOrderTable();
         }
+        importOrderManage.reloadData();
         mainpanel.add(importOrderManage);
         lbTitle.setText("Import Order Management");
         mainpanel.revalidate();
         mainpanel.repaint();
     }
+
     private void viewCustomerManagement() {
         mainpanel.removeAll();
         if (customerTable == null) {
             customerTable = new CustomerTable();
         }
+        customerTable.reloadData();
         mainpanel.add(customerTable);
         lbTitle.setText("Customer Management");
         mainpanel.revalidate();
         mainpanel.repaint();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBrand;
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnOrders;
     private javax.swing.JButton btnVehicle;

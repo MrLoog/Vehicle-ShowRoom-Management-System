@@ -105,31 +105,31 @@ public class DealerService extends BaseService{
         }
     }
     //
-    public List<Dealer> paging(String query) {
-        Statement stm = null;
-        List<Dealer> customers = new ArrayList<Dealer>();
-        Connection con = AppUtility.getConnection();
-        try {
-            stm = con.createStatement();
-            stm.executeQuery(query);
-            ResultSet rs = stm.executeQuery(query);
-            while (rs.next()) {
-                Dealer c = new Dealer();
-                c.setId(rs.getInt("id"));
-                c.setName(rs.getString("name"));
-                c.setLoginName(rs.getString("loginName"));
-                c.setIsAdmin(rs.getBoolean("isManager"));
-                customers.add(c);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            stm.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return customers;
-    }
-    
+//    public List<Dealer> paging(String query) {
+//        Statement stm = null;
+//        List<Dealer> customers = new ArrayList<Dealer>();
+//        Connection con = AppUtility.getConnection();
+//        try {
+//            stm = con.createStatement();
+//            stm.executeQuery(query);
+//            ResultSet rs = stm.executeQuery(query);
+//            while (rs.next()) {
+//                Dealer c = new Dealer();
+//                c.setId(rs.getInt("id"));
+//                c.setName(rs.getString("name"));
+//                c.setLoginName(rs.getString("loginName"));
+//                c.setIsAdmin(rs.getBoolean("isManager"));
+//                customers.add(c);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            stm.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return customers;
+//    }
+//    
 }

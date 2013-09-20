@@ -24,23 +24,23 @@ import javax.swing.table.AbstractTableModel;
  * @author kiendv
  */
 public class CustomerTable extends javax.swing.JPanel {
-    
+
     CustomerService customerService;
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
     int curpage = 1;
     String search = "";
     TableCustomerModel model = new TableCustomerModel();
-    
+
     public void setTotalpage(Integer totalpage) {
         this.totalpage.set(totalpage);
         fillPage();
     }
-    
+
     public void setCurpage(int curpage) {
         this.curpage = curpage;
         fillDataCustomer(curpage);
     }
-    
+
     private void fillDataCustomer(int page) {
         String pagingsql = "";
         if (search.equals("")) {
@@ -54,10 +54,20 @@ public class CustomerTable extends javax.swing.JPanel {
         tableCustomer.revalidate();
         tableCustomer.repaint();
     }
-    
+
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+
     private void fillPage() {
         comboCustomer.removeAllItems();
-        for (int i = 1; i <= totalpage.get(); i++) {
+        for (int i = 1; i <= getTotalPage(); i++) {
             comboCustomer.addItem(i);
         }
         comboCustomer.setSelectedItem(curpage);
@@ -83,7 +93,7 @@ public class CustomerTable extends javax.swing.JPanel {
         fillDataCustomer(1);
         fillPage();
     }
-    
+
     public boolean isNumeric(String str) {
         try {
             double d = Double.parseDouble(str);
@@ -213,7 +223,7 @@ public class CustomerTable extends javax.swing.JPanel {
 
     private void comboCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCustomerActionPerformed
     }//GEN-LAST:event_comboCustomerActionPerformed
-    
+
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         try {
             Edit ed = new Edit(null, true);
@@ -225,20 +235,20 @@ public class CustomerTable extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(tableCustomer, "Please choose item to edit");
         }
     }//GEN-LAST:event_btnEditActionPerformed
-    
+
     private void tableCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCustomerMouseClicked
     }//GEN-LAST:event_tableCustomerMouseClicked
-    
+
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         search = "";
         txtKeyword.setText(search);
         fillDataCustomer(1);
         fillPage();
     }//GEN-LAST:event_btnRefreshActionPerformed
-    
+
     private void comboCustomerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboCustomerPropertyChange
     }//GEN-LAST:event_comboCustomerPropertyChange
-    
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         try {
             int row = tableCustomer.getSelectedRow();
@@ -260,22 +270,22 @@ public class CustomerTable extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(tableCustomer, "Please choose item to delete");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-    
+
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         search = txtKeyword.getText();
         fillDataCustomer(1);
         fillPage();
     }//GEN-LAST:event_btnSearchActionPerformed
-    
+
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         CreateCustomer newcustomer = new CreateCustomer(null, true);
         newcustomer.setLocationRelativeTo(null);
         newcustomer.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
-    
+
     private void comboCustomerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCustomerItemStateChanged
     }//GEN-LAST:event_comboCustomerItemStateChanged
-    
+
     private void comboCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboCustomerMouseClicked
     }//GEN-LAST:event_comboCustomerMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -291,4 +301,9 @@ public class CustomerTable extends javax.swing.JPanel {
     private javax.swing.JTable tableCustomer;
     private javax.swing.JTextField txtKeyword;
     // End of variables declaration//GEN-END:variables
+
+    public void reloadData() {
+        fillDataCustomer(curpage);
+        fillPage();
+    }
 }

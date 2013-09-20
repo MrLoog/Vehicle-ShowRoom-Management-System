@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.component.importorder;
+package app.view.component.order;
 
 import app.model.Customer;
 import app.model.ImportOrder;
@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class ImportOrderTable extends javax.swing.JPanel {
-
+    
     private ImportOrderService importOrderService;
     private VehicleService vehicleService;
 
@@ -45,17 +45,17 @@ public class ImportOrderTable extends javax.swing.JPanel {
     int curpage = 1;
     String search = "";
     TableImportOrderModel model = new TableImportOrderModel();
-
+    
     public void setTotalpage(Integer totalpage) {
         this.totalpage.set(totalpage);
         fillPage();
     }
-
+    
     public void setCurpage(int curpage) {
         this.curpage = curpage;
         fillData(curpage);
     }
-
+    
     private void fillData(int page) {
         String pagingsql = "";
         if (search.equals("")) {
@@ -69,10 +69,20 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jTable1.revalidate();
         jTable1.repaint();
     }
-
+    
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+    
     private void fillPage() {
         jComboBox1.removeAllItems();
-        for (int i = 1; i <= totalpage.get(); i++) {
+        for (int i = 1; i <= getTotalPage(); i++) {
             jComboBox1.addItem(i);
         }
         jComboBox1.setSelectedItem(curpage);
@@ -88,14 +98,17 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jComboBox1.revalidate();
         jComboBox1.repaint();
     }
-
+    
     public void reloadTableOrder() {
         search = "";
         jTextField1.setText(search);
         fillData(1);
         fillPage();
     }
-
+    public void reloadData(){
+        fillData(curpage);
+        fillPage();
+    }
     public ImportOrder getSelectedImportOrder() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
@@ -104,7 +117,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
             return ((TableImportOrderModel) jTable1.getModel()).getData(index);
         }
     }
-
+    
     public Object getSelectedObject() {
         return getSelectedImportOrder();
     }
@@ -161,6 +174,11 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jPanel1.add(jButton3);
 
         jButton4.setText("Refresh");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton4);
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -187,7 +205,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         fillData(1);
         fillPage();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
@@ -201,7 +219,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         });
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         ImportOrder io = getSelectedImportOrder();
@@ -216,12 +234,21 @@ public class ImportOrderTable extends javax.swing.JPanel {
             dialog.setListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    reloadTableOrder();
+                    fillData(curpage);
+                    fillPage();
                 }
             });
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+    
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        search = "";
+        jTextField1.setText(search);
+        fillData(1);
+        fillPage();
+    }//GEN-LAST:event_jButton4ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

@@ -19,7 +19,8 @@ import javax.swing.border.Border;
 public class Main extends javax.swing.JFrame {
 
     public static Dealer activeUser;
-    public static final int PerPage=1;
+    public static final int PerPage=5;
+    public static final String ALL="All";
     private SalesServiceV2 viewsales;
     private ManageShowroomV2 viewshowroom;
     private DealerManage dealerManage;
@@ -64,7 +65,7 @@ public class Main extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
+        setPreferredSize(new java.awt.Dimension(1000, 700));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 100));

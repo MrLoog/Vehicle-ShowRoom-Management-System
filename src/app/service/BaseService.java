@@ -165,6 +165,32 @@ public abstract class BaseService {
         return output;
     }
 
+    public List<Integer> executeQueryGetListID(String query) {
+        List<Integer> output = new ArrayList<Integer>();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                output.add(rs.getInt("ID"));
+            }
+            output = ResultSetToList(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return output;
+    }
+
     public <T> List<T> executePrepareStmt(PreparedStatement ps) {
         List<T> output = new ArrayList<T>();
         try {

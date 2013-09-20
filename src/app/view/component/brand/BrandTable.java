@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.component.invoice;
+package app.view.component.brand;
 
-import app.model.Order;
-import app.view.model.TableOrderModelV2;
+import app.model.Brand;
+import app.service.BrandService;
+import app.view.model.TableBrandModel;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
@@ -15,8 +16,9 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Administrator
  */
-public class OrderTable extends javax.swing.JPanel {
+public class BrandTable extends javax.swing.JPanel {
 
+    private List<Brand> model;
     private ActionListener selectListener;
 
     public void setSelectListener(ActionListener listener) {
@@ -30,33 +32,28 @@ public class OrderTable extends javax.swing.JPanel {
             }
         });
     }
-    private List<Order> model;
 
-    public void setModel(List<Order> model) {
+    public void setModel(List<Brand> model) {
         this.model = model;
-        TableOrderModelV2 tablemodel = new TableOrderModelV2(model);
+        TableBrandModel tablemodel = new TableBrandModel(model);
         jTable1.setModel(tablemodel);
         jTable1.revalidate();
         jTable1.repaint();
     }
 
-    public Order getSelectedOrder() {
+    public Brand getSelectedBrand() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
             return null;
         } else {
-            return ((TableOrderModelV2) jTable1.getModel()).getData(index);
+            return ((TableBrandModel) jTable1.getModel()).getData(index);
         }
     }
 
-    public Object getSelectedObject() {
-        return getSelectedOrder();
-    }
-
     /**
-     * Creates new form OrderTable
+     * Creates new form BrandTable
      */
-    public OrderTable() {
+    public BrandTable() {
         initComponents();
     }
 

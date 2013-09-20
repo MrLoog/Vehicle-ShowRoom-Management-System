@@ -11,11 +11,14 @@ import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
 import app.view.Main;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,6 +39,46 @@ public class SalesOrder extends javax.swing.JPanel {
         vehicleService = new VehicleService();
         customerService = new CustomerService();
         reloadTableOrder();
+        orderTable1.setSelectListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Order o = orderTable1.getSelectedOrder();
+                if (o != null) {
+                    orderUpdateStatus1.setModel(o);
+                    orderUpdateStatus1.setPurchaseListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            int stt = orderUpdateStatus1.getNewStatus();
+                            Order o = orderUpdateStatus1.getModel();
+                            if (stt != o.getStatus() && stt == Order.STATUS_CANCEL) {
+                                Vehicle v = vehicleService.getById(o.getVehicleId());
+                                v.setQuantity(v.getQuantity() + o.getQuantity());
+                                vehicleService.update(v);
+                                o.setStatus(stt);
+                                orderService.update(o);
+                                JOptionPane.showMessageDialog(null, "Return Vehicle to store, Update order success.");
+                            } else if (stt != o.getStatus() && o.getStatus() == Order.STATUS_CANCEL) {
+                                Vehicle v = vehicleService.getById(o.getVehicleId());
+                                if (v.getQuantity() >= o.getQuantity()) {
+                                    v.setQuantity(v.getQuantity() - o.getQuantity());
+                                    vehicleService.update(v);
+                                    o.setStatus(stt);
+                                    orderService.update(o);
+                                    JOptionPane.showMessageDialog(null, "Get Vehicle from store, Update order success.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Vehicle in store not avaiable to order. Update failed.");
+                                }
+                            } else {
+                                o.setStatus(stt);
+                                orderService.update(o);
+                                JOptionPane.showMessageDialog(null, "Update order success.");
+                            }
+                            reloadTableOrder();
+                        }
+                    });
+                }
+            }
+        });
     }
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
     int curpage = 1;
@@ -56,7 +99,7 @@ public class SalesOrder extends javax.swing.JPanel {
         if (search.equals("")) {
             pagingsql = orderService.BuildPagingSql(orderService.getTableName(), orderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), new ArrayList<Integer>(), new ArrayList<Integer>(), jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         } else {
-            List<Vehicle> lst1 = vehicleService.executeQuery("select * from " + vehicleService.getTableName() + " where " + vehicleService.getConditionSearch(search));
+            List<Vehicle> lst1 = vehicleService.executeQuery("select * from " + vehicleService.getTableName() + " where " + vehicleService.getConditionSearch(search, Main.ALL, Main.ALL));
             List<Customer> lst2 = customerService.executeQuery("select * from " + customerService.getTableName() + " where " + customerService.getConditionSearch(search));
             List<Integer> lstintv = new ArrayList<Integer>();
             List<Integer> lstintc = new ArrayList<Integer>();
@@ -80,9 +123,19 @@ public class SalesOrder extends javax.swing.JPanel {
         orderTable1.setModel(lst);
     }
 
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+
     private void fillPage() {
         jComboBox1.removeAllItems();
-        for (int i = 1; i <= totalpage.get(); i++) {
+        for (int i = 1; i <= getTotalPage(); i++) {
             jComboBox1.addItem(i);
         }
         jComboBox1.setSelectedItem(curpage);
@@ -122,7 +175,6 @@ public class SalesOrder extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         orderUpdateStatus1 = new app.view.component.invoice.OrderUpdateStatus();
@@ -150,14 +202,6 @@ public class SalesOrder extends javax.swing.JPanel {
         jCheckBox1.setText("Wait Only");
         jPanel3.add(jCheckBox1);
 
-        jButton2.setText("Load Data");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton2);
-
         jButton5.setText("Refresh");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,12 +222,6 @@ public class SalesOrder extends javax.swing.JPanel {
         add(jPanel2, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        Order o = (Order) orderTable1.getSelectedObject();
-        orderUpdateStatus1.setModel(o);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         reloadTableOrder();
@@ -197,7 +235,6 @@ public class SalesOrder extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox1;

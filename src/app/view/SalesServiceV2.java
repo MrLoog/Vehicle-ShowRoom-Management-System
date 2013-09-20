@@ -7,6 +7,7 @@ package app.view;
 import app.service.OrderService;
 import app.service.VehicleService;
 import app.view.component.report.DealerReport;
+import app.view.composite.OrderForCustomer;
 import app.view.composite.SalesOrder;
 import app.view.composite.SalesVehicle;
 import javax.swing.JPanel;
@@ -23,14 +24,26 @@ public class SalesServiceV2 extends javax.swing.JPanel {
     private SalesVehicle salesVehicle;
     private SalesOrder salesOrder;
     private DealerReport report;
+    private OrderForCustomer orderForCustomer;
 
     /**
      * Creates new form SalesServiceV2
      */
     public SalesServiceV2() {
         initComponents();
-        showVehicleView();
-        salesVehicle.viewTableVehicle();
+        showOrderForCustomerView();
+    }
+
+    private void showOrderForCustomerView() {
+        if (orderForCustomer == null) {
+            orderForCustomer = new OrderForCustomer();
+        }
+        activePanel = orderForCustomer;
+        orderForCustomer.reloadData();
+        mainpanel.removeAll();
+        mainpanel.add(orderForCustomer);
+        mainpanel.revalidate();
+        mainpanel.repaint();
     }
 
     public void showVehicleView() {
@@ -49,6 +62,7 @@ public class SalesServiceV2 extends javax.swing.JPanel {
             salesOrder = new SalesOrder();
         }
         activePanel = salesOrder;
+        salesOrder.reloadTableOrder();
         mainpanel.removeAll();
         mainpanel.add(salesOrder);
         mainpanel.revalidate();
@@ -84,10 +98,9 @@ public class SalesServiceV2 extends javax.swing.JPanel {
         mainpanel = new javax.swing.JPanel();
         lbTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        btnVehicle2 = new javax.swing.JButton();
         btnOrders = new javax.swing.JButton();
-        btnCustomer = new javax.swing.JButton();
-        btnCustomer1 = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
+        btnCreateOrder = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -103,15 +116,7 @@ public class SalesServiceV2 extends javax.swing.JPanel {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        btnVehicle2.setText("Vehicles");
-        btnVehicle2.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnVehicle2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVehicle2ActionPerformed(evt);
-            }
-        });
-
-        btnOrders.setText("Orders");
+        btnOrders.setText("Update Order");
         btnOrders.setPreferredSize(new java.awt.Dimension(100, 40));
         btnOrders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,19 +124,19 @@ public class SalesServiceV2 extends javax.swing.JPanel {
             }
         });
 
-        btnCustomer.setText("Customers");
-        btnCustomer.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnCustomer.addActionListener(new java.awt.event.ActionListener() {
+        btnReport.setText("Report");
+        btnReport.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCustomerActionPerformed(evt);
+                btnReportActionPerformed(evt);
             }
         });
 
-        btnCustomer1.setText("Report");
-        btnCustomer1.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnCustomer1.addActionListener(new java.awt.event.ActionListener() {
+        btnCreateOrder.setText("Create Order");
+        btnCreateOrder.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnCreateOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCustomer1ActionPerformed(evt);
+                btnCreateOrderActionPerformed(evt);
             }
         });
 
@@ -141,67 +146,45 @@ public class SalesServiceV2 extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnVehicle2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustomer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnOrders, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                    .addComponent(btnCreateOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnVehicle2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(btnCreateOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnCustomer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         add(jPanel3, java.awt.BorderLayout.LINE_START);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnVehicle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehicle2ActionPerformed
-        if (activePanel instanceof SalesVehicle) {
-            salesVehicle.viewTableVehicle();
-        } else {
-            showVehicleView();
-            salesVehicle.viewTableVehicle();
-        }
-    }//GEN-LAST:event_btnVehicle2ActionPerformed
 
     private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
         // TODO add your handling code here:
         showInvoiceView();
     }//GEN-LAST:event_btnOrdersActionPerformed
 
-    private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        // TODO add your handling code here:
-        if (activePanel instanceof SalesVehicle) {
-            salesVehicle.viewTableCustomer();
-        } else {
-            showVehicleView();
-            salesVehicle.viewTableCustomer();
-        }
-    }//GEN-LAST:event_btnCustomerActionPerformed
-
-    private void btnCustomer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomer1ActionPerformed
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         // TODO add your handling code here:
         showDealerReportView();
-    }//GEN-LAST:event_btnCustomer1ActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    private void btnCreateOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateOrderActionPerformed
+        // TODO add your handling code here:
+        showOrderForCustomerView();
+    }//GEN-LAST:event_btnCreateOrderActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCustomer;
-    private javax.swing.JButton btnCustomer1;
+    private javax.swing.JButton btnCreateOrder;
     private javax.swing.JButton btnOrders;
-    private javax.swing.JButton btnVehicle;
-    private javax.swing.JButton btnVehicle1;
-    private javax.swing.JButton btnVehicle2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton btnReport;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lbTitle;
     private javax.swing.JPanel mainpanel;

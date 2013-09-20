@@ -22,11 +22,20 @@ public class Order {
     private int vehicleId;
     private int price;
     private int status;
+    private int quantity;
     private Date created;
     private Date modified;
     private Customer customer;
     private Vehicle vehicle;
     private Dealer dealer;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public Dealer getDealer() {
         return dealer;

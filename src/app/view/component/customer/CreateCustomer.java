@@ -188,7 +188,11 @@ public class CreateCustomer extends javax.swing.JDialog {
         }
         if (flag == true) {
             reset();
-            int r = sv.create(name, addr, phone);
+            Customer c = new Customer();
+            c.setName(name);
+            c.setAddress(addr);
+            c.setPhone(phone);
+            int r = sv.add(c);
             System.out.println("K: " + r);
             if (r > 0) {
                 lbAlert.setForeground(Color.blue);

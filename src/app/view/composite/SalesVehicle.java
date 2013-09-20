@@ -59,14 +59,14 @@ public class SalesVehicle extends javax.swing.JPanel {
     }
 
     private void fillDataVehicle(int page) {
-        String pagingsql = "";
-        if (search.equals("")) {
-            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), null, Main.PerPage, page, totalpage);
-        } else {
-            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionSearch(search), Main.PerPage, page, totalpage);
-        }
-        List<Vehicle> lst = vehicleService.executeQuery(pagingsql);
-        vehicleTable.setModel(lst);
+//        String pagingsql = "";
+//        if (search.equals("")) {
+//            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), null, Main.PerPage, page, totalpage);
+//        } else {
+//            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionSearch(search), Main.PerPage, page, totalpage);
+//        }
+//        List<Vehicle> lst = vehicleService.executeQuery(pagingsql);
+//        vehicleTable.setModel(lst);
     }
 
     private void fillDataCustomer(int page) {
@@ -80,9 +80,19 @@ public class SalesVehicle extends javax.swing.JPanel {
         customerTable.setModel(lst);
     }
 
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+
     private void fillPage() {
         jComboBox1.removeAllItems();
-        for (int i = 1; i <= totalpage.get(); i++) {
+        for (int i = 1; i <= getTotalPage(); i++) {
             jComboBox1.addItem(i);
         }
         jComboBox1.setSelectedItem(curpage);

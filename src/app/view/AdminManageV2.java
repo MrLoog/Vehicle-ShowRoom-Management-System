@@ -26,6 +26,7 @@ public class AdminManageV2 extends javax.swing.JPanel {
         if (dealerManager == null) {
             dealerManager = new DealerManager();
         }
+        dealerManager.reload();
         mainpanel.removeAll();
         mainpanel.add(dealerManager);
         mainpanel.revalidate();

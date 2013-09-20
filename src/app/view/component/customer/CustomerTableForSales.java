@@ -7,15 +7,19 @@ package app.view.component.customer;
 import app.icomponent.IPanelTable;
 import app.model.Customer;
 import app.view.model.TableCustomerModel;
+import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Administrator
  */
-public class CustomerTableForSales extends javax.swing.JPanel implements IPanelTable{
+public class CustomerTableForSales extends javax.swing.JPanel implements IPanelTable {
 
     private List<Customer> model;
+
     /**
      * Creates new form CustomerTableForSales
      */
@@ -29,6 +33,19 @@ public class CustomerTableForSales extends javax.swing.JPanel implements IPanelT
         jTable1.setModel(tablemodel);
         jTable1.revalidate();
         jTable1.repaint();
+    }
+    private ActionListener selectListener;
+
+    public void setSelectListener(ActionListener listener) {
+        this.selectListener = listener;
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (selectListener != null) {
+                    selectListener.actionPerformed(null);
+                }
+            }
+        });
     }
 
     public Customer getSelectedCustomer() {

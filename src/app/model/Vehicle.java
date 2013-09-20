@@ -9,12 +9,22 @@ package app.model;
  * @author Administrator
  */
 public class Vehicle {
+
     private Integer id;
     private String name;
     private String brand;
     private Integer price;
     private String modelNumber;
     private int quantity;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getModelNumber() {
         return modelNumber;
@@ -24,7 +34,6 @@ public class Vehicle {
         this.modelNumber = modelNumber;
     }
 
-    
     public int getQuantity() {
         return quantity;
     }

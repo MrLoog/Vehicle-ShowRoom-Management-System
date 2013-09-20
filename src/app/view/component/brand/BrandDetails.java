@@ -2,40 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.view.component.common;
-
-import java.util.List;
-import javax.swing.JButton;
+package app.view.component.brand;
 
 /**
  *
  * @author Administrator
  */
-public class PanelGroupButton extends javax.swing.JPanel {
-
-    private List<JButton> lstBtn;
-
-    public void setListBtn(List<JButton> btns) {
-        lstBtn = btns;
-    }
-
-    public List<JButton> getListBtn() {
-        return lstBtn;
-    }
-
-    public void refresh() {
-        removeAll();
-        for (JButton btn : lstBtn) {
-            add(btn);
-        }
-        revalidate();
-        repaint();
-    }
+public class BrandDetails extends javax.swing.JPanel {
 
     /**
-     * Creates new form PanelGroupButton
+     * Creates new form BrandDetails
      */
-    public PanelGroupButton() {
+    public BrandDetails() {
         initComponents();
     }
 
@@ -47,6 +25,17 @@ public class PanelGroupButton extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

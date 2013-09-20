@@ -7,14 +7,20 @@ package app.view.component.vehicle;
 import app.icomponent.IPanelTable;
 import app.model.Vehicle;
 import app.view.model.TableVehicleModel;
+import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  *
  * @author Administrator
  */
-public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
-
+public class VehicleTable extends javax.swing.JPanel implements IPanelTable {
+    
     private List<Vehicle> model;
 
     /**
@@ -24,6 +30,20 @@ public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
         initComponents();
     }
 
+    private ActionListener selectListener;
+    public void setSelectListener(ActionListener listener) {
+        this.selectListener = listener;
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (selectListener != null) {
+                    selectListener.actionPerformed(null);
+                }
+            }
+        });
+    }
+
     public void setModel(List<Vehicle> model) {
         this.model = model;
         TableVehicleModel tablemodel = new TableVehicleModel(model);
@@ -31,7 +51,7 @@ public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
         jTable1.revalidate();
         jTable1.repaint();
     }
-
+    
     public Vehicle getSelectedVehicle() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
@@ -40,9 +60,11 @@ public class VehicleTable extends javax.swing.JPanel implements IPanelTable{
             return ((TableVehicleModel) jTable1.getModel()).getData(index);
         }
     }
-    public Object getSelectedObject(){
+
+    public Object getSelectedObject() {
         return getSelectedVehicle();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

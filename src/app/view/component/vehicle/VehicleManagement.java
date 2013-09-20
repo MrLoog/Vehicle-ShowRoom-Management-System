@@ -4,7 +4,11 @@
  */
 package app.view.component.vehicle;
 
+import app.model.Brand;
+import app.model.Category;
 import app.model.Vehicle;
+import app.service.BrandService;
+import app.service.CategoryService;
 import app.service.VehicleService;
 import app.view.Main;
 import app.view.component.order.DialogImportOrderForm;
@@ -24,6 +28,8 @@ import javax.swing.JOptionPane;
 public class VehicleManagement extends javax.swing.JPanel {
 
     VehicleService service;
+    private BrandService brandService;
+    private CategoryService categoryService;
     TableVehicleModel tableModel = new TableVehicleModel();
 
     /**
@@ -32,8 +38,29 @@ public class VehicleManagement extends javax.swing.JPanel {
     public VehicleManagement() {
         initComponents();
         service = new VehicleService();
+        brandService = new BrandService();
+        categoryService = new CategoryService();
+        initCbbFilter();
         setCurpage(1);
         fillPage();
+    }
+
+    private void initCbbFilter() {
+        cbbrand.removeAllItems();
+        List<Brand> brands = brandService.getAll();
+        cbbrand.addItem(Main.ALL);
+        for (Brand brand : brands) {
+            cbbrand.addItem(brand.getName());
+        }
+        cbbrand.revalidate();
+        cbbrand.repaint();
+
+        cbbcategory.removeAllItems();
+        List<Category> categorys = categoryService.getAll();
+        cbbcategory.addItem(Main.ALL);
+        for (Category category : categorys) {
+            cbbcategory.addItem(category.getTitle());
+        }
     }
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
     int curpage = 1;
@@ -51,10 +78,12 @@ public class VehicleManagement extends javax.swing.JPanel {
 
     private void fillData(int page) {
         String pagingsql = "";
+        String brand = (String) cbbrand.getSelectedItem();
+        String category = (String) cbbcategory.getSelectedItem();
         if (search.equals("")) {
-            pagingsql = service.BuildPagingSql(service.getTableName(), null, Main.PerPage, page, totalpage);
+            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionFilter(brand, category), Main.PerPage, page, totalpage);
         } else {
-            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionSearch(search), Main.PerPage, page, totalpage);
+            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionSearch(search, brand, category), Main.PerPage, page, totalpage);
         }
         List<Vehicle> lst = service.executeQuery(pagingsql);
         tableModel.setData(lst);
@@ -63,9 +92,19 @@ public class VehicleManagement extends javax.swing.JPanel {
         tableVehicle.repaint();
     }
 
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+
     private void fillPage() {
         comboVehicle.removeAllItems();
-        for (int i = 1; i <= totalpage.get(); i++) {
+        for (int i = 1; i <= getTotalPage(); i++) {
             comboVehicle.addItem(i);
         }
         comboVehicle.setSelectedItem(curpage);
@@ -107,6 +146,8 @@ public class VehicleManagement extends javax.swing.JPanel {
         comboVehicle = new javax.swing.JComboBox();
         txtKeyword = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
+        cbbcategory = new javax.swing.JComboBox();
+        cbbrand = new javax.swing.JComboBox();
         btnNew = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -157,6 +198,12 @@ public class VehicleManagement extends javax.swing.JPanel {
             }
         });
         jPanel1.add(btnSearch);
+
+        cbbcategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbbcategory);
+
+        cbbrand.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbbrand);
 
         btnNew.setText("New");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
@@ -224,6 +271,12 @@ public class VehicleManagement extends javax.swing.JPanel {
         if (isedit) {
             creater.setModel(v);
         }
+        creater.setSaveListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                reloadData();
+            }
+        });
         creater.setVisible(true);
     }
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -243,6 +296,8 @@ public class VehicleManagement extends javax.swing.JPanel {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
+        cbbrand.setSelectedItem(Main.ALL);
+        cbbcategory.setSelectedItem(Main.ALL);
         search = "";
         txtKeyword.setText("");
         fillData(1);
@@ -264,7 +319,7 @@ public class VehicleManagement extends javax.swing.JPanel {
         dialog.setListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                btnRefreshActionPerformed(ae);
+                reloadData();
             }
         });
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -273,6 +328,8 @@ public class VehicleManagement extends javax.swing.JPanel {
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox cbbcategory;
+    private javax.swing.JComboBox cbbrand;
     private javax.swing.JComboBox comboVehicle;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
@@ -281,4 +338,9 @@ public class VehicleManagement extends javax.swing.JPanel {
     private javax.swing.JTable tableVehicle;
     private javax.swing.JTextField txtKeyword;
     // End of variables declaration//GEN-END:variables
+
+    public void reloadData() {
+        fillData(curpage);
+        fillPage();
+    }
 }

@@ -139,7 +139,7 @@ public class VehicleCreateNew extends javax.swing.JDialog {
                             .addComponent(ePrice)
                             .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel7))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,23 +209,23 @@ public class VehicleCreateNew extends javax.swing.JDialog {
         return flag;
     }
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        if (valid()) {
-                int x = vehicleService.create(txtName.getText(), txtBrand.getText(), txtPrice.getText(), txtModel.getText(), "0");
-                if (x > 0) {
-                    lbResult.setText("Created Vehicle: " + txtName.getText());
-                    reset();
-                } else if (x == 0) {
-                    JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
-                    lbResult.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(emodel, "Error, cannot create vehicle: " + txtName.getText());
-                    lbResult.setText("");
-                }
-            }
-            btnCreate.setText("Save");
-            if(saveListener!=null){
-                saveListener.actionPerformed(evt);
-            }
+//        if (valid()) {
+//                int x = vehicleService.create(txtName.getText(), txtBrand.getText(), txtPrice.getText(), txtModel.getText(), "0");
+//                if (x > 0) {
+//                    lbResult.setText("Created Vehicle: " + txtName.getText());
+//                    reset();
+//                } else if (x == 0) {
+//                    JOptionPane.showMessageDialog(emodel, "Existed this vehicle with Model, Name, Brand similar: ");
+//                    lbResult.setText("");
+//                } else {
+//                    JOptionPane.showMessageDialog(emodel, "Error, cannot create vehicle: " + txtName.getText());
+//                    lbResult.setText("");
+//                }
+//            }
+//            btnCreate.setText("Save");
+//            if(saveListener!=null){
+//                saveListener.actionPerformed(evt);
+//            }
     }//GEN-LAST:event_btnCreateActionPerformed
     public void reset() {
         eName.setText("");

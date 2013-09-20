@@ -12,6 +12,7 @@ import app.service.OrderService;
 import app.service.VehicleService;
 import app.view.Main;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -26,35 +27,55 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class OrderForm extends javax.swing.JPanel {
-
+    
     private boolean isEdit = false;
     private Order model;
     private CustomerService customerService;
     private VehicleService vehicleService;
     private OrderService orderService;
     private List<Vehicle> vehicleAvaiable;
+    private ActionListener purchaseListener;
+    private ActionListener cancelListener;
+    private int buyQuantity = 1;
+    
+    public void setCancelListener(ActionListener cancelListener) {
+        this.cancelListener = cancelListener;
+    }
+    
+    public void setBuyQuantity(int buyQuantity) {
+        this.buyQuantity = buyQuantity;
+        if (model != null && model.getPrice() != 0) {
+            model.setQuantity(buyQuantity);
+            jLabel15.setText(buyQuantity + "");
+            jLabel10.setText(model.getPrice() + "");
+            jLabel17.setText((model.getPrice() * buyQuantity) + "");
+        }
+    }
+    
+    public void setPurchaseListener(ActionListener purchaseListener) {
+        this.purchaseListener = purchaseListener;
+    }
     
     public void setEditMode(boolean isEdit) {
         this.isEdit = isEdit;
     }
-
-
+    
     public Order getModel() {
         return model;
     }
-
+    
     public void setModel(Order model) {
         this.model = model;
         setDefaultValue(model);
     }
-
+    
     private void setDefaultValue(Order d) {
         jLabel10.setText(String.valueOf(d.getPrice()));
         jLabel12.setText("" + d.getStatus());
         if (d.getVehicle() != null) {
-            jComboBox1.setSelectedItem(d.getVehicle().getModelNumber());
+            jLabel8.setText(d.getVehicle().getModelNumber());
         } else {
-            jComboBox1.setSelectedItem("");
+            jLabel8.setText("No Info");
         }
         if (d.getCustomer() != null) {
             jTextField1.setText(d.getCustomer().getName());
@@ -66,19 +87,20 @@ public class OrderForm extends javax.swing.JPanel {
             jTextField3.setText("");
         }
     }
-
+    
     private void clear() {
         clearErrorMes();
-        model = new Order();
+        model.setCustomerId(0);
+        model.setCustomer(new Customer());
         setModel(model);
     }
-
+    
     private void loadDataToModel() {
         if (model == null) {
             model = new Order();
         }
     }
-
+    
     private boolean isFormValid() {
         boolean output = true;
         clearErrorMes();
@@ -123,20 +145,9 @@ public class OrderForm extends javax.swing.JPanel {
                 setModelCustomer(customers.get(0));
             }
         }
-        String vehiclemodel = jComboBox1.getSelectedItem().toString();
-        if (vehiclemodel.equals("")) {
-            jLabel8.setText("Vehicle Model is required.");
-            output = false;
-        } else {
-            for (Vehicle v : vehicleAvaiable) {
-                if (v.getModelNumber().equals(vehiclemodel)) {
-                    setModelVehicle(v);
-                }
-            }
-        }
         return output;
     }
-
+    
     private void clearErrorMes() {
         jLabel2.setText("");
         jLabel4.setText("");
@@ -153,14 +164,6 @@ public class OrderForm extends javax.swing.JPanel {
         customerService = new CustomerService();
         vehicleService = new VehicleService();
         orderService = new OrderService();
-        fillDataCombobox();
-    }
-
-    private void fillDataCombobox() {
-        vehicleAvaiable = vehicleService.executePrepareStmt(vehicleService.getPrepareStmtAllAvaiable());
-        for (Vehicle v : vehicleAvaiable) {
-            jComboBox1.addItem(v.getModelNumber());
-        }
     }
 
     /**
@@ -191,9 +194,18 @@ public class OrderForm extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
 
         jLabel1.setText("Customer Name :");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Customer Address :");
 
@@ -201,9 +213,15 @@ public class OrderForm extends javax.swing.JPanel {
 
         jLabel7.setText("Vehicle Model :");
 
+        jLabel8.setText("No Info");
+
         jLabel9.setText("Price :");
 
+        jLabel10.setText("No Info");
+
         jLabel11.setText("Status :");
+
+        jLabel12.setText("No Info");
 
         jButton1.setText("Purchase");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -219,19 +237,20 @@ public class OrderForm extends javax.swing.JPanel {
             }
         });
 
-        jButton3.setText("New Order");
+        jButton3.setText("Cancel");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jComboBox1.setEditable(true);
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
-            }
-        });
+        jLabel14.setText("Buy Quantity :");
+
+        jLabel15.setText("No Info");
+
+        jLabel16.setText("Total :");
+
+        jLabel17.setText("No Info");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -242,44 +261,49 @@ public class OrderForm extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1)
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addComponent(jButton1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jButton1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton3)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3))
+                            .addComponent(jTextField3)
+                            .addComponent(jTextField2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel16))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -298,33 +322,38 @@ public class OrderForm extends javax.swing.JPanel {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel17))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel12))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (isFormValid()) {
-            jLabel13.setText("Saving...");
             model.setDealerId(Main.activeUser.getId());
             model.setPrice(model.getVehicle().getPrice());
             model.setStatus(Order.STATUS_NEW);
@@ -332,71 +361,57 @@ public class OrderForm extends javax.swing.JPanel {
             java.sql.Date inputdate = new java.sql.Date(date.getTime());
             model.setCreated(inputdate);
             model.setModified(inputdate);
-            int returnid = orderService.add(model);
-            model.setId(returnid);
-            DialogComfirmOrder d=new DialogComfirmOrder(null, true);
+//            int returnid = orderService.add(model);
+//            model.setId(returnid);
+            final DialogComfirmOrder d = new DialogComfirmOrder(null, true);
             d.setModel(model);
             d.setLocationRelativeTo(null);
+            d.setPurchaseListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    saveModel();
+                    d.dispose();
+                }
+            });
+            d.setCancelListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    JOptionPane.showMessageDialog(null, "Cancel Order, Dialog is closing.");
+                    d.dispose();
+                }
+            });
             d.setVisible(true);
-            jLabel13.setText("Save Success");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        clearErrorMes();
-        if (model.getId() != 0) {
-            model.setId(0);
+        if (cancelListener != null) {
+            cancelListener.actionPerformed(evt);
         }
-        setDefaultValue(model);
-        jLabel13.setText("Ready for create new order.");
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+    
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-        String selected = jComboBox1.getSelectedItem().toString();
-        for (Vehicle v : vehicleAvaiable) {
-            if (v.getModelNumber().equals(selected)) {
-                if (model == null) {
-                    model = new Order();
-                }
-                for (Vehicle v2 : vehicleAvaiable) {
-                    if (v.getId() == v2.getId()) {
-                        model.setVehicleId(v2.getId());
-                        model.setPrice(v2.getPrice());
-                        model.setVehicle(v2);
-                        jLabel10.setText(String.valueOf(model.getPrice()));
-                        jLabel12.setText("" + model.getStatus());
-                        if (model.getCustomer() != null) {
-                            jTextField1.setText(model.getCustomer().getName());
-                            jTextField2.setText(model.getCustomer().getAddress());
-                            jTextField3.setText(model.getCustomer().getPhone());
-                        } else {
-                            jTextField1.setText("");
-                            jTextField2.setText("");
-                            jTextField3.setText("");
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }//GEN-LAST:event_jComboBox1ItemStateChanged
+    }//GEN-LAST:event_jTextField1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -418,22 +433,20 @@ public class OrderForm extends javax.swing.JPanel {
             setModelCustomer(selectobj);
         }
     }
-
+    
     private void setModelVehicle(Object selectobj) {
         Vehicle v = (Vehicle) selectobj;
-        if (model == null) {
-            model = new Order();
-        }
-        for (Vehicle v2 : vehicleAvaiable) {
-            if (v.getId() == v2.getId()) {
-                model.setVehicleId(v2.getId());
-                model.setPrice(v2.getPrice());
-                model.setVehicle(v2);
-                setDefaultValue(model);
+        if (selectobj != null) {
+            if (model == null) {
+                model = new Order();
             }
+            model.setVehicleId(v.getId());
+            model.setPrice(v.getPrice());
+            model.setVehicle(v);
+            setDefaultValue(model);
         }
     }
-
+    
     private void setModelCustomer(Object selectobj) {
         Customer v = (Customer) selectobj;
         if (model == null) {
@@ -442,5 +455,23 @@ public class OrderForm extends javax.swing.JPanel {
         model.setCustomerId(v.getId());
         model.setCustomer(v);
         setDefaultValue(model);
+    }
+    private ActionListener orderSuccessListener;
+    
+    public void setOrderSuccessListener(ActionListener orderSuccessListener) {
+        this.orderSuccessListener = orderSuccessListener;
+    }
+    
+    private void saveModel() {
+        int returnid = orderService.add(model);
+        Vehicle v = vehicleService.getById(model.getVehicleId());
+        v.setQuantity(v.getQuantity() - model.getQuantity());
+        vehicleService.update(v);
+        model = new Order();
+        setDefaultValue(model);
+        JOptionPane.showMessageDialog(null, "Confirm Success, Order status is wait and on order view, Dialog is closing.");
+        if (orderSuccessListener != null) {
+            orderSuccessListener.actionPerformed(null);
+        }
     }
 }
