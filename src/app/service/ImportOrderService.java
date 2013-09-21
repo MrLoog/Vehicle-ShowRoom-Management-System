@@ -5,7 +5,9 @@
 package app.service;
 
 import app.model.ImportOrder;
+import app.model.Order;
 import app.model.Vehicle;
+import app.utility.AppUtility;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,12 +37,13 @@ public class ImportOrderService extends BaseService {
             while (rs.next()) {
                 ImportOrder temp = new ImportOrder();
                 temp.setId(rs.getInt("ID"));
-                temp.setName(rs.getString("Name"));
-                temp.setBrand(rs.getString("Brand"));
                 temp.setPrice(rs.getInt("Price"));
-                temp.setModelNumber(rs.getString("ModelNumber"));
+                temp.setVehicleID(rs.getInt("VehicleID"));
                 temp.setQuantity(rs.getInt("Quantity"));
                 temp.setDealerId(rs.getInt("DealerID"));
+                temp.setCreated(rs.getDate("Created"));
+                temp.setModified(rs.getDate("Modified"));
+                temp.setIsDeleted(rs.getBoolean("IsDeleted"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -51,19 +54,20 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
     }
 
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
             ImportOrder order = (ImportOrder) obj;
-            insertStmt.setString(1, order.getModelNumber());
-            insertStmt.setString(2, order.getName());
-            insertStmt.setString(3, order.getBrand());
-            insertStmt.setInt(4, order.getPrice());
-            insertStmt.setInt(5, order.getQuantity());
-            insertStmt.setInt(6, order.getDealerId());
+            insertStmt.setInt(1, order.getVehicleID());
+            insertStmt.setInt(2, order.getPrice());
+            insertStmt.setInt(3, order.getQuantity());
+            insertStmt.setInt(4, order.getDealerId());
+            insertStmt.setDate(5, order.getCreated());
+            insertStmt.setDate(6, order.getModified());
+            insertStmt.setBoolean(7, order.isIsDeleted());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,20 +75,21 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,Brand=?,Price=?,ModelNumber=?,Quantity=?,DealerID=? where ID=?";
+        return "update " + getTableName() + " set Price=?,VehicleID=?,Quantity=?,DealerID=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
 
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
             ImportOrder order = (ImportOrder) obj;
-            updateStmt.setString(1, order.getName());
-            updateStmt.setString(2, order.getBrand());
-            updateStmt.setInt(3, order.getPrice());
-            updateStmt.setString(4, order.getModelNumber());
-            updateStmt.setInt(5, order.getQuantity());
-            updateStmt.setInt(6, order.getDealerId());
-            updateStmt.setInt(7, order.getId());
+            updateStmt.setInt(1, order.getPrice());
+            updateStmt.setInt(2, order.getVehicleID());
+            updateStmt.setInt(3, order.getQuantity());
+            updateStmt.setInt(4, order.getDealerId());
+            updateStmt.setDate(5, order.getCreated());
+            updateStmt.setDate(6, order.getModified());
+            updateStmt.setBoolean(7, order.isIsDeleted());
+            updateStmt.setInt(8, order.getId());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,9 +109,19 @@ public class ImportOrderService extends BaseService {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public String getConditionSearch(String search) {
-        String pre = "Name like '%search%' or Brand like '%search%' or ModelNumber like '%search%'";
+
+    public String getConditionSearchWithStatusAndJoin(int id, List<Integer> lstVehicle) {
+         String pre = "";
+        String search = "";
+        if (!(lstVehicle.size() <= 0 && lstVehicle.size() <= 0)) {
+            pre = "(VehicleID in paraVehicle) and ";
+        }
+        String searchVehicle = AppUtility.buildStringInSql(lstVehicle);
+        pre += " DealerID=id ";
         String result = pre.replaceAll("search", search);
+        result = result.replaceAll("id", id + "");
+        result = result.replaceAll("paraVehicle", searchVehicle);
         return result;
     }
+
 }

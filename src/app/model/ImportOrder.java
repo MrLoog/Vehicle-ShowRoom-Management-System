@@ -4,18 +4,64 @@
  */
 package app.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Administrator
  */
 public class ImportOrder {
+
     private Integer id;
-    private String name;
-    private String brand;
     private Integer price;
-    private String modelNumber;
+    private int vehicleID;
     private int quantity;
     private int dealerId;
+    private Date created;
+    private Date modified;
+    private boolean isDeleted;
+    private Vehicle vehicle;
+    private Dealer dealer;
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public int getDealerId() {
         return dealerId;
@@ -25,15 +71,14 @@ public class ImportOrder {
         this.dealerId = dealerId;
     }
 
-    public String getModelNumber() {
-        return modelNumber;
+    public int getVehicleID() {
+        return vehicleID;
     }
 
-    public void setModelNumber(String modelNumber) {
-        this.modelNumber = modelNumber;
+    public void setVehicleID(int vehicleID) {
+        this.vehicleID = vehicleID;
     }
 
-    
     public int getQuantity() {
         return quantity;
     }
@@ -48,22 +93,6 @@ public class ImportOrder {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public Integer getPrice() {

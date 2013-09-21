@@ -4,6 +4,8 @@
  */
 package app.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Administrator
@@ -14,6 +16,42 @@ public class Customer {
     private String address;
     private String phone;
     private int dealerId;
+    private Date created;
+    private Date modified;
+    private boolean isDeleted;
+    private Dealer dealer;
+
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public int getDealerId() {
         return dealerId;

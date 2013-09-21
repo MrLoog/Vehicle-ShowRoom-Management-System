@@ -4,11 +4,8 @@
  */
 package app.view.component.order;
 
-import app.model.Customer;
 import app.model.ImportOrder;
-import app.model.Order;
 import app.model.Vehicle;
-import app.service.DealerService;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
 import app.view.Main;
@@ -28,7 +25,7 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class ImportOrderTable extends javax.swing.JPanel {
-    
+
     private ImportOrderService importOrderService;
     private VehicleService vehicleService;
 
@@ -38,6 +35,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
     public ImportOrderTable() {
         initComponents();
         importOrderService = new ImportOrderService();
+        vehicleService = new VehicleService();
         fillData(1);
         fillPage();
     }
@@ -45,31 +43,36 @@ public class ImportOrderTable extends javax.swing.JPanel {
     int curpage = 1;
     String search = "";
     TableImportOrderModel model = new TableImportOrderModel();
-    
+
     public void setTotalpage(Integer totalpage) {
         this.totalpage.set(totalpage);
         fillPage();
     }
-    
+
     public void setCurpage(int curpage) {
         this.curpage = curpage;
         fillData(curpage);
     }
-    
+
     private void fillData(int page) {
         String pagingsql = "";
         if (search.equals("")) {
-            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), null, Main.PerPage, page, totalpage);
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), new ArrayList<Integer>()), Main.PerPage, page, totalpage);
         } else {
-            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearch(search), Main.PerPage, page, totalpage);
+            List<Integer> lstVehicle = vehicleService.executeQueryGetListID(vehicleService.getQuerySearchVehicle(search));
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), lstVehicle), Main.PerPage, page, totalpage);
         }
         List<ImportOrder> lst = importOrderService.executeQuery(pagingsql);
+        for (ImportOrder importOrder : lst) {
+            importOrder.setVehicle((Vehicle) vehicleService.getById(importOrder.getVehicleID()));
+            importOrder.setDealer(Main.activeUser);
+        }
         model.setData(lst);
         jTable1.setModel(model);
         jTable1.revalidate();
         jTable1.repaint();
     }
-    
+
     private int getTotalPage() {
         int temptotal = totalpage.get();
         int temp = temptotal % Main.PerPage;
@@ -79,7 +82,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
             return (temptotal / Main.PerPage) + 1;
         }
     }
-    
+
     private void fillPage() {
         jComboBox1.removeAllItems();
         for (int i = 1; i <= getTotalPage(); i++) {
@@ -98,17 +101,19 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jComboBox1.revalidate();
         jComboBox1.repaint();
     }
-    
+
     public void reloadTableOrder() {
         search = "";
         jTextField1.setText(search);
         fillData(1);
         fillPage();
     }
-    public void reloadData(){
+
+    public void reloadData() {
         fillData(curpage);
         fillPage();
     }
+
     public ImportOrder getSelectedImportOrder() {
         int index = jTable1.getSelectedRow();
         if (index == -1) {
@@ -117,7 +122,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
             return ((TableImportOrderModel) jTable1.getModel()).getData(index);
         }
     }
-    
+
     public Object getSelectedObject() {
         return getSelectedImportOrder();
     }
@@ -135,7 +140,6 @@ public class ImportOrderTable extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -143,7 +147,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.FlowLayout(0));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         jPanel1.add(jComboBox1);
 
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -156,14 +160,6 @@ public class ImportOrderTable extends javax.swing.JPanel {
             }
         });
         jPanel1.add(jButton1);
-
-        jButton2.setText("New");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton2);
 
         jButton3.setText("Edit");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -205,21 +201,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         fillData(1);
         fillPage();
     }//GEN-LAST:event_jButton1ActionPerformed
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setEditMode(false);
-        dialog.setListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                reloadTableOrder();
-            }
-        });
-        dialog.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         ImportOrder io = getSelectedImportOrder();
@@ -227,21 +209,22 @@ public class ImportOrderTable extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Don't select a row!");
             return;
         } else {
-            DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
+            final DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
             dialog.setLocationRelativeTo(null);
             dialog.setModel(io);
             dialog.setEditMode(true);
-            dialog.setListener(new ActionListener() {
+            dialog.setSaveListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     fillData(curpage);
                     fillPage();
+                    dialog.dispose();
                 }
             });
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         search = "";
@@ -251,7 +234,6 @@ public class ImportOrderTable extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton4ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox jComboBox1;

@@ -5,12 +5,8 @@
 package app.view.composite;
 
 import app.icomponent.IPanelTable;
-import app.model.Brand;
-import app.model.Category;
 import app.model.Customer;
 import app.model.Vehicle;
-import app.service.BrandService;
-import app.service.CategoryService;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
@@ -36,8 +32,6 @@ public class OrderForCustomer extends javax.swing.JPanel {
     private VehicleService vehicleService;
     private OrderService orderService;
     private CustomerService customerService;
-    private BrandService brandService;
-    private CategoryService categoryService;
 
     /**
      * Creates new form OrderStep1
@@ -47,8 +41,6 @@ public class OrderForCustomer extends javax.swing.JPanel {
         vehicleService = new VehicleService();
         orderService = new OrderService();
         customerService = new CustomerService();
-        brandService = new BrandService();
-        categoryService = new CategoryService();
         initCbbFilter();
         viewTableVehicle();
         viewVehicleDetails();
@@ -66,19 +58,19 @@ public class OrderForCustomer extends javax.swing.JPanel {
 
     private void initCbbFilter() {
         cbbrand.removeAllItems();
-        List<Brand> brands = brandService.getAll();
+        List<String> brands = vehicleService.getListBrandName();
         cbbrand.addItem(Main.ALL);
-        for (Brand brand : brands) {
-            cbbrand.addItem(brand.getName());
+        for (String brand : brands) {
+            cbbrand.addItem(brand);
         }
         cbbrand.revalidate();
         cbbrand.repaint();
 
         cbbcategory.removeAllItems();
-        List<Category> categorys = categoryService.getAll();
+        List<String> categorys = vehicleService.getListCategoryName();
         cbbcategory.addItem(Main.ALL);
-        for (Category category : categorys) {
-            cbbcategory.addItem(category.getTitle());
+        for (String category : categorys) {
+            cbbcategory.addItem(category);
         }
     }
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);

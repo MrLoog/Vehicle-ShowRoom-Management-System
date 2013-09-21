@@ -6,7 +6,6 @@ package app.service;
 
 import app.model.Dealer;
 import app.utility.AppUtility;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +34,10 @@ public class DealerService extends BaseService{
                 temp.setName(rs.getString("Name"));
                 temp.setLoginName(rs.getString("LoginName"));
                 temp.setPassword(rs.getString("Password"));
-                temp.setIsAdmin(rs.getBoolean("IsManager"));
+                temp.setIsManager(rs.getBoolean("IsManager"));
+                temp.setCreated(rs.getDate("Created"));
+                temp.setModified(rs.getDate("Modified"));
+                temp.setIsDeleted(rs.getBoolean("IsDeleted"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -46,17 +48,20 @@ public class DealerService extends BaseService{
     
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
     }
     
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
-            Dealer brand = (Dealer) obj;
-            insertStmt.setString(1, brand.getName());
-            insertStmt.setString(2, brand.getLoginName());
-            insertStmt.setString(3, brand.getPassword());
-            insertStmt.setBoolean(4, brand.isIsAdmin());
+            Dealer temp = (Dealer) obj;
+            insertStmt.setString(1, temp.getName());
+            insertStmt.setString(2, temp.getLoginName());
+            insertStmt.setString(3, temp.getPassword());
+            insertStmt.setBoolean(4, temp.isIsManager());
+            insertStmt.setDate(5, temp.getCreated());
+            insertStmt.setDate(6, temp.getModified());
+            insertStmt.setBoolean(7, temp.isIsDeleted());
         } catch (SQLException ex) {
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,7 +69,7 @@ public class DealerService extends BaseService{
     
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=? where ID=?";
+        return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
     public int updaterole(String status, int id) {
         String sql = "update Dealers set IsManager='"+status+"' where ID="+id;
@@ -79,12 +84,15 @@ public class DealerService extends BaseService{
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
-            Dealer brand = (Dealer) obj;
-            updateStmt.setString(1, brand.getName());
-            updateStmt.setString(2, brand.getLoginName());
-            updateStmt.setString(3, brand.getPassword());
-            updateStmt.setBoolean(4, brand.isIsAdmin());
-            updateStmt.setInt(5, brand.getId());
+            Dealer temp = (Dealer) obj;
+            updateStmt.setString(1, temp.getName());
+            updateStmt.setString(2, temp.getLoginName());
+            updateStmt.setString(3, temp.getPassword());
+            updateStmt.setBoolean(4, temp.isIsManager());
+            updateStmt.setDate(5, temp.getCreated());
+            updateStmt.setDate(6, temp.getModified());
+            updateStmt.setBoolean(7, temp.isIsDeleted());
+            updateStmt.setInt(8, temp.getId());
         } catch (SQLException ex) {
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }

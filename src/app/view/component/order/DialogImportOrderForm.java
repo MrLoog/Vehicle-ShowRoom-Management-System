@@ -34,7 +34,7 @@ public class DialogImportOrderForm extends javax.swing.JDialog {
         importOrderForm2.setEditMode(isedit);
     }
 
-    public void setListener(ActionListener ls) {
+    public void setSaveListener(ActionListener ls) {
         importOrderForm2.setSaveListener(ls);
     }
 

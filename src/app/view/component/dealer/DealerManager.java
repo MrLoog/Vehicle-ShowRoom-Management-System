@@ -72,11 +72,11 @@ public class DealerManager extends javax.swing.JPanel {
             }
             if (lst.size() < 2) {
                 for (int i = 0; i < lst.size(); i++) {
-                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsAdmin()});
+                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
                 }
             } else {
                 for (int i = from; i <= to; i++) {
-                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsAdmin()});
+                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
                 }
             }
             tableDealer.setModel(model);
@@ -90,7 +90,7 @@ public class DealerManager extends javax.swing.JPanel {
                 model = new DefaultTableModel();
             }
             for (int i = 0; i < lst.size(); i++) {
-                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsAdmin()});
+                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
             }
             tableDealer.setModel(model);
             paging();
@@ -349,7 +349,7 @@ public class DealerManager extends javax.swing.JPanel {
                 d.setId(id);
                 d.setName(name);
                 d.setLoginName(loginname);
-                d.setIsAdmin(true);
+                d.setIsManager(true);
                 if (service.updaterole(up, id)>0) {
                     txtOK.setText("Changed role of " + loginname + " click REFRESH!");
                 } else {

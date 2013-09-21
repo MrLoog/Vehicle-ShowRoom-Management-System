@@ -36,7 +36,7 @@ public class DealerForm extends javax.swing.JPanel {
     private void setDefaultValue(Dealer d) {
         jTextField1.setText(d.getName());
         jTextField2.setText(d.getLoginName());
-        jCheckBox1.setSelected(d.isIsAdmin());
+        jCheckBox1.setSelected(d.isIsManager());
     }
     
     private void clear() {
@@ -46,7 +46,7 @@ public class DealerForm extends javax.swing.JPanel {
             Dealer v = new Dealer();
             v.setName("");
             v.setLoginName("");
-            v.setIsAdmin(false);
+            v.setIsManager(false);
             setModel(v);
         }
     }
@@ -57,7 +57,7 @@ public class DealerForm extends javax.swing.JPanel {
         }
         model.setName(jTextField1.getText());
         model.setLoginName(jTextField2.getText());
-        model.setIsAdmin(jCheckBox1.isSelected());
+        model.setIsManager(jCheckBox1.isSelected());
     }
     
     private boolean isFormValid() {

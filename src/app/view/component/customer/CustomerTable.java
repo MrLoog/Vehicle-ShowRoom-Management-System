@@ -5,8 +5,10 @@
 package app.view.component.customer;
 
 import app.model.Customer;
+import app.model.Dealer;
 import javax.swing.table.DefaultTableModel;
 import app.service.CustomerService;
+import app.service.DealerService;
 import app.view.Main;
 import app.view.model.TableCustomerModel;
 import java.awt.TrayIcon;
@@ -26,6 +28,7 @@ import javax.swing.table.AbstractTableModel;
 public class CustomerTable extends javax.swing.JPanel {
 
     CustomerService customerService;
+    DealerService dealerService;
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
     int curpage = 1;
     String search = "";
@@ -49,6 +52,9 @@ public class CustomerTable extends javax.swing.JPanel {
             pagingsql = customerService.BuildPagingSql(customerService.getTableName(), customerService.getConditionSearch(search), Main.PerPage, page, totalpage);
         }
         List<Customer> lst = customerService.executeQuery(pagingsql);
+        for (Customer customer : lst) {
+            customer.setDealer((Dealer)dealerService.getById(customer.getDealerId()));
+        }
         model.setData(lst);
         tableCustomer.setModel(model);
         tableCustomer.revalidate();
@@ -90,6 +96,7 @@ public class CustomerTable extends javax.swing.JPanel {
     public CustomerTable() {
         initComponents();
         customerService = new CustomerService();
+        dealerService=new DealerService();
         fillDataCustomer(1);
         fillPage();
     }

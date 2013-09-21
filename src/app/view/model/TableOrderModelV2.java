@@ -5,6 +5,7 @@
 package app.view.model;
 
 import app.model.Order;
+import app.utility.AppUtility;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -35,7 +36,7 @@ public class TableOrderModelV2 extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return 6;
     }
 
     @Override
@@ -45,17 +46,15 @@ public class TableOrderModelV2 extends AbstractTableModel {
             case 0:
                 return c.getCustomer().getName();
             case 1:
-                return c.getCustomer().getPhone();
-            case 2:
                 return c.getVehicle().getModelNumber();
-            case 3:
+            case 2:
                 return c.getPrice();
+            case 3:
+                return c.getQuantity();
             case 4:
-                return c.getStatus();
+                return (c.getPrice()* c.getQuantity());
             case 5:
-                return c.getCreated();
-            case 6:
-                return c.getModified();
+                return AppUtility.getStatusString(c.getStatus());
             default:
                 return null;
         }
@@ -67,17 +66,15 @@ public class TableOrderModelV2 extends AbstractTableModel {
             case 0:
                 return "Customer";
             case 1:
-                return "Phone";
+                return "Vehicle Model";
             case 2:
-                return "Model";
-            case 3:
                 return "Price";
+            case 3:
+                return "Quantity";
             case 4:
-                return "Status";
+                return "Total";
             case 5:
-                return "Created";
-            case 6:
-                return "Modified";
+                return "Status";
             default:
                 return null;
         }

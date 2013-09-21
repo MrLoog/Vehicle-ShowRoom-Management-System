@@ -4,16 +4,12 @@
  */
 package app.service;
 
-import app.model.OrderPlus;
 import app.model.Order;
 import app.utility.AppUtility;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +40,7 @@ public class OrderService extends BaseService {
                 temp.setCreated(rs.getDate("Created"));
                 temp.setModified(rs.getDate("Modified"));
                 temp.setQuantity(rs.getInt("Quantity"));
+                temp.setIsDeleted(rs.getBoolean("IsDeleted"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -54,21 +51,22 @@ public class OrderService extends BaseService {
     
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?,?,?)";
     }
     
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
-            Order brand = (Order) obj;
-            insertStmt.setInt(1, brand.getDealerId());
-            insertStmt.setInt(2, brand.getCustomerId());
-            insertStmt.setInt(3, brand.getVehicleId());
-            insertStmt.setInt(4, brand.getPrice());
-            insertStmt.setInt(5, brand.getStatus());
-            insertStmt.setDate(6, brand.getCreated());
-            insertStmt.setDate(7, brand.getModified());
-            insertStmt.setInt(8, brand.getQuantity());
+            Order temp = (Order) obj;
+            insertStmt.setInt(1, temp.getDealerId());
+            insertStmt.setInt(2, temp.getCustomerId());
+            insertStmt.setInt(3, temp.getVehicleId());
+            insertStmt.setInt(4, temp.getPrice());
+            insertStmt.setInt(5, temp.getStatus());
+            insertStmt.setDate(6, temp.getCreated());
+            insertStmt.setDate(7, temp.getModified());
+            insertStmt.setInt(8, temp.getQuantity());
+            insertStmt.setBoolean(9, temp.isIsDeleted());
         } catch (SQLException ex) {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,22 +74,23 @@ public class OrderService extends BaseService {
     
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set DealerID=?,CustomerID=?,VehicleID=?,Price=?,Status=?,Created=?,Modified=?,Quantity=? where ID=?";
+        return "update " + getTableName() + " set DealerID=?,CustomerID=?,VehicleID=?,Price=?,Status=?,Created=?,Modified=?,Quantity=?,IsDeleted=? where ID=?";
     }
     
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
-            Order brand = (Order) obj;
-            updateStmt.setInt(1, brand.getDealerId());
-            updateStmt.setInt(2, brand.getCustomerId());
-            updateStmt.setInt(3, brand.getVehicleId());
-            updateStmt.setInt(4, brand.getPrice());
-            updateStmt.setInt(5, brand.getStatus());
-            updateStmt.setDate(6, brand.getCreated());
-            updateStmt.setDate(7, brand.getModified());
-            updateStmt.setInt(8, brand.getQuantity());
-            updateStmt.setInt(9, brand.getId());
+            Order temp = (Order) obj;
+            updateStmt.setInt(1, temp.getDealerId());
+            updateStmt.setInt(2, temp.getCustomerId());
+            updateStmt.setInt(3, temp.getVehicleId());
+            updateStmt.setInt(4, temp.getPrice());
+            updateStmt.setInt(5, temp.getStatus());
+            updateStmt.setDate(6, temp.getCreated());
+            updateStmt.setDate(7, temp.getModified());
+            updateStmt.setInt(8, temp.getQuantity());
+            updateStmt.setBoolean(9, temp.isIsDeleted());
+            updateStmt.setInt(10, temp.getId());
         } catch (SQLException ex) {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }

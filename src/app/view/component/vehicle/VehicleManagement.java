@@ -4,11 +4,7 @@
  */
 package app.view.component.vehicle;
 
-import app.model.Brand;
-import app.model.Category;
 import app.model.Vehicle;
-import app.service.BrandService;
-import app.service.CategoryService;
 import app.service.VehicleService;
 import app.view.Main;
 import app.view.component.order.DialogImportOrderForm;
@@ -28,8 +24,6 @@ import javax.swing.JOptionPane;
 public class VehicleManagement extends javax.swing.JPanel {
 
     VehicleService service;
-    private BrandService brandService;
-    private CategoryService categoryService;
     TableVehicleModel tableModel = new TableVehicleModel();
 
     /**
@@ -38,8 +32,6 @@ public class VehicleManagement extends javax.swing.JPanel {
     public VehicleManagement() {
         initComponents();
         service = new VehicleService();
-        brandService = new BrandService();
-        categoryService = new CategoryService();
         initCbbFilter();
         setCurpage(1);
         fillPage();
@@ -47,19 +39,19 @@ public class VehicleManagement extends javax.swing.JPanel {
 
     private void initCbbFilter() {
         cbbrand.removeAllItems();
-        List<Brand> brands = brandService.getAll();
+        List<String> brands = service.getListBrandName();
         cbbrand.addItem(Main.ALL);
-        for (Brand brand : brands) {
-            cbbrand.addItem(brand.getName());
+        for (String brand : brands) {
+            cbbrand.addItem(brand);
         }
         cbbrand.revalidate();
         cbbrand.repaint();
 
         cbbcategory.removeAllItems();
-        List<Category> categorys = categoryService.getAll();
+        List<String> categorys = service.getListCategoryName();
         cbbcategory.addItem(Main.ALL);
-        for (Category category : categorys) {
-            cbbcategory.addItem(category.getTitle());
+        for (String category : categorys) {
+            cbbcategory.addItem(category);
         }
     }
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
@@ -121,6 +113,26 @@ public class VehicleManagement extends javax.swing.JPanel {
         comboVehicle.repaint();
     }
 
+    public void reloadData() {
+        fillData(curpage);
+        fillPage();
+    }
+
+    public void reInit() {
+        initCbbFilter();
+        fillData(1);
+        fillPage();
+    }
+
+    public void refresh() {
+        cbbrand.setSelectedItem(Main.ALL);
+        cbbcategory.setSelectedItem(Main.ALL);
+        search = "";
+        txtKeyword.setText(search);
+        fillData(1);
+        fillPage();
+    }
+
     public boolean isNumeric(String str) {
         try {
             double d = Double.parseDouble(str);
@@ -146,8 +158,8 @@ public class VehicleManagement extends javax.swing.JPanel {
         comboVehicle = new javax.swing.JComboBox();
         txtKeyword = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        cbbcategory = new javax.swing.JComboBox();
         cbbrand = new javax.swing.JComboBox();
+        cbbcategory = new javax.swing.JComboBox();
         btnNew = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -199,11 +211,11 @@ public class VehicleManagement extends javax.swing.JPanel {
         });
         jPanel1.add(btnSearch);
 
-        cbbcategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbbcategory);
-
         cbbrand.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cbbrand);
+
+        cbbcategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbbcategory);
 
         btnNew.setText("New");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
@@ -274,7 +286,7 @@ public class VehicleManagement extends javax.swing.JPanel {
         creater.setSaveListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                reloadData();
+                reInit();
             }
         });
         creater.setVisible(true);
@@ -296,12 +308,7 @@ public class VehicleManagement extends javax.swing.JPanel {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        cbbrand.setSelectedItem(Main.ALL);
-        cbbcategory.setSelectedItem(Main.ALL);
-        search = "";
-        txtKeyword.setText("");
-        fillData(1);
-        fillPage();
+        refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -311,17 +318,19 @@ public class VehicleManagement extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Select a row to perform this action!");
             return;
         }
-        DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
+        final DialogImportOrderForm dialog = new DialogImportOrderForm(null, true);
         dialog.setLocationRelativeTo(null);
         dialog.setEditMode(false);
         dialog.setModel(v);
-        dialog.setVisible(true);
-        dialog.setListener(new ActionListener() {
+        dialog.setSaveListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 reloadData();
+                dialog.dispose();
             }
         });
+        dialog.setVisible(true);
+
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
@@ -338,9 +347,4 @@ public class VehicleManagement extends javax.swing.JPanel {
     private javax.swing.JTable tableVehicle;
     private javax.swing.JTextField txtKeyword;
     // End of variables declaration//GEN-END:variables
-
-    public void reloadData() {
-        fillData(curpage);
-        fillPage();
-    }
 }

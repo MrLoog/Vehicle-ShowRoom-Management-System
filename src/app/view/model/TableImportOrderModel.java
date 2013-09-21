@@ -13,24 +13,26 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Administrator
  */
-public class TableImportOrderModel extends AbstractTableModel{
+public class TableImportOrderModel extends AbstractTableModel {
+
     List<ImportOrder> data;
 
     public TableImportOrderModel(List<ImportOrder> data) {
-        this.data=data;
+        this.data = data;
     }
 
     public TableImportOrderModel() {
-        this.data=new ArrayList<ImportOrder>();
+        this.data = new ArrayList<ImportOrder>();
     }
-    public ImportOrder getData(int index){
+
+    public ImportOrder getData(int index) {
         return data.get(index);
     }
 
     public void setData(List<ImportOrder> data) {
         this.data = data;
     }
-    
+
     @Override
     public int getRowCount() {
         return data.size();
@@ -38,32 +40,47 @@ public class TableImportOrderModel extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-         return 6;
+        return 6;
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
-       ImportOrder c = data.get(i);
-        switch(i1){
-            case 0: return c.getId();
-            case 1: return c.getName();
-            case 2: return c.getModelNumber();
-            case 3: return c.getBrand();
-            case 4: return c.getPrice();
-            case 5: return c.getQuantity();
-            default: return null;
+        ImportOrder c = data.get(i);
+        switch (i1) {
+            case 0:
+                return c.getVehicle().getModelNumber();
+            case 1:
+                return c.getDealer().getName();
+            case 2:
+                return c.getCreated();
+            case 3:
+                return c.getPrice();
+            case 4:
+                return c.getQuantity();
+            case 5:
+                return (c.getPrice() * c.getQuantity());
+            default:
+                return null;
         }
     }
-     @Override
+
+    @Override
     public String getColumnName(int column) {
-        switch(column){
-            case 0: return "ID";
-            case 1: return "Vehicle Name";
-            case 2: return "Model";
-            case 3: return "Brand";
-            case 4: return "Price";
-            case 5: return "Quantity";
-            default: return null;
+        switch (column) {
+            case 0:
+                return "Vehicle Model";
+            case 1:
+                return "Dealer";
+            case 2:
+                return "Created";
+            case 3:
+                return "Price";
+            case 4:
+                return "Quantity";
+            case 5:
+                return "Total";
+            default:
+                return null;
         }
     }
 }

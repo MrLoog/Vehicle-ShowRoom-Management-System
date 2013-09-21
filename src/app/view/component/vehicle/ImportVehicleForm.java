@@ -32,7 +32,8 @@ public class ImportVehicleForm extends javax.swing.JPanel {
     public void setModel(Vehicle model) {
         this.model = model;
         txtName.setText(model.getName());
-        txtBrand.setText(model.getBrand());
+        cbbBrand.setSelectedItem(model.getBrand());
+        cbbCategory.setSelectedItem(model.getCategory());
         txtPrice.setText(model.getPrice().toString());
         txtModel.setText(model.getModelNumber());
     }
@@ -43,7 +44,23 @@ public class ImportVehicleForm extends javax.swing.JPanel {
     public ImportVehicleForm() {
         initComponents();
         vehicleService = new VehicleService();
-        lbResult.setText("");
+        initCbb();
+    }
+
+    private void initCbb() {
+        cbbBrand.removeAllItems();
+        List<String> brands = vehicleService.getListBrandName();
+        for (String brand : brands) {
+            cbbBrand.addItem(brand);
+        }
+        cbbBrand.revalidate();
+        cbbBrand.repaint();
+
+        cbbCategory.removeAllItems();
+        List<String> categorys = vehicleService.getListCategoryName();
+        for (String category : categorys) {
+            cbbCategory.addItem(category);
+        }
     }
 
     public boolean valid() {
@@ -52,8 +69,14 @@ public class ImportVehicleForm extends javax.swing.JPanel {
             eName.setText("Name invalid, min: 4 chars, max: 255 chars");
             flag = false;
         }
-        if (txtBrand.getText().length() < 3) {
+        String brand = (String) cbbBrand.getSelectedItem();
+        if (brand.length() < 3) {
             eBrand.setText("Brand invalid, min: 3 chars, max: 255 chars");
+            flag = false;
+        }
+        String category = (String) cbbCategory.getSelectedItem();
+        if (brand.length() < 3) {
+            eCategory.setText("Brand invalid, min: 3 chars, max: 255 chars");
             flag = false;
         }
         if (txtPrice.getText().equals("")) {
@@ -95,7 +118,6 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         txtModel = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
-        txtBrand = new javax.swing.JTextField();
         txtPrice = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -103,8 +125,11 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         eName = new javax.swing.JLabel();
         eBrand = new javax.swing.JLabel();
         ePrice = new javax.swing.JLabel();
-        lbResult = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        eCategory = new javax.swing.JLabel();
+        cbbBrand = new javax.swing.JComboBox();
+        cbbCategory = new javax.swing.JComboBox();
 
         setPreferredSize(new java.awt.Dimension(402, 400));
 
@@ -145,16 +170,18 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         ePrice.setForeground(new java.awt.Color(255, 0, 0));
         ePrice.setText(".");
 
-        lbResult.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lbResult.setForeground(new java.awt.Color(0, 153, 51));
-        lbResult.setText(".");
-
         jButton1.setText("Reset");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Category :");
+
+        cbbBrand.setEditable(true);
+
+        cbbCategory.setEditable(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -164,34 +191,30 @@ public class ImportVehicleForm extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(88, 88, 88)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emodel)
-                            .addComponent(eName)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtModel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                                .addComponent(txtName, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtBrand))))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jLabel7))
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel5)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(lbResult, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnCreate))
-                        .addGap(66, 66, 66)
+                        .addGap(83, 83, 83)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
-                            .addComponent(eBrand)
-                            .addComponent(ePrice)
-                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(ePrice, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(eCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtModel)
+                                .addComponent(txtName)
+                                .addComponent(eBrand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(emodel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(eName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbbBrand, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbbCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(65, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -214,26 +237,26 @@ public class ImportVehicleForm extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                    .addComponent(cbbBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
                 .addComponent(eBrand)
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                .addComponent(eCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(ePrice)
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCreate)
-                            .addComponent(jButton1))
-                        .addContainerGap(72, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbResult)
-                        .addGap(18, 18, 18))))
+                    .addComponent(jLabel5)
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ePrice)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnCreate))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -243,25 +266,21 @@ public class ImportVehicleForm extends javax.swing.JPanel {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if (valid()) {
-            btnCreate.setText("Saving Data...");
             loadDataToModel();
             if (isEdit) {
                 if (vehicleService.update(model)) {
-                    lbResult.setText("Save Vehicle Success");
+                    JOptionPane.showMessageDialog(emodel, "Update Vehicle Success.");
                 } else {
                     JOptionPane.showMessageDialog(emodel, "Error, cannot save vehicle: " + txtName.getText());
-                    lbResult.setText("");
                 }
             } else {
                 int x = vehicleService.add(model);
                 if (x > 0) {
-                    lbResult.setText("Created Vehicle Success");
+                    JOptionPane.showMessageDialog(emodel, "Create new Vehicle Success.");
                 } else {
                     JOptionPane.showMessageDialog(null, "Error, cannot create vehicle");
-                    lbResult.setText("");
                 }
             }
-            btnCreate.setText("Save");
             if (saveListener != null) {
                 saveListener.actionPerformed(evt);
             }
@@ -274,18 +293,20 @@ public class ImportVehicleForm extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JComboBox cbbBrand;
+    private javax.swing.JComboBox cbbCategory;
     private javax.swing.JLabel eBrand;
+    private javax.swing.JLabel eCategory;
     private javax.swing.JLabel eName;
     private javax.swing.JLabel ePrice;
     private javax.swing.JLabel emodel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel lbResult;
-    private javax.swing.JTextField txtBrand;
     private javax.swing.JTextField txtModel;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPrice;
@@ -301,6 +322,7 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         } else {
             Vehicle v = new Vehicle();
             v.setBrand("");
+            v.setCategory("");
             v.setName("");
             v.setPrice(0);
             v.setModelNumber("");
@@ -312,7 +334,8 @@ public class ImportVehicleForm extends javax.swing.JPanel {
         if (model == null) {
             model = new Vehicle();
         }
-        model.setBrand(txtBrand.getText());
+        model.setBrand((String) cbbBrand.getSelectedItem());
+        model.setCategory((String) cbbCategory.getSelectedItem());
         model.setModelNumber(txtModel.getText());
         model.setName(txtName.getText());
         model.setPrice(Integer.parseInt(txtPrice.getText()));

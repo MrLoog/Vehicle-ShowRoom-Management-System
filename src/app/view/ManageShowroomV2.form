@@ -73,7 +73,6 @@
                       <Component id="btnVehicle" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnOrders" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCustomer" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnBrand" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
@@ -88,9 +87,7 @@
                   <Component id="btnOrders" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnCustomer" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnBrand" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="78" max="32767" attributes="0"/>
+                  <EmptySpace pref="136" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -127,17 +124,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCustomerActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnBrand">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Brand"/>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 40]"/>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrandActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

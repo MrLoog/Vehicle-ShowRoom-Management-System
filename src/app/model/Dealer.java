@@ -4,6 +4,8 @@
  */
 package app.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Administrator
@@ -14,14 +16,42 @@ public class Dealer {
     private String loginName;
     private String password;
     private boolean isManager;
+    private Date created;
+    private Date modified;
+    private boolean isDeleted;
 
-    public boolean isIsAdmin() {
+    public boolean isIsManager() {
         return isManager;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isManager = isAdmin;
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
     }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
 
     public int getId() {
         return id;

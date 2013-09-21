@@ -4,6 +4,8 @@
  */
 package app.model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Administrator
@@ -17,6 +19,33 @@ public class Vehicle {
     private String modelNumber;
     private int quantity;
     private String category;
+    private Date created;
+    private Date modified;
+    private boolean isDeleted;
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getCategory() {
         return category;

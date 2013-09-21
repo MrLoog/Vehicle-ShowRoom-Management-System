@@ -28,6 +28,15 @@ public class Order {
     private Customer customer;
     private Vehicle vehicle;
     private Dealer dealer;
+    private boolean isDeleted;
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public int getQuantity() {
         return quantity;

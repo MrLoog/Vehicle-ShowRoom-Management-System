@@ -5,13 +5,9 @@
 package app.service;
 
 import app.model.Customer;
-import app.utility.AppUtility;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,6 +40,9 @@ public class CustomerService extends BaseService {
                 temp.setAddress(rs.getString("Address"));
                 temp.setPhone(rs.getString("Phone"));
                 temp.setDealerId(rs.getInt("DealerID"));
+                temp.setCreated(rs.getDate("Created"));
+                temp.setModified(rs.getDate("Modified"));
+                temp.setIsDeleted(rs.getBoolean("IsDeleted"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -54,17 +53,20 @@ public class CustomerService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
     }
 
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
-            Customer brand = (Customer) obj;
-            insertStmt.setString(1, brand.getName());
-            insertStmt.setString(2, brand.getAddress());
-            insertStmt.setString(3, brand.getPhone());
-            insertStmt.setInt(4, brand.getDealerId());
+            Customer temp = (Customer) obj;
+            insertStmt.setString(1, temp.getName());
+            insertStmt.setString(2, temp.getAddress());
+            insertStmt.setString(3, temp.getPhone());
+            insertStmt.setDate(4, temp.getCreated());
+            insertStmt.setDate(5, temp.getModified());
+            insertStmt.setBoolean(6, temp.isIsDeleted());
+            insertStmt.setInt(7, temp.getDealerId());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,18 +74,21 @@ public class CustomerService extends BaseService {
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,Address=?,Phone=?,DealerID=? where ID=?";
+        return "update " + getTableName() + " set Name=?,Address=?,Phone=?,DealerID=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
 
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
-            Customer brand = (Customer) obj;
-            updateStmt.setString(1, brand.getName());
-            updateStmt.setString(2, brand.getAddress());
-            updateStmt.setString(3, brand.getPhone());
-            updateStmt.setInt(4, brand.getDealerId());
-            updateStmt.setInt(5, brand.getId());
+            Customer temp = (Customer) obj;
+            updateStmt.setString(1, temp.getName());
+            updateStmt.setString(2, temp.getAddress());
+            updateStmt.setString(3, temp.getPhone());
+            updateStmt.setInt(4, temp.getDealerId());
+            updateStmt.setDate(5, temp.getCreated());
+            updateStmt.setDate(6, temp.getModified());
+            updateStmt.setBoolean(7, temp.isIsDeleted());
+            updateStmt.setInt(8, temp.getId());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
         }

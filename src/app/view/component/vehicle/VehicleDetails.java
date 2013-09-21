@@ -14,23 +14,23 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class VehicleDetails extends javax.swing.JPanel {
-
+    
     private Vehicle model;
     private ActionListener orderCommand;
-    private int buyquantity=0;
-
+    private int buyquantity = 0;
+    
     public int getBuyquantity() {
         return buyquantity;
     }
-
+    
     public ActionListener getOrderCommand() {
         return orderCommand;
     }
-
+    
     public Vehicle getModel() {
         return model;
     }
-
+    
     public void setOrderCommand(ActionListener orderCommand) {
         this.orderCommand = orderCommand;
     }
@@ -64,6 +64,8 @@ public class VehicleDetails extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
 
         jLabel1.setText("Model Number :");
 
@@ -94,6 +96,10 @@ public class VehicleDetails extends javax.swing.JPanel {
 
         jLabel11.setText("Buy Quantity :");
 
+        jLabel12.setText("Category :");
+
+        jLabel13.setText("No Info");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -109,9 +115,11 @@ public class VehicleDetails extends javax.swing.JPanel {
                             .addComponent(jLabel7)
                             .addComponent(jLabel5)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel11))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12))
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel6)
@@ -123,47 +131,51 @@ public class VehicleDetails extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel12))
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-          if(model==null){
+        if (model == null) {
             JOptionPane.showMessageDialog(this, "No Vehicle to Order.");
             return;
         }
-        if(model.getQuantity()<=0){
+        if (model.getQuantity() <= 0) {
             JOptionPane.showMessageDialog(this, "This Model not avaiable for order.");
             return;
         }
-        buyquantity = (Integer)jComboBox1.getSelectedItem();
+        buyquantity = (Integer) jComboBox1.getSelectedItem();
         if (orderCommand != null) {
             orderCommand.actionPerformed(evt);
         }
@@ -174,6 +186,8 @@ public class VehicleDetails extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -190,6 +204,7 @@ public class VehicleDetails extends javax.swing.JPanel {
         jLabel4.setText(model.getName());
         jLabel6.setText(model.getBrand());
         jLabel8.setText(model.getPrice() + "");
+        jLabel13.setText(model.getCategory());
         if (model.getQuantity() <= 0) {
             jLabel10.setText("Not Avaiable");
         } else {
@@ -199,7 +214,7 @@ public class VehicleDetails extends javax.swing.JPanel {
                 jComboBox1.addItem(i);
             }
             jComboBox1.setSelectedIndex(0);
-            buyquantity=1;
+            buyquantity = 1;
         }
     }
 }

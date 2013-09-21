@@ -4,6 +4,7 @@
  */
 package app.utility;
 
+import app.model.Order;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -112,5 +113,20 @@ public class AppUtility {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
         return s;
+    }
+
+    public static String getStatusString(int status) {
+        switch (status) {
+            case Order.STATUS_NEW:
+                return "New";
+            case Order.STATUS_WAIT_CREATE:
+                return "Pre Created";
+            case Order.STATUS_DONE:
+                return "Done";
+            case Order.STATUS_CANCEL:
+                return "Cancel";
+            default:
+                return null;
+        }
     }
 }

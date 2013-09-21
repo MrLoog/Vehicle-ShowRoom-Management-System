@@ -49,6 +49,9 @@ public class VehicleService extends BaseService {
                 temp.setModelNumber(rs.getString("ModelNumber"));
                 temp.setQuantity(rs.getInt("Quantity"));
                 temp.setCategory(rs.getString("Category"));
+                temp.setCreated(rs.getDate("Created"));
+                temp.setModified(rs.getDate("Modified"));
+                temp.setIsDeleted(rs.getBoolean("IsDeleted"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -66,7 +69,10 @@ public class VehicleService extends BaseService {
             insertStmt.setInt(3, vehicle.getPrice());
             insertStmt.setString(4, vehicle.getModelNumber());
             insertStmt.setInt(5, vehicle.getQuantity());
-            insertStmt.setString(6, vehicle.getCategory());
+            insertStmt.setDate(6, vehicle.getCreated());
+            insertStmt.setDate(7, vehicle.getModified());
+            insertStmt.setBoolean(8, vehicle.isIsDeleted());
+            insertStmt.setString(9, vehicle.getCategory());
         } catch (SQLException ex) {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -82,7 +88,10 @@ public class VehicleService extends BaseService {
             updateStmt.setString(4, temp.getModelNumber());
             updateStmt.setInt(5, temp.getQuantity());
             updateStmt.setString(6, temp.getCategory());
-            updateStmt.setInt(7, temp.getId());
+            updateStmt.setDate(7, temp.getCreated());
+            updateStmt.setDate(8, temp.getModified());
+            updateStmt.setBoolean(9, temp.isIsDeleted());
+            updateStmt.setInt(10, temp.getId());
         } catch (SQLException ex) {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -100,12 +109,12 @@ public class VehicleService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?)";
+        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Name=?,Brand=?,Price=?,ModelNumber=?,Quantity=?,Category=? where ID=?";
+        return "update " + getTableName() + " set Name=?,Brand=?,Price=?,ModelNumber=?,Quantity=?,Category=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
 
     @Override
@@ -308,5 +317,39 @@ public class VehicleService extends BaseService {
         }
         pre += " 1=1 ";
         return pre;
+    }
+
+    public List<String> getListBrandName() {
+        List<String> output = new ArrayList<String>();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("select distinct Brand from " + getTableName());
+            while (rs.next()) {
+                output.add(rs.getString("Brand"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
+    public List<String> getListCategoryName() {
+        List<String> output = new ArrayList<String>();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("select distinct Category from " + getTableName());
+            while (rs.next()) {
+                output.add(rs.getString("Category"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
+    public String getQuerySearchVehicle(String search) {
+       String sql="select * from "+getTableName()+" where ModelNumber like 'search' ";
+       sql=sql.replaceAll("search", search);
+       return sql;
     }
 }
