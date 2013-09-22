@@ -120,8 +120,7 @@ public class VehicleManagement extends javax.swing.JPanel {
 
     public void reInit() {
         initCbbFilter();
-        fillData(1);
-        fillPage();
+        fillData(curpage);
     }
 
     public void refresh() {
@@ -154,7 +153,6 @@ public class VehicleManagement extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableVehicle = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        lbCur = new javax.swing.JLabel();
         comboVehicle = new javax.swing.JComboBox();
         txtKeyword = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -185,9 +183,6 @@ public class VehicleManagement extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
         jPanel1.setLayout(new java.awt.FlowLayout(0));
 
-        lbCur.setText(".");
-        jPanel1.add(lbCur);
-
         comboVehicle.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboVehicleItemStateChanged(evt);
@@ -201,6 +196,11 @@ public class VehicleManagement extends javax.swing.JPanel {
         jPanel1.add(comboVehicle);
 
         txtKeyword.setPreferredSize(new java.awt.Dimension(100, 25));
+        txtKeyword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKeywordActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtKeyword);
 
         btnSearch.setText("Search");
@@ -277,7 +277,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Not selected a row.");
             return;
         }
-        CreateVehicleDialog creater = new CreateVehicleDialog(null, true);
+        final CreateVehicleDialog creater = new CreateVehicleDialog(null, true);
         creater.setLocationRelativeTo(null);
         creater.setEditMode(isedit);
         if (isedit) {
@@ -287,6 +287,7 @@ public class VehicleManagement extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 reInit();
+                creater.dispose();
             }
         });
         creater.setVisible(true);
@@ -332,6 +333,11 @@ public class VehicleManagement extends javax.swing.JPanel {
         dialog.setVisible(true);
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtKeywordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKeywordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKeywordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
@@ -343,7 +349,6 @@ public class VehicleManagement extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbCur;
     private javax.swing.JTable tableVehicle;
     private javax.swing.JTextField txtKeyword;
     // End of variables declaration//GEN-END:variables

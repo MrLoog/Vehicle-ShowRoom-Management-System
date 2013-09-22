@@ -58,11 +58,6 @@
         <Property name="alignment" type="int" value="0"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lbCur">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="."/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JComboBox" name="comboVehicle">
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="comboVehicleItemStateChanged"/>
@@ -75,6 +70,9 @@
               <Dimension value="[100, 25]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtKeywordActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnSearch">
           <Properties>

@@ -10,6 +10,7 @@ import app.model.Vehicle;
 import app.service.CustomerService;
 import app.service.OrderService;
 import app.service.VehicleService;
+import app.utility.AppUtility;
 import app.view.Main;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -27,7 +28,7 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class OrderForm extends javax.swing.JPanel {
-    
+
     private boolean isEdit = false;
     private Order model;
     private CustomerService customerService;
@@ -37,41 +38,41 @@ public class OrderForm extends javax.swing.JPanel {
     private ActionListener purchaseListener;
     private ActionListener cancelListener;
     private int buyQuantity = 1;
-    
+
     public void setCancelListener(ActionListener cancelListener) {
         this.cancelListener = cancelListener;
     }
-    
+
     public void setBuyQuantity(int buyQuantity) {
         this.buyQuantity = buyQuantity;
         if (model != null && model.getPrice() != 0) {
             model.setQuantity(buyQuantity);
             jLabel15.setText(buyQuantity + "");
-            jLabel10.setText(model.getPrice() + "");
+            jTextField5.setText(model.getPrice() + "");
             jLabel17.setText((model.getPrice() * buyQuantity) + "");
         }
     }
-    
+
     public void setPurchaseListener(ActionListener purchaseListener) {
         this.purchaseListener = purchaseListener;
     }
-    
+
     public void setEditMode(boolean isEdit) {
         this.isEdit = isEdit;
     }
-    
+
     public Order getModel() {
         return model;
     }
-    
+
     public void setModel(Order model) {
         this.model = model;
         setDefaultValue(model);
     }
-    
+
     private void setDefaultValue(Order d) {
-        jLabel10.setText(String.valueOf(d.getPrice()));
-        jLabel12.setText("" + d.getStatus());
+        jTextField5.setText(String.valueOf(d.getPrice()));
+        jLabel12.setText(AppUtility.getStatusString(model.getStatus()));
         if (d.getVehicle() != null) {
             jLabel8.setText(d.getVehicle().getModelNumber());
         } else {
@@ -87,20 +88,20 @@ public class OrderForm extends javax.swing.JPanel {
             jTextField3.setText("");
         }
     }
-    
+
     private void clear() {
         clearErrorMes();
         model.setCustomerId(0);
         model.setCustomer(new Customer());
         setModel(model);
     }
-    
+
     private void loadDataToModel() {
         if (model == null) {
             model = new Order();
         }
     }
-    
+
     private boolean isFormValid() {
         boolean output = true;
         clearErrorMes();
@@ -111,6 +112,8 @@ public class OrderForm extends javax.swing.JPanel {
         }
         String cusname = jTextField1.getText();
         String cusphone = jTextField3.getText();
+        //pre get and re set later
+        String price = jTextField5.getText();
         Customer c = new Customer();
         c.setName(cusname);
         c.setPhone(cusphone);
@@ -129,6 +132,10 @@ public class OrderForm extends javax.swing.JPanel {
                 int choice = JOptionPane.showConfirmDialog(this, "Customer not exists, save this?", "Confirm for save", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     c.setDealerId(Main.activeUser.getId());
+                    Date date = new Date();
+                    java.sql.Date inputdate = new java.sql.Date(date.getTime());
+                    c.setCreated(inputdate);
+                    c.setModified(inputdate);
                     int returnid = customerService.add(c);
                     c.setId(returnid);
                     setModelCustomer(c);
@@ -145,9 +152,25 @@ public class OrderForm extends javax.swing.JPanel {
                 setModelCustomer(customers.get(0));
             }
         }
+        jTextField5.setText(price);
+        if (price.equals("")) {
+            jLabel19.setText("Price is required.");
+            output = false;
+        } else {
+            try {
+                int intprice = Integer.parseInt(price);
+                if (intprice <= 0) {
+                    jLabel19.setText("Price is greater 0.");
+                    output = false;
+                }
+            } catch (NumberFormatException e) {
+                jLabel19.setText("Price is number.");
+                output = false;
+            }
+        }
         return output;
     }
-    
+
     private void clearErrorMes() {
         jLabel2.setText("");
         jLabel4.setText("");
@@ -187,7 +210,6 @@ public class OrderForm extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -198,6 +220,8 @@ public class OrderForm extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
 
         jLabel1.setText("Customer Name :");
 
@@ -216,8 +240,6 @@ public class OrderForm extends javax.swing.JPanel {
         jLabel8.setText("No Info");
 
         jLabel9.setText("Price :");
-
-        jLabel10.setText("No Info");
 
         jLabel11.setText("Status :");
 
@@ -252,6 +274,22 @@ public class OrderForm extends javax.swing.JPanel {
 
         jLabel17.setText("No Info");
 
+        jTextField5.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField5FocusLost(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
+            }
+        });
+
+        jLabel19.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -265,7 +303,7 @@ public class OrderForm extends javax.swing.JPanel {
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                            .addComponent(jTextField1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -282,20 +320,22 @@ public class OrderForm extends javax.swing.JPanel {
                             .addComponent(jTextField3)
                             .addComponent(jTextField2)))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addComponent(jLabel14)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel11)
                             .addComponent(jLabel16))
                         .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel17)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jTextField5)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -333,8 +373,10 @@ public class OrderForm extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(jLabel17))
@@ -342,12 +384,12 @@ public class OrderForm extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -355,7 +397,7 @@ public class OrderForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (isFormValid()) {
             model.setDealerId(Main.activeUser.getId());
-            model.setPrice(model.getVehicle().getPrice());
+            model.setPrice(Integer.parseInt(jTextField5.getText()));
             model.setStatus(Order.STATUS_NEW);
             Date date = new Date();
             java.sql.Date inputdate = new java.sql.Date(date.getTime());
@@ -383,28 +425,55 @@ public class OrderForm extends javax.swing.JPanel {
             d.setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         if (cancelListener != null) {
             cancelListener.actionPerformed(evt);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField5FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusLost
+        // TODO add your handling code here:
+        try {
+            int price = Integer.parseInt(jTextField5.getText());
+            if (price > 0) {
+                jLabel17.setText("" + (price * model.getQuantity()));
+            }
+        } catch (NumberFormatException numberFormatException) {
+            return;
+        }
+    }//GEN-LAST:event_jTextField5FocusLost
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+        // TODO add your handling code here:
+        try {
+            int price = Integer.parseInt(jTextField5.getText());
+            if (price > 0) {
+                jLabel17.setText("" + (price * model.getQuantity()));
+            }
+        } catch (NumberFormatException numberFormatException) {
+            return;
+        }
+    }//GEN-LAST:event_jTextField5KeyReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -412,6 +481,7 @@ public class OrderForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -423,6 +493,7 @@ public class OrderForm extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 
     public void setDataModel(Object selectobj) {
@@ -433,7 +504,7 @@ public class OrderForm extends javax.swing.JPanel {
             setModelCustomer(selectobj);
         }
     }
-    
+
     private void setModelVehicle(Object selectobj) {
         Vehicle v = (Vehicle) selectobj;
         if (selectobj != null) {
@@ -446,7 +517,7 @@ public class OrderForm extends javax.swing.JPanel {
             setDefaultValue(model);
         }
     }
-    
+
     private void setModelCustomer(Object selectobj) {
         Customer v = (Customer) selectobj;
         if (model == null) {
@@ -457,11 +528,11 @@ public class OrderForm extends javax.swing.JPanel {
         setDefaultValue(model);
     }
     private ActionListener orderSuccessListener;
-    
+
     public void setOrderSuccessListener(ActionListener orderSuccessListener) {
         this.orderSuccessListener = orderSuccessListener;
     }
-    
+
     private void saveModel() {
         int returnid = orderService.add(model);
         Vehicle v = vehicleService.getById(model.getVehicleId());

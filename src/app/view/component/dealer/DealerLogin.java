@@ -102,9 +102,9 @@ public class DealerLogin extends javax.swing.JPanel {
         jLabel4.setText("");
         jLabel5.setText("");
         if (valid()) {
-            List<Dealer> matchdealer = dealerService.executeQuery("select * from " + dealerService.getTableName() + " where LoginName='" + jTextField1.getText() + "'");
+            List<Dealer> matchdealer = dealerService.executeQuery("select * from " + dealerService.getTableName() + " where LoginName='" + jTextField1.getText() + "' and IsDeleted=0");
             if (matchdealer.size() <= 0) {
-                jLabel4.setText("Login Name is not exists");
+                jLabel4.setText("Login Name is not exists or lock");
             } else {
                 for (Dealer d : matchdealer) {
                     if (d.getPassword().equals(AppUtility.EncryptPassword(new String(jPasswordField1.getPassword())))) {

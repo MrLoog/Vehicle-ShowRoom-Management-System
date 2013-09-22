@@ -4,8 +4,10 @@
  */
 package app.view.component.order;
 
+import app.model.Dealer;
 import app.model.ImportOrder;
 import app.model.Vehicle;
+import app.service.DealerService;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
 import app.view.Main;
@@ -28,6 +30,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
 
     private ImportOrderService importOrderService;
     private VehicleService vehicleService;
+    private DealerService dealerService;
 
     /**
      * Creates new form ImportOrderTable
@@ -36,6 +39,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         initComponents();
         importOrderService = new ImportOrderService();
         vehicleService = new VehicleService();
+        dealerService = new DealerService();
         fillData(1);
         fillPage();
     }
@@ -57,15 +61,16 @@ public class ImportOrderTable extends javax.swing.JPanel {
     private void fillData(int page) {
         String pagingsql = "";
         if (search.equals("")) {
-            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), new ArrayList<Integer>()), Main.PerPage, page, totalpage);
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(new ArrayList<Integer>()), Main.PerPage, page, totalpage);
         } else {
             List<Integer> lstVehicle = vehicleService.executeQueryGetListID(vehicleService.getQuerySearchVehicle(search));
-            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), lstVehicle), Main.PerPage, page, totalpage);
+            pagingsql = importOrderService.BuildPagingSql(importOrderService.getTableName(), importOrderService.getConditionSearchWithStatusAndJoin(lstVehicle), Main.PerPage, page, totalpage);
         }
         List<ImportOrder> lst = importOrderService.executeQuery(pagingsql);
         for (ImportOrder importOrder : lst) {
             importOrder.setVehicle((Vehicle) vehicleService.getById(importOrder.getVehicleID()));
-            importOrder.setDealer(Main.activeUser);
+            importOrder.setDealer((Dealer) dealerService.getById(importOrder.getDealerId()));
+            importOrder.setDealerModified((Dealer) dealerService.getById(importOrder.getDealerModifiedID()));
         }
         model.setData(lst);
         jTable1.setModel(model);
@@ -217,7 +222,6 @@ public class ImportOrderTable extends javax.swing.JPanel {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     fillData(curpage);
-                    fillPage();
                     dialog.dispose();
                 }
             });

@@ -7,7 +7,16 @@ package app.view.component.dealer;
 import app.model.Dealer;
 import app.service.DealerService;
 import app.utility.AppUtility;
+import app.view.Main;
+import app.view.model.TableDealerModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,111 +26,91 @@ import javax.swing.table.DefaultTableModel;
  */
 public class DealerManager extends javax.swing.JPanel {
 
-    float itemsPerPage = 10;
-    float total = 0;
-    static int cur = 1;
-    static boolean isSearch = false;
-    DealerService service;
-    String kword = "";
-    String sql = "exec pagingdealers " + cur + "," + itemsPerPage;
-    String getTotal = "";
-    int from, to;
+    AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
+    int curpage = 1;
+    String search = "";
+    TableDealerModel model = new TableDealerModel();
+
+    public void setTotalpage(Integer totalpage) {
+        this.totalpage.set(totalpage);
+        fillPage();
+    }
+
+    public void setCurpage(int curpage) {
+        this.curpage = curpage;
+        fillDataCustomer(curpage);
+    }
+
+    private void fillDataCustomer(int page) {
+        String pagingsql = "";
+        if (search.equals("")) {
+            pagingsql = dealerService.BuildPagingSql(dealerService.getTableName(), null, Main.PerPage, page, totalpage);
+        } else {
+            pagingsql = dealerService.BuildPagingSql(dealerService.getTableName(), dealerService.getConditionSearch(search), Main.PerPage, page, totalpage);
+        }
+        List<Dealer> lst = dealerService.executeQuery(pagingsql);
+        model.setData(lst);
+        tableDealer.setModel(model);
+        tableDealer.revalidate();
+        tableDealer.repaint();
+    }
+
+    private int getTotalPage() {
+        int temptotal = totalpage.get();
+        int temp = temptotal % Main.PerPage;
+        if (temp == 0) {
+            return (temptotal / Main.PerPage);
+        } else {
+            return (temptotal / Main.PerPage) + 1;
+        }
+    }
+
+    private void fillPage() {
+        comboDealer.removeAllItems();
+        for (int i = 1; i <= getTotalPage(); i++) {
+            comboDealer.addItem(i);
+        }
+        comboDealer.setSelectedItem(curpage);
+        comboDealer.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent ie) {
+                Object temppage = comboDealer.getSelectedItem();
+                if (temppage != null) {
+                    setCurpage((Integer) temppage);
+                }
+            }
+        });
+        comboDealer.revalidate();
+        comboDealer.repaint();
+    }
+
+    public void refresh() {
+        search = "";
+        jtxtsearch.setText(search);
+        fillDataCustomer(1);
+        fillPage();
+    }
+
+    public void reloadData() {
+        fillDataCustomer(curpage);
+    }
+
+    public Dealer getSelectedDealer() {
+        int index = tableDealer.getSelectedRow();
+        if (index == -1) {
+            return null;
+        } else {
+            return ((TableDealerModel) tableDealer.getModel()).getData(index);
+        }
+    }
+    DealerService dealerService;
 
     /**
      * Creates new form DealerManager
      */
     public DealerManager() {
         initComponents();
-        includeData();
-    }
-
-    public void includeData() {
-        DefaultTableModel model = new DefaultTableModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            model.removeRow(i);
-        }
-        if (cur == 0 || cur == -1) {
-            cur = 1;
-        }
-        service = new DealerService();
-        if (isSearch) {
-            try {
-                total = service.executeQuery(getTotal).size();
-            } catch (Exception ex) {
-                total = 0;
-            }
-            String[] colName = {""};
-            model.setColumnIdentifiers(new String[]{"ID", "Name", "Login Name", "Is Admin"});
-            List<Dealer> lst = service.executeQuery(sql);
-            if (model == null) {
-                model = new DefaultTableModel();
-            }
-            if (cur > 1) {
-                from = Math.round(itemsPerPage * (cur - 1));
-                to = Math.round((cur * itemsPerPage));
-            } else {
-                from = 0;
-                to = Math.round(itemsPerPage);
-            }
-            if (to >= total) {
-                to = Math.round(total) - 1;
-            }
-            if (total < itemsPerPage) {
-                from = 0;
-                to = to = Math.round(total) - 1;
-            }
-            if (lst.size() < 2) {
-                for (int i = 0; i < lst.size(); i++) {
-                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
-                }
-            } else {
-                for (int i = from; i <= to; i++) {
-                    model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
-                }
-            }
-            tableDealer.setModel(model);
-            paging();
-        } else {
-            total = service.getAll().size();
-            String[] colName = {""};
-            model.setColumnIdentifiers(new String[]{"ID", "Name", "Login Name", "Is Admin"});
-            List<Dealer> lst = service.executeQuery(sql);
-            if (model == null) {
-                model = new DefaultTableModel();
-            }
-            for (int i = 0; i < lst.size(); i++) {
-                model.addRow(new Object[]{lst.get(i).getId(), lst.get(i).getName(), lst.get(i).getLoginName(), lst.get(i).isIsManager()});
-            }
-            tableDealer.setModel(model);
-            paging();
-        }
-    }
-
-    public void paging() {
-        if (isSearch) {
-            comboDealer.removeAllItems();
-            comboDealer.addItem("Go to page:");
-            float pages = (total / itemsPerPage);
-            for (int i = 0; i < pages; i++) {
-                comboDealer.addItem(i + 1);
-            }
-        } else {
-            comboDealer.removeAllItems();
-            comboDealer.addItem("Go to page:");
-            float pages = (total / itemsPerPage);
-            for (int i = 0; i < pages; i++) {
-                comboDealer.addItem(i + 1);
-            }
-        }
-    }
-
-    public boolean isNumeric(String str) {
-        try {
-            double d = Double.parseDouble(str);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
+        dealerService = new DealerService();
     }
 
     /**
@@ -136,9 +125,8 @@ public class DealerManager extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableDealer = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        lbCur = new javax.swing.JLabel();
         comboDealer = new javax.swing.JComboBox();
-        txtKeyword = new javax.swing.JTextField();
+        jtxtsearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnDel = new javax.swing.JButton();
@@ -166,10 +154,11 @@ public class DealerManager extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
         jPanel1.setLayout(new java.awt.FlowLayout(0));
 
-        lbCur.setText(".");
-        jPanel1.add(lbCur);
-
-        comboDealer.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboDealer.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboDealerItemStateChanged(evt);
+            }
+        });
         comboDealer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboDealerActionPerformed(evt);
@@ -177,9 +166,9 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(comboDealer);
 
-        txtKeyword.setMinimumSize(new java.awt.Dimension(30, 20));
-        txtKeyword.setPreferredSize(new java.awt.Dimension(50, 25));
-        jPanel1.add(txtKeyword);
+        jtxtsearch.setMinimumSize(new java.awt.Dimension(30, 20));
+        jtxtsearch.setPreferredSize(new java.awt.Dimension(100, 25));
+        jPanel1.add(jtxtsearch);
 
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -197,7 +186,7 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(btnAdd);
 
-        btnDel.setText("Delete");
+        btnDel.setText("(Un)Lock");
         btnDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelActionPerformed(evt);
@@ -205,7 +194,7 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(btnDel);
 
-        btnUpgrade.setText("Update Manager role");
+        btnUpgrade.setText("(Un) Set Manager");
         btnUpgrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpgradeActionPerformed(evt);
@@ -227,139 +216,92 @@ public class DealerManager extends javax.swing.JPanel {
         add(txtOK, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboDealerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDealerActionPerformed
-        if (!isSearch) {
-            String s = "";
-            try {
-                s = comboDealer.getSelectedItem().toString();
-                cur = Integer.parseInt(s);
-                comboDealer.removeItem(comboDealer.getSelectedItem());
-            } catch (Exception ex) {
-                cur = 1;
-            }
-            lbCur.setText(cur + "");
-            sql = "exec pagingdealers " + cur + "," + itemsPerPage;
-            includeData();
-        } else {
-            String s = "";
-            try {
-                s = comboDealer.getSelectedItem().toString();
-                cur = Integer.parseInt(s);
-                comboDealer.removeItem(comboDealer.getSelectedItem());
-            } catch (Exception ex) {
-                cur = 1;
-            }
-            lbCur.setText(cur + "");
-            String kw = txtKeyword.getText().trim();
-            if (isNumeric(kw)) {
-                sql = "exec searchdealer '" + kw + "', " + cur + ", " + itemsPerPage + ", 1";
-                getTotal = "exec searchdealerall '" + kword + "', 1";
-            } else {
-                sql = "exec searchdealer '" + kw + "', " + cur + ", " + itemsPerPage + ", 0";
-                getTotal = "exec searchdealerall '" + kword + "', 0";
-            }
-            includeData();
-        }
-    }//GEN-LAST:event_comboDealerActionPerformed
-
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String kw = txtKeyword.getText().trim();
-        if (kw == "" || kw.equals("") || kw == null || kw.length() < 1) {
-            isSearch = false;
-            sql = "exec pagingdealers 1," + itemsPerPage;
-            includeData();
-        } else {
-            isSearch = true;
-            kword = kw;
-            cur = 1;
-            if (isNumeric(kw)) {
-                sql = "exec searchdealer '" + kw + "', " + cur + ", " + itemsPerPage + ", 1";
-                getTotal = "exec searchdealerall '" + kword + "', 1";
-            } else {
-                sql = "exec searchdealer '" + kw + "', " + cur + ", " + itemsPerPage + ", 0";
-                getTotal = "exec searchdealerall '" + kword + "', 0";
-            }
-            includeData();
-        }
+        search = jtxtsearch.getText();
+        fillDataCustomer(1);
+        fillPage();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        try {
-            int row = tableDealer.getSelectedRow();
-            int id = Integer.parseInt(tableDealer.getValueAt(row, 0).toString());
-            String name = tableDealer.getValueAt(row, 1).toString();
-            int x = JOptionPane.showConfirmDialog(tableDealer, "Do you want to delete: " + name + " (" + id + ")");
-            if (x == 0) {
-                Dealer c = new Dealer();
-                c.setId(id);
-                c.setName(name);
-                boolean r = service.delete(c);
-                if (r) {
-                    JOptionPane.showMessageDialog(tableDealer, "Removed: " + name + " (" + id + "), click refresh.");
-                } else {
-                    JOptionPane.showMessageDialog(tableDealer, "Error, cannot delete " + name, "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                reload();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(tableDealer, "Please choose item to delete");
-        }
-    }//GEN-LAST:event_btnDelActionPerformed
-
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        reload();
+        refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        DealerCreateNew newd = new DealerCreateNew(null, isSearch);
-        newd.show();
+        final DealerCreateNew dialog = new DealerCreateNew(null, true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setEditMode(false);
+        dialog.setSaveListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                refresh();
+                dialog.dispose();
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
-    public void reload(){
-        isSearch = false;
-        String s = "";
-        try {
-            s = comboDealer.getSelectedItem().toString();
-            cur = Integer.parseInt(s);
-            comboDealer.removeItem(comboDealer.getSelectedItem());
-        } catch (Exception ex) {
-            cur = 1;
-        }
-        lbCur.setText(cur + "");
-        sql = "exec pagingdealers " + cur + "," + itemsPerPage;
-        includeData();
-    }
+
     private void btnUpgradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpgradeActionPerformed
-        try {
-            int row = tableDealer.getSelectedRow();
-            int id = Integer.parseInt(tableDealer.getValueAt(row, 0).toString());
-            String name = tableDealer.getValueAt(row, 1).toString();
-            String loginname = tableDealer.getValueAt(row, 2).toString();
-            String status = tableDealer.getValueAt(row, 3).toString();
-            int x = -10;
-            String up = "false";
-            if (status == "true") {
-                x = JOptionPane.showConfirmDialog(btnAdd, "Change: " + loginname + " to Normal user?");
-                up = "false";
-            } else {
-                x = JOptionPane.showConfirmDialog(btnAdd, "Set: " + loginname + " to Manager?");
-                up = "true";
-            }
-            if (x == 0) {
-                Dealer d = new Dealer();
-                d.setId(id);
-                d.setName(name);
-                d.setLoginName(loginname);
-                d.setIsManager(true);
-                if (service.updaterole(up, id)>0) {
-                    txtOK.setText("Changed role of " + loginname + " click REFRESH!");
-                } else {
-                    JOptionPane.showMessageDialog(btnUpgrade, "Error! Can not upgrade.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            reload();
-        } catch (Exception ex) {
+        Dealer d = getSelectedDealer();
+        if (d == null) {
+            JOptionPane.showMessageDialog(null, "Select a row to perform this action.");
+            return;
         }
+        if ("sa".equals(d.getLoginName())) {
+            JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
+            return;
+        }
+        if (!"sa".equals(Main.activeUser.getLoginName())) {
+
+            if (!Main.activeUser.isIsManager() || d.isIsManager()) {
+                JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
+                return;
+            }
+        }
+        d.setIsManager(!d.isIsManager());
+        Date date = new Date();
+        java.sql.Date inputdate = new java.sql.Date(date.getTime());
+        d.setModified(inputdate);
+        dealerService.update(d);
+        JOptionPane.showMessageDialog(null, "Update Success");
+        reloadData();
     }//GEN-LAST:event_btnUpgradeActionPerformed
+
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
+        // TODO add your handling code here:
+        Dealer d = getSelectedDealer();
+        if (d == null) {
+            JOptionPane.showMessageDialog(null, "Select a row to perform this action.");
+            return;
+        }
+         if ("sa".equals(d.getLoginName())) {
+            JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
+            return;
+        }
+        if (!"sa".equals(Main.activeUser.getLoginName())) {
+
+            if (!Main.activeUser.isIsManager() || d.isIsManager()) {
+                JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
+                return;
+            }
+        }
+        d.setIsDeleted(!d.isIsDeleted());
+        Date date = new Date();
+        java.sql.Date inputdate = new java.sql.Date(date.getTime());
+        d.setModified(inputdate);
+        dealerService.update(d);
+        JOptionPane.showMessageDialog(null, "Update Success");
+        reloadData();
+    }//GEN-LAST:event_btnDelActionPerformed
+
+    private void comboDealerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDealerActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_comboDealerActionPerformed
+
+    private void comboDealerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboDealerItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboDealerItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDel;
@@ -369,9 +311,8 @@ public class DealerManager extends javax.swing.JPanel {
     private javax.swing.JComboBox comboDealer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbCur;
+    private javax.swing.JTextField jtxtsearch;
     private javax.swing.JTable tableDealer;
-    private javax.swing.JTextField txtKeyword;
     private javax.swing.JLabel txtOK;
     // End of variables declaration//GEN-END:variables
 }

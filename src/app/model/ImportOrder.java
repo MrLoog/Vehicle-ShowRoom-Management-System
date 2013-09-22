@@ -22,6 +22,24 @@ public class ImportOrder {
     private boolean isDeleted;
     private Vehicle vehicle;
     private Dealer dealer;
+    private int DealerModifiedID;
+    private Dealer DealerModified;
+
+    public int getDealerModifiedID() {
+        return DealerModifiedID;
+    }
+
+    public void setDealerModifiedID(int DealerModifiedID) {
+        this.DealerModifiedID = DealerModifiedID;
+    }
+
+    public Dealer getDealerModified() {
+        return DealerModified;
+    }
+
+    public void setDealerModified(Dealer DealerModified) {
+        this.DealerModified = DealerModified;
+    }
 
     public Vehicle getVehicle() {
         return vehicle;

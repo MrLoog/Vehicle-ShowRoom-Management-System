@@ -120,7 +120,7 @@ public class AppUtility {
             case Order.STATUS_NEW:
                 return "New";
             case Order.STATUS_WAIT_CREATE:
-                return "Pre Created";
+                return "Is Creating";
             case Order.STATUS_DONE:
                 return "Done";
             case Order.STATUS_CANCEL:
@@ -128,5 +128,11 @@ public class AppUtility {
             default:
                 return null;
         }
+    }
+
+    public static java.sql.Date getCurrentDateSql() {
+        java.util.Date date = new java.util.Date();
+        java.sql.Date inputdate = new java.sql.Date(date.getTime());
+        return inputdate;
     }
 }

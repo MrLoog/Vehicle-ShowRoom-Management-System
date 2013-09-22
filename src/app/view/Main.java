@@ -7,7 +7,6 @@ package app.view;
 import app.model.Dealer;
 import app.view.component.vehicle.VehicleManagement;
 import app.view.composite.CustomerManage;
-import app.view.composite.DealerManage;
 import app.view.composite.PersonalDialog;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -23,7 +22,6 @@ public class Main extends javax.swing.JFrame {
     public static final String ALL="All";
     private SalesServiceV2 viewsales;
     private ManageShowroomV2 viewshowroom;
-    private DealerManage dealerManage;
     private LoginFrame loginFrame;
     private AdminManageV2 adminManage;
 
@@ -203,15 +201,6 @@ public class Main extends javax.swing.JFrame {
         BodyChanged();
     }
 
-    public void ViewDealerManage() {
-        if (dealerManage == null) {
-            dealerManage = new DealerManage();
-            dealerManage.init();
-        }
-        jPanel3.removeAll();
-        jPanel3.add(dealerManage);
-        BodyChanged();
-    }
 
     public void viewAdminManage() {
         if (adminManage == null) {

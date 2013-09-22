@@ -9,7 +9,6 @@ import app.service.VehicleService;
 import app.view.component.report.DealerReport;
 import app.view.composite.OrderForCustomer;
 import app.view.composite.SalesOrder;
-import app.view.composite.SalesVehicle;
 import javax.swing.JPanel;
 
 /**
@@ -21,7 +20,6 @@ public class SalesServiceV2 extends javax.swing.JPanel {
     private VehicleService vehicleService;
     private OrderService orderService;
     private JPanel activePanel;
-    private SalesVehicle salesVehicle;
     private SalesOrder salesOrder;
     private DealerReport report;
     private OrderForCustomer orderForCustomer;
@@ -42,17 +40,6 @@ public class SalesServiceV2 extends javax.swing.JPanel {
         orderForCustomer.reloadData();
         mainpanel.removeAll();
         mainpanel.add(orderForCustomer);
-        mainpanel.revalidate();
-        mainpanel.repaint();
-    }
-
-    public void showVehicleView() {
-        if (salesVehicle == null) {
-            salesVehicle = new SalesVehicle();
-        }
-        activePanel = salesVehicle;
-        mainpanel.removeAll();
-        mainpanel.add(salesVehicle);
         mainpanel.revalidate();
         mainpanel.repaint();
     }

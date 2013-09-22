@@ -19,12 +19,12 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class OrderService extends BaseService {
-    
+
     @Override
     public String getTableName() {
         return "Orders";
     }
-    
+
     @Override
     protected List<Order> ResultSetToList(ResultSet rs) {
         List<Order> output = new ArrayList<Order>();
@@ -48,12 +48,12 @@ public class OrderService extends BaseService {
         }
         return output;
     }
-    
+
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + "(DealerID,CustomerID,VehicleID,Price,Status,Created,Modified,Quantity,IsDeleted) values(?,?,?,?,?,?,?,?,?)";
     }
-    
+
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
@@ -71,12 +71,12 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     protected String getQueryUpdate() {
         return "update " + getTableName() + " set DealerID=?,CustomerID=?,VehicleID=?,Price=?,Status=?,Created=?,Modified=?,Quantity=?,IsDeleted=? where ID=?";
     }
-    
+
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
@@ -95,12 +95,12 @@ public class OrderService extends BaseService {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     protected String getQueryDelete() {
         return "delete from " + getTableName() + " where ID=?";
     }
-    
+
     @Override
     protected void setParameterForDelete(Object obj) {
         try {
@@ -177,6 +177,7 @@ public class OrderService extends BaseService {
 //        return stt;
 //    }
 //    
+
     public PreparedStatement getPrepareStmtFindByDealerID(int id) {
         PreparedStatement ps = null;
         try {
@@ -187,7 +188,7 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
-    
+
     public PreparedStatement getPrepareStmtCountOrder(int dealerid) {
         PreparedStatement ps = null;
         try {
@@ -198,7 +199,7 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
-    
+
     public PreparedStatement getPrepareStmtCountOrderWithStatus(int dealerid, int status) {
         PreparedStatement ps = null;
         try {
@@ -210,7 +211,7 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
-    
+
     public String getConditionSearchWithStatus(int id, String search, boolean selected) {
         String pre = "(CustomerID=search or VehicleID=search) and DealerID=id ";
         if (selected) {
@@ -220,7 +221,7 @@ public class OrderService extends BaseService {
         result = result.replaceAll("id", id + "");
         return result;
     }
-    
+
     public String getConditionSearchWithStatusAndJoin(int id, List<Integer> restrictVehicle, List<Integer> restrictCustomer, boolean selected) {
         String pre = "";
         String search = "";
@@ -238,5 +239,16 @@ public class OrderService extends BaseService {
         result = result.replaceAll("paraCustomer", searchCustomer);
         result = result.replaceAll("paraVehicle", searchVehicle);
         return result;
+    }
+
+    public PreparedStatement getPrepareStmtAllOrderDone() {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select * from " + getTableName() + " where Status=?");
+            ps.setInt(1, Order.STATUS_DONE);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
     }
 }

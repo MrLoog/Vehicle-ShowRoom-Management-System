@@ -8,8 +8,10 @@ import app.model.ImportOrder;
 import app.model.Vehicle;
 import app.service.ImportOrderService;
 import app.service.VehicleService;
+import app.view.Main;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -18,16 +20,16 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class ImportOrderForm extends javax.swing.JPanel {
-
+    
     private VehicleService vehicleService;
     private ImportOrderService importOrderService;
     private ImportOrder model;
     private boolean isEdit = false;
-
+    
     public ImportOrder getModel() {
         return model;
     }
-
+    
     public void setModel(ImportOrder model) {
         this.model = model;
         jTextField1.setText(model.getVehicle().getModelNumber());
@@ -166,22 +168,26 @@ public class ImportOrderForm extends javax.swing.JPanel {
 //            setEditMode(true);
 //        }
     }//GEN-LAST:event_jTextField1FocusLost
-
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         createOrder();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton2ActionPerformed
     private void createOrder() {
         if (validateImportOrder()) {
-            int originqt = model.getQuantity();
-            loadDataToModel();
             int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to save?", "Confirm Save", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
+                int originqt = model.getQuantity();
+                loadDataToModel();
+                Date date = new Date();
+                java.sql.Date inputdate = new java.sql.Date(date.getTime());
+                model.setModified(inputdate);
+                model.setDealerModifiedID(Main.activeUser.getId());
                 Vehicle v = vehicleService.getById(model.getVehicleID());
                 if (isEdit && ((v.getQuantity() - originqt + model.getQuantity()) < 0)) {
                     JOptionPane.showMessageDialog(this, "Vehicle in store not enough to edit this order.");
@@ -191,11 +197,15 @@ public class ImportOrderForm extends javax.swing.JPanel {
                     importOrderService.update(model);
                     if (originqt != model.getQuantity()) {
                         v.setQuantity(v.getQuantity() - originqt + model.getQuantity());
+                        v.setModified(inputdate);
                         vehicleService.update(v);
                     }
                 } else {
+                    model.setCreated(inputdate);
+                    model.setDealerId(Main.activeUser.getId());
                     importOrderService.add(model);
                     v.setQuantity(v.getQuantity() + model.getQuantity());
+                    v.setModified(inputdate);
                     vehicleService.update(v);
                 }
                 JOptionPane.showMessageDialog(this, "Save Order Success.");
@@ -205,12 +215,12 @@ public class ImportOrderForm extends javax.swing.JPanel {
             }
         }
     }
-
+    
     private void clearMes() {
         jLabel3.setText("");
         jLabel1.setText("");
     }
-
+    
     private boolean validateImportOrder() {
         boolean flag = true;
         clearMes();
@@ -248,11 +258,11 @@ public class ImportOrderForm extends javax.swing.JPanel {
         }
         return flag;
     }
-
+    
     public void setEditMode(boolean b) {
         isEdit = b;
     }
-
+    
     private void loadDataToModel() {
         if (model == null) {
             return;
@@ -282,7 +292,7 @@ public class ImportOrderForm extends javax.swing.JPanel {
         setModel(o);
     }
     private ActionListener saveListener;
-
+    
     void setSaveListener(ActionListener ls) {
         this.saveListener = ls;
     }

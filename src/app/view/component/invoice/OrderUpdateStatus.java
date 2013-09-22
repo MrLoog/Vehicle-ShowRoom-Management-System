@@ -9,6 +9,7 @@ import app.model.Vehicle;
 import app.service.OrderService;
 import app.service.VehicleService;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import sun.misc.Cache;
 
@@ -273,9 +274,12 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        loadStatus();
         int choice = JOptionPane.showConfirmDialog(this, "Are you sure to update status order to " + getStringOrderStatus(newStatus) + " ?", "Confirm Update", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
+            loadStatus();
+            Date date = new Date();
+            java.sql.Date inputdate = new java.sql.Date(date.getTime());
+            model.setModified(inputdate);
             if (purchaseListener != null) {
                 purchaseListener.actionPerformed(evt);
             }

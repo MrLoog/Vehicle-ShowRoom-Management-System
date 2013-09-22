@@ -50,7 +50,7 @@ public class TableImportOrderModel extends AbstractTableModel {
             case 0:
                 return c.getVehicle().getModelNumber();
             case 1:
-                return c.getDealer().getName();
+                return c.getDealerModified().getName();
             case 2:
                 return c.getCreated();
             case 3:
@@ -70,7 +70,7 @@ public class TableImportOrderModel extends AbstractTableModel {
             case 0:
                 return "Vehicle Model";
             case 1:
-                return "Dealer";
+                return "Dealer Modified";
             case 2:
                 return "Created";
             case 3:

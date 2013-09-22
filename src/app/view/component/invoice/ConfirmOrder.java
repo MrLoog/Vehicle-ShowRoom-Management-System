@@ -15,14 +15,14 @@ import java.awt.event.ActionListener;
  * @author Administrator
  */
 public class ConfirmOrder extends javax.swing.JPanel {
-
-   private ActionListener purchaseListener;
-
+    
+    private ActionListener purchaseListener;
+    
     public void setPurchaseListener(ActionListener purchaseListener) {
         this.purchaseListener = purchaseListener;
     }
     private ActionListener cancelListener;
-
+    
     public void setCancelListener(ActionListener cancelListener) {
         this.cancelListener = cancelListener;
     }
@@ -253,7 +253,7 @@ public class ConfirmOrder extends javax.swing.JPanel {
             purchaseListener.actionPerformed(evt);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if (cancelListener != null) {
@@ -289,19 +289,19 @@ public class ConfirmOrder extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
     private Order model;
-
+    
     public void setModel(Order o) {
         model = o;
         setDisplayData(model);
     }
-
+    
     public void setDisplayData(Order o) {
         jLabel14.setText(o.getPrice() + "");
-        jLabel16.setText(o.getQuantity()+"");
+        jLabel16.setText(o.getQuantity() + "");
         jLabel20.setText(o.getCreated().toString());
         jLabel21.setText(o.getModified().toString());
-        jLabel22.setText(o.getStatus() + "");
-        jLabel24.setText((o.getQuantity()*o.getPrice())+"");
+        jLabel22.setText(app.utility.AppUtility.getStatusString(o.getStatus()));
+        jLabel24.setText((o.getQuantity() * o.getPrice()) + "");
         if (o.getStatus() == Order.STATUS_NEW) {
             jButton1.setEnabled(true);
             jButton2.setEnabled(true);

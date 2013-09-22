@@ -4,6 +4,9 @@
  */
 package app.view.component.dealer;
 
+import app.model.Dealer;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author kiendv
@@ -16,6 +19,18 @@ public class DealerCreateNew extends javax.swing.JDialog {
     public DealerCreateNew(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public void setModel(Dealer model) {
+        dealerForm1.setModel(model);
+    }
+
+    public void setEditMode(boolean isedit) {
+        dealerForm1.setEditMode(isedit);
+    }
+
+    public void setSaveListener(ActionListener ls) {
+        dealerForm1.setSaveListener(ls);
     }
 
     /**

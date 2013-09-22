@@ -53,7 +53,7 @@ public class CustomerService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + "(Name,Address,Phone,DealerID,Created,Modified,IsDeleted) values(?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -63,10 +63,10 @@ public class CustomerService extends BaseService {
             insertStmt.setString(1, temp.getName());
             insertStmt.setString(2, temp.getAddress());
             insertStmt.setString(3, temp.getPhone());
-            insertStmt.setDate(4, temp.getCreated());
-            insertStmt.setDate(5, temp.getModified());
-            insertStmt.setBoolean(6, temp.isIsDeleted());
-            insertStmt.setInt(7, temp.getDealerId());
+            insertStmt.setInt(4, temp.getDealerId());
+            insertStmt.setDate(5, temp.getCreated());
+            insertStmt.setDate(6, temp.getModified());
+            insertStmt.setBoolean(7, temp.isIsDeleted());
         } catch (SQLException ex) {
             Logger.getLogger(CustomerService.class.getName()).log(Level.SEVERE, null, ex);
         }

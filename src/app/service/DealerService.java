@@ -18,12 +18,13 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class DealerService extends BaseService{
+public class DealerService extends BaseService {
+
     @Override
     public String getTableName() {
         return "Dealers";
     }
-    
+
     @Override
     protected List<Dealer> ResultSetToList(ResultSet rs) {
         List<Dealer> output = new ArrayList<Dealer>();
@@ -45,12 +46,12 @@ public class DealerService extends BaseService{
         }
         return output;
     }
-    
+
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + "(Name,LoginName,Password,IsManager,Created,Modified,IsDeleted) values(?,?,?,?,?,?,?)";
     }
-    
+
     @Override
     protected void setParameterForInsert(Object obj) {
         try {
@@ -66,13 +67,14 @@ public class DealerService extends BaseService{
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     protected String getQueryUpdate() {
         return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
+
     public int updaterole(String status, int id) {
-        String sql = "update Dealers set IsManager='"+status+"' where ID="+id;
+        String sql = "update Dealers set IsManager='" + status + "' where ID=" + id;
         try {
             Statement stm = AppUtility.getConnection().createStatement();
             return stm.executeUpdate(sql);
@@ -81,6 +83,7 @@ public class DealerService extends BaseService{
             return -1;
         }
     }
+
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {
@@ -97,12 +100,12 @@ public class DealerService extends BaseService{
             Logger.getLogger(DealerService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     protected String getQueryDelete() {
         return "delete from " + getTableName() + " where ID=?";
     }
-    
+
     @Override
     protected void setParameterForDelete(Object obj) {
         try {
@@ -140,4 +143,10 @@ public class DealerService extends BaseService{
 //        return customers;
 //    }
 //    
+
+    public String getConditionSearch(String search) {
+        String pre = " Name like '%search%' or LoginName like '%search%' ";
+        String result = pre.replaceAll("search", search);
+        return result;
+    }
 }

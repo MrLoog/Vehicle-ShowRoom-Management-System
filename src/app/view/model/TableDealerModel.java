@@ -5,6 +5,7 @@
 package app.view.model;
 
 import app.model.Dealer;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -18,6 +19,10 @@ public class TableDealerModel extends AbstractTableModel {
 
     public TableDealerModel(List<Dealer> data) {
         this.data = data;
+    }
+
+    public TableDealerModel() {
+        this.data=new ArrayList<Dealer>();
     }
 
     public Dealer getData(int index) {

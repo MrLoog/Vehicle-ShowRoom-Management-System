@@ -12,6 +12,8 @@ import app.service.DealerService;
 import app.view.Main;
 import app.view.model.TableCustomerModel;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
@@ -53,7 +55,7 @@ public class CustomerTable extends javax.swing.JPanel {
         }
         List<Customer> lst = customerService.executeQuery(pagingsql);
         for (Customer customer : lst) {
-            customer.setDealer((Dealer)dealerService.getById(customer.getDealerId()));
+            customer.setDealer((Dealer) dealerService.getById(customer.getDealerId()));
         }
         model.setData(lst);
         tableCustomer.setModel(model);
@@ -96,9 +98,18 @@ public class CustomerTable extends javax.swing.JPanel {
     public CustomerTable() {
         initComponents();
         customerService = new CustomerService();
-        dealerService=new DealerService();
+        dealerService = new DealerService();
         fillDataCustomer(1);
         fillPage();
+    }
+
+    public Customer getSelectedCustomer() {
+        int index = tableCustomer.getSelectedRow();
+        if (index == -1) {
+            return null;
+        } else {
+            return ((TableCustomerModel) tableCustomer.getModel()).getData(index);
+        }
     }
 
     public boolean isNumeric(String str) {
@@ -122,14 +133,12 @@ public class CustomerTable extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCustomer = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        lbCur = new javax.swing.JLabel();
         comboCustomer = new javax.swing.JComboBox();
         txtKeyword = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
         btnNew = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -154,9 +163,7 @@ public class CustomerTable extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 35));
-
-        lbCur.setText("1");
-        jPanel1.add(lbCur);
+        jPanel1.setLayout(new java.awt.FlowLayout(0));
 
         comboCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -182,7 +189,7 @@ public class CustomerTable extends javax.swing.JPanel {
 
         txtKeyword.setText(" ");
         txtKeyword.setMinimumSize(new java.awt.Dimension(6, 80));
-        txtKeyword.setPreferredSize(new java.awt.Dimension(80, 30));
+        txtKeyword.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel1.add(txtKeyword);
 
         btnSearch.setText("Search");
@@ -193,6 +200,14 @@ public class CustomerTable extends javax.swing.JPanel {
         });
         jPanel1.add(btnSearch);
 
+        btnNew.setText("New");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNew);
+
         btnEdit.setText("Edit");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,14 +215,6 @@ public class CustomerTable extends javax.swing.JPanel {
             }
         });
         jPanel1.add(btnEdit);
-
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnDelete);
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -217,66 +224,21 @@ public class CustomerTable extends javax.swing.JPanel {
         });
         jPanel1.add(btnRefresh);
 
-        btnNew.setText("Create New");
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNew);
-
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCustomerActionPerformed
     }//GEN-LAST:event_comboCustomerActionPerformed
 
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        try {
-            Edit ed = new Edit(null, true);
-            ed.setLocationRelativeTo(null);
-            int row = tableCustomer.getSelectedRow();
-            int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
-            ed.callme(id);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(tableCustomer, "Please choose item to edit");
-        }
-    }//GEN-LAST:event_btnEditActionPerformed
-
     private void tableCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCustomerMouseClicked
     }//GEN-LAST:event_tableCustomerMouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        search = "";
-        txtKeyword.setText(search);
-        fillDataCustomer(1);
-        fillPage();
+        refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void comboCustomerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboCustomerPropertyChange
     }//GEN-LAST:event_comboCustomerPropertyChange
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        try {
-            int row = tableCustomer.getSelectedRow();
-            int id = Integer.parseInt(tableCustomer.getValueAt(row, 0).toString());
-            String name = tableCustomer.getValueAt(row, 1).toString();
-            int x = JOptionPane.showConfirmDialog(tableCustomer, "Do you want to delete: " + name + " (" + id + ")");
-            if (x == 0) {
-                Customer c = new Customer();
-                c.setId(id);
-                c.setName(name);
-                boolean r = customerService.delete(c);
-                if (r) {
-                    JOptionPane.showMessageDialog(tableCustomer, "Removed: " + name + " (" + id + "), click refresh.");
-                } else {
-                    JOptionPane.showMessageDialog(tableCustomer, "Error, cannot delete " + name, "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(tableCustomer, "Please choose item to delete");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         search = txtKeyword.getText();
@@ -285,9 +247,17 @@ public class CustomerTable extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        CreateCustomer newcustomer = new CreateCustomer(null, true);
-        newcustomer.setLocationRelativeTo(null);
-        newcustomer.setVisible(true);
+        final DialogCustomerForm dialog = new DialogCustomerForm(null, true);
+        dialog.setEditMode(false);
+        dialog.setLocationRelativeTo(null);
+        dialog.setSaveListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                fillDataCustomer(curpage);
+                dialog.dispose();
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void comboCustomerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCustomerItemStateChanged
@@ -295,8 +265,29 @@ public class CustomerTable extends javax.swing.JPanel {
 
     private void comboCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboCustomerMouseClicked
     }//GEN-LAST:event_comboCustomerMouseClicked
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        Customer c = getSelectedCustomer();
+        if (c == null) {
+            JOptionPane.showMessageDialog(null, "Select a row to perform this action.");
+            return;
+        } else {
+            final DialogCustomerForm dialog = new DialogCustomerForm(null, true);
+            dialog.setModel(c);
+            dialog.setEditMode(true);
+            dialog.setLocationRelativeTo(null);
+            dialog.setSaveListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    fillDataCustomer(curpage);
+                    dialog.dispose();
+                }
+            });
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRefresh;
@@ -304,13 +295,19 @@ public class CustomerTable extends javax.swing.JPanel {
     private javax.swing.JComboBox comboCustomer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbCur;
     private javax.swing.JTable tableCustomer;
     private javax.swing.JTextField txtKeyword;
     // End of variables declaration//GEN-END:variables
 
     public void reloadData() {
         fillDataCustomer(curpage);
+        fillPage();
+    }
+
+    public void refresh() {
+        search = "";
+        txtKeyword.setText(search);
+        fillDataCustomer(1);
         fillPage();
     }
 }

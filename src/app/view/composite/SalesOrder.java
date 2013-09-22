@@ -73,7 +73,7 @@ public class SalesOrder extends javax.swing.JPanel {
                                 orderService.update(o);
                                 JOptionPane.showMessageDialog(null, "Update order success.");
                             }
-                            reloadTableOrder();
+                            fillData(curpage);
                         }
                     });
                 }

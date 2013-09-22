@@ -69,10 +69,10 @@ public class VehicleService extends BaseService {
             insertStmt.setInt(3, vehicle.getPrice());
             insertStmt.setString(4, vehicle.getModelNumber());
             insertStmt.setInt(5, vehicle.getQuantity());
-            insertStmt.setDate(6, vehicle.getCreated());
-            insertStmt.setDate(7, vehicle.getModified());
-            insertStmt.setBoolean(8, vehicle.isIsDeleted());
-            insertStmt.setString(9, vehicle.getCategory());
+            insertStmt.setString(6, vehicle.getCategory());
+            insertStmt.setDate(7, vehicle.getCreated());
+            insertStmt.setDate(8, vehicle.getModified());
+            insertStmt.setBoolean(9, vehicle.isIsDeleted());
         } catch (SQLException ex) {
             Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,7 +109,7 @@ public class VehicleService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + "(Name,Brand,Price,ModelNumber,Quantity,Category,Created,Modified,IsDeleted) values(?,?,?,?,?,?,?,?,?)";
     }
 
     @Override

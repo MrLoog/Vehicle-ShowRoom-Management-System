@@ -7,8 +7,12 @@ package app.view.component.dealer;
 import app.model.Dealer;
 import app.service.DealerService;
 import app.utility.AppUtility;
+import app.view.Main;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,10 +20,16 @@ import java.util.List;
  */
 public class DealerForm extends javax.swing.JPanel {
     
+    private ActionListener saveListener;
+
+    public void setSaveListener(ActionListener saveListener) {
+        this.saveListener = saveListener;
+    }
+    
     private DealerService dealerService;
     private boolean isEdit = false;
     private Dealer model;
-
+    
     public void setEditMode(boolean isEdit) {
         this.isEdit = isEdit;
     }
@@ -84,7 +94,6 @@ public class DealerForm extends javax.swing.JPanel {
     private void clearErrorMes() {
         jLabel4.setText("");
         jLabel5.setText("");
-        jLabel6.setText("");
     }
 
     /**
@@ -93,6 +102,10 @@ public class DealerForm extends javax.swing.JPanel {
     public DealerForm() {
         initComponents();
         dealerService = new DealerService();
+        if (!Main.activeUser.isIsManager()) {
+            jLabel3.setVisible(false);
+            jCheckBox1.setVisible(false);
+        }
     }
 
     /**
@@ -114,7 +127,6 @@ public class DealerForm extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel6 = new javax.swing.JLabel();
 
         jLabel1.setText("Name :");
 
@@ -152,31 +164,26 @@ public class DealerForm extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addGap(42, 42, 42)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                .addComponent(jTextField2)
-                                .addComponent(jButton2)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jCheckBox1))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                        .addComponent(jTextField2)
+                        .addComponent(jButton2)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jCheckBox1))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(69, 69, 69)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -204,19 +211,30 @@ public class DealerForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         clearErrorMes();
         if (isFormValid()) {
-            jLabel6.setText("Saving...");
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to save?", "Confirm Save", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.NO_OPTION) {
+                return;
+            }
             loadDataToModel();
+            Date date = new Date();
+            java.sql.Date inputdate = new java.sql.Date(date.getTime());
+            model.setModified(inputdate);
             try {
                 if (isEdit) {
                     dealerService.update(model);
+                    JOptionPane.showMessageDialog(null, "Save success.");
                 } else {
+                    model.setCreated(inputdate);
                     model.setPassword(AppUtility.EncryptPassword("123456"));
                     dealerService.add(model);
+                    JOptionPane.showMessageDialog(null, "Create new Dealer success. Default password is \"123456\"");
                 }
             } catch (Exception e) {
-                jLabel6.setText("Error");
             }
-            jLabel6.setText("<html>Save Success<br>Password is default '123456'</html>");
+            
+            if(saveListener!=null){
+                saveListener.actionPerformed(evt);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
     
@@ -227,17 +245,7 @@ public class DealerForm extends javax.swing.JPanel {
     
     private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
         // TODO add your handling code here:
-        String inputln = jTextField2.getText();
-        if (!inputln.equals("")) {
-            List<Dealer> ds = dealerService.executeQuery("select * from " + dealerService.getTableName() + " where LoginName='" + inputln + "'");
-            if (ds.size() > 0) {
-                if (isEdit) {
-                    setModel(ds.get(0));
-                } else {
-                    jLabel5.setText("Login Name is exists");
-                }
-            }
-        }
+        
     }//GEN-LAST:event_jTextField2FocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -248,7 +256,6 @@ public class DealerForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

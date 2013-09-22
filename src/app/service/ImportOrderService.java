@@ -44,6 +44,7 @@ public class ImportOrderService extends BaseService {
                 temp.setCreated(rs.getDate("Created"));
                 temp.setModified(rs.getDate("Modified"));
                 temp.setIsDeleted(rs.getBoolean("IsDeleted"));
+                temp.setDealerModifiedID(rs.getInt("DealerModifiedID"));
                 output.add(temp);
             }
         } catch (SQLException ex) {
@@ -54,7 +55,7 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryInsert() {
-        return "insert into " + getTableName() + " values(?,?,?,?,?,?,?)";
+        return "insert into " + getTableName() + "(VehicleID,Price,Quantity,DealerID,Created,Modified,IsDeleted,DealerModifiedID) values(?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -68,6 +69,7 @@ public class ImportOrderService extends BaseService {
             insertStmt.setDate(5, order.getCreated());
             insertStmt.setDate(6, order.getModified());
             insertStmt.setBoolean(7, order.isIsDeleted());
+            insertStmt.setInt(8, order.getDealerModifiedID());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +77,7 @@ public class ImportOrderService extends BaseService {
 
     @Override
     protected String getQueryUpdate() {
-        return "update " + getTableName() + " set Price=?,VehicleID=?,Quantity=?,DealerID=?,Created=?,Modified=?,IsDeleted=? where ID=?";
+        return "update " + getTableName() + " set Price=?,VehicleID=?,Quantity=?,DealerID=?,Created=?,Modified=?,IsDeleted=?,DealerModifiedID=? where ID=?";
     }
 
     @Override
@@ -89,7 +91,8 @@ public class ImportOrderService extends BaseService {
             updateStmt.setDate(5, order.getCreated());
             updateStmt.setDate(6, order.getModified());
             updateStmt.setBoolean(7, order.isIsDeleted());
-            updateStmt.setInt(8, order.getId());
+            updateStmt.setInt(8, order.getDealerModifiedID());
+            updateStmt.setInt(9, order.getId());
         } catch (SQLException ex) {
             Logger.getLogger(ImportOrderService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -110,16 +113,15 @@ public class ImportOrderService extends BaseService {
         }
     }
 
-    public String getConditionSearchWithStatusAndJoin(int id, List<Integer> lstVehicle) {
+    public String getConditionSearchWithStatusAndJoin(List<Integer> lstVehicle) {
          String pre = "";
         String search = "";
         if (!(lstVehicle.size() <= 0 && lstVehicle.size() <= 0)) {
             pre = "(VehicleID in paraVehicle) and ";
         }
         String searchVehicle = AppUtility.buildStringInSql(lstVehicle);
-        pre += " DealerID=id ";
+        pre += " 1=1 ";
         String result = pre.replaceAll("search", search);
-        result = result.replaceAll("id", id + "");
         result = result.replaceAll("paraVehicle", searchVehicle);
         return result;
     }
