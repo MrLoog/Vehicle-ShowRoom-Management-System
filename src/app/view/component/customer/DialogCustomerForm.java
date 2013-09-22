@@ -95,7 +95,7 @@ public class DialogCustomerForm extends javax.swing.JDialog {
     public DialogCustomerForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        customerService = new CustomerService();
+        customerService = CustomerService.getInstance();
     }
 
     /**

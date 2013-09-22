@@ -31,7 +31,7 @@ public class VehicleManagement extends javax.swing.JPanel {
      */
     public VehicleManagement() {
         initComponents();
-        service = new VehicleService();
+        service = VehicleService.getInstance();
         initCbbFilter();
         setCurpage(1);
         fillPage();

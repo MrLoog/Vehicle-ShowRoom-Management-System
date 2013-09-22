@@ -42,8 +42,8 @@ public class ImportOrderForm extends javax.swing.JPanel {
      */
     public ImportOrderForm() {
         initComponents();
-        vehicleService = new VehicleService();
-        importOrderService = new ImportOrderService();
+        vehicleService = VehicleService.getInstance();
+        importOrderService = ImportOrderService.getInstance();
     }
 
     /**

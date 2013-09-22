@@ -25,7 +25,7 @@ Customer cu = null;
         initComponents();
     }
     public void callme(int id){
-        sv = new CustomerService();
+        sv = CustomerService.getInstance();
         Customer c = sv.getById(id);
         cu = new Customer();
         cu.setId(id);

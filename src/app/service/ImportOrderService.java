@@ -8,6 +8,8 @@ import app.model.ImportOrder;
 import app.model.Order;
 import app.model.Vehicle;
 import app.utility.AppUtility;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,7 +23,16 @@ import java.util.logging.Logger;
  */
 public class ImportOrderService extends BaseService {
 
-    public ImportOrderService() {
+    private static ImportOrderService instance;
+
+    public static ImportOrderService getInstance() {
+        if (instance == null) {
+            instance = new ImportOrderService();
+        }
+        return instance;
+    }
+
+    private ImportOrderService() {
         super();
     }
 
@@ -114,7 +125,7 @@ public class ImportOrderService extends BaseService {
     }
 
     public String getConditionSearchWithStatusAndJoin(List<Integer> lstVehicle) {
-         String pre = "";
+        String pre = "";
         String search = "";
         if (!(lstVehicle.size() <= 0 && lstVehicle.size() <= 0)) {
             pre = "(VehicleID in paraVehicle) and ";
@@ -126,4 +137,41 @@ public class ImportOrderService extends BaseService {
         return result;
     }
 
+    public PreparedStatement getPrepareStmtGetByVehicleID(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select VehicleID,Sum(Quantity) as sum,Sum(Price*Quantity) as total from " + getTableName()+ " where IsDeleted=0 and (Created between ? and ?) group by VehicleID ";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getPrepareStmtAllOrder(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select * from " + getTableName()+ " where IsDeleted=0 and (Created between ? and ?) ";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
 }

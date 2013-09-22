@@ -37,9 +37,9 @@ public class ImportOrderTable extends javax.swing.JPanel {
      */
     public ImportOrderTable() {
         initComponents();
-        importOrderService = new ImportOrderService();
-        vehicleService = new VehicleService();
-        dealerService = new DealerService();
+        importOrderService = importOrderService.getInstance();
+        vehicleService = VehicleService.getInstance();
+        dealerService = DealerService.getInstance();
         fillData(1);
         fillPage();
     }

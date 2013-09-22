@@ -135,4 +135,30 @@ public class AppUtility {
         java.sql.Date inputdate = new java.sql.Date(date.getTime());
         return inputdate;
     }
+
+    public static Date getMinDate(List<Date> lst) {
+        if (lst.size() <= 0) {
+            return null;
+        }
+        Date output = lst.get(0);
+        for (Date date : lst) {
+            if (output.getTime() > date.getTime()) {
+                output = date;
+            }
+        }
+        return output;
+    }
+
+    public static Date getMaxDate(List<Date> lst) {
+        if (lst.size() <= 0) {
+            return null;
+        }
+        Date output = lst.get(0);
+        for (Date date : lst) {
+            if (output.getTime() < date.getTime()) {
+                output = date;
+            }
+        }
+        return output;
+    }
 }

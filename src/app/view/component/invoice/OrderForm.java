@@ -184,9 +184,9 @@ public class OrderForm extends javax.swing.JPanel {
      */
     public OrderForm() {
         initComponents();
-        customerService = new CustomerService();
-        vehicleService = new VehicleService();
-        orderService = new OrderService();
+        customerService =CustomerService.getInstance();
+        vehicleService = VehicleService.getInstance();
+        orderService = OrderService.getInstance();
     }
 
     /**

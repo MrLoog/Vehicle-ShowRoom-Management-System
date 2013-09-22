@@ -109,7 +109,7 @@ public class PersonalForm extends javax.swing.JPanel {
      */
     public PersonalForm() {
         initComponents();
-        dealerService = new DealerService();
+        dealerService = DealerService.getInstance();
         clearError();
     }
 

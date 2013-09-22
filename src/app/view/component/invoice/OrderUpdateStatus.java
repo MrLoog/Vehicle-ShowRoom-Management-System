@@ -42,8 +42,11 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
      */
     public OrderUpdateStatus() {
         initComponents();
-        orderService = new OrderService();
-        vehicleService = new VehicleService();
+        init();
+    }
+    private void init(){
+        orderService = OrderService.getInstance();
+        vehicleService = VehicleService.getInstance();
         jComboBox1.removeAllItems();
         jComboBox1.addItem(getStringOrderStatus(Order.STATUS_NEW));
         jComboBox1.addItem(getStringOrderStatus(Order.STATUS_CANCEL));

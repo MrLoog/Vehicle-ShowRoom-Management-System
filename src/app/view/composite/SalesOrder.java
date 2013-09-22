@@ -35,9 +35,9 @@ public class SalesOrder extends javax.swing.JPanel {
      */
     public SalesOrder() {
         initComponents();
-        orderService = new OrderService();
-        vehicleService = new VehicleService();
-        customerService = new CustomerService();
+        orderService = OrderService.getInstance();
+        vehicleService = VehicleService.getInstance();
+        customerService = CustomerService.getInstance();
         reloadTableOrder();
         orderTable1.setSelectListener(new ActionListener() {
             @Override
@@ -169,20 +169,19 @@ public class SalesOrder extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        orderTable1 = new app.view.component.invoice.OrderTable();
         jPanel3 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton5 = new javax.swing.JButton();
+        orderTable1 = new app.view.component.invoice.OrderTable();
         jPanel2 = new javax.swing.JPanel();
         orderUpdateStatus1 = new app.view.component.invoice.OrderUpdateStatus();
 
         setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(orderTable1, java.awt.BorderLayout.CENTER);
 
         jPanel3.setLayout(new java.awt.FlowLayout(0));
         jPanel3.add(jComboBox1);
@@ -211,13 +210,12 @@ public class SalesOrder extends javax.swing.JPanel {
         jPanel3.add(jButton5);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.NORTH);
+        jPanel1.add(orderTable1, java.awt.BorderLayout.CENTER);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-
-        orderUpdateStatus1.setPreferredSize(new java.awt.Dimension(250, 343));
-        jPanel2.add(orderUpdateStatus1, java.awt.BorderLayout.CENTER);
+        jPanel2.add(orderUpdateStatus1, java.awt.BorderLayout.PAGE_END);
 
         add(jPanel2, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents

@@ -43,7 +43,7 @@ public class ImportVehicleForm extends javax.swing.JPanel {
      */
     public ImportVehicleForm() {
         initComponents();
-        vehicleService = new VehicleService();
+        vehicleService = VehicleService.getInstance();
         initCbb();
     }
 
@@ -94,7 +94,7 @@ public class ImportVehicleForm extends javax.swing.JPanel {
             flag = false;
         }
         if (!(isEdit && (model.getModelNumber() != null && model.getModelNumber() != "" && model.getModelNumber().equals(txtModel.getText())))) {
-            List<Vehicle> lst = vehicleService.executeQuery(vehicleService.getByModelNumberQuery(txtModel.getText()));
+            List<Vehicle> lst = vehicleService.executeQuery(vehicleService.getByModelNumberQueryNew(txtModel.getText()));
             if (lst != null && lst.size() > 0) {
                 emodel.setText("Model Number Exist");
                 flag = false;

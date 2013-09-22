@@ -18,8 +18,9 @@ import javax.swing.border.Border;
 public class Main extends javax.swing.JFrame {
 
     public static Dealer activeUser;
-    public static final int PerPage=5;
-    public static final String ALL="All";
+    public static final int PerPage = 5;
+    public static final String ALL = "All";
+    public static final int LIMIT = 5;
     private SalesServiceV2 viewsales;
     private ManageShowroomV2 viewshowroom;
     private LoginFrame loginFrame;
@@ -200,7 +201,6 @@ public class Main extends javax.swing.JFrame {
         jPanel3.add(viewshowroom);
         BodyChanged();
     }
-
 
     public void viewAdminManage() {
         if (adminManage == null) {

@@ -19,6 +19,18 @@ import java.util.logging.Logger;
  */
 public class CustomerService extends BaseService {
 
+    private static CustomerService instance;
+    public static CustomerService getInstance(){
+        if(instance==null){
+            instance=new CustomerService();
+        }
+        return instance;
+    }
+
+    private CustomerService() {
+        super();
+    }
+    
     @Override
     public String getTableName() {
         return "Customers";

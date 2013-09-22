@@ -20,6 +20,19 @@ import java.util.logging.Logger;
  */
 public class DealerService extends BaseService {
 
+    private static DealerService instance;
+
+    public static DealerService getInstance() {
+        if (instance == null) {
+            instance = new DealerService();
+        }
+        return instance;
+    }
+
+    private DealerService() {
+        super();
+    }
+
     @Override
     public String getTableName() {
         return "Dealers";

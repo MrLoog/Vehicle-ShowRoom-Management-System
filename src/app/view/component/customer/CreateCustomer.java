@@ -169,7 +169,7 @@ public class CreateCustomer extends javax.swing.JDialog {
         ePhone.setText("");
     }
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        sv = new CustomerService();
+        sv = CustomerService.getInstance();
         String name = txtName.getText();
         String addr = txtAddress.getText();
         String phone = txtPhone.getText();

@@ -110,7 +110,7 @@ public class DealerManager extends javax.swing.JPanel {
      */
     public DealerManager() {
         initComponents();
-        dealerService = new DealerService();
+        dealerService = DealerService.getInstance();
     }
 
     /**

@@ -5,6 +5,7 @@
 package app.view;
 
 import app.view.component.dealer.DealerManager;
+import app.view.component.report.ShowroomReport;
 
 /**
  *
@@ -13,6 +14,7 @@ import app.view.component.dealer.DealerManager;
 public class AdminManageV2 extends javax.swing.JPanel {
 
     private DealerManager dealerManager;
+    private ShowroomReport showroomReport;
 
     /**
      * Creates new form AdminManageV2
@@ -29,6 +31,16 @@ public class AdminManageV2 extends javax.swing.JPanel {
         dealerManager.refresh();
         mainpanel.removeAll();
         mainpanel.add(dealerManager);
+        mainpanel.revalidate();
+        mainpanel.repaint();
+    }
+
+    private void viewReport() {
+        if (showroomReport == null) {
+            showroomReport = new ShowroomReport();
+        }
+        mainpanel.removeAll();
+        mainpanel.add(showroomReport);
         mainpanel.revalidate();
         mainpanel.repaint();
     }
@@ -109,9 +121,8 @@ public class AdminManageV2 extends javax.swing.JPanel {
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
         // TODO add your handling code here:
-        
+        viewReport();
     }//GEN-LAST:event_btnCustomerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnVehicle2;

@@ -23,7 +23,7 @@ public class DealerLogin extends javax.swing.JPanel {
      */
     public DealerLogin() {
         initComponents();
-        dealerService = new DealerService();
+        dealerService = DealerService.getInstance();
     }
 
     /**

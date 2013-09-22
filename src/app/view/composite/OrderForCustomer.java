@@ -40,10 +40,10 @@ public class OrderForCustomer extends javax.swing.JPanel {
      */
     public OrderForCustomer() {
         initComponents();
-        vehicleService = new VehicleService();
-        orderService = new OrderService();
-        customerService = new CustomerService();
-        dealerService=new DealerService();
+        vehicleService = VehicleService.getInstance();
+        orderService = OrderService.getInstance();
+        customerService = CustomerService.getInstance();
+        dealerService=DealerService.getInstance();
         initCbbFilter();
         viewTableVehicle();
         viewVehicleDetails();

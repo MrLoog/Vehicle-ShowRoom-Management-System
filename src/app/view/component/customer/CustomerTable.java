@@ -97,8 +97,8 @@ public class CustomerTable extends javax.swing.JPanel {
      */
     public CustomerTable() {
         initComponents();
-        customerService = new CustomerService();
-        dealerService = new DealerService();
+        customerService = CustomerService.getInstance();
+        dealerService = DealerService.getInstance();
         fillDataCustomer(1);
         fillPage();
     }

@@ -101,7 +101,7 @@ public class DealerForm extends javax.swing.JPanel {
      */
     public DealerForm() {
         initComponents();
-        dealerService = new DealerService();
+        dealerService = DealerService.getInstance();
         if (!Main.activeUser.isIsManager()) {
             jLabel3.setVisible(false);
             jCheckBox1.setVisible(false);

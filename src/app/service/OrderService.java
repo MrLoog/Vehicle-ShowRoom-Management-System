@@ -6,6 +6,8 @@ package app.service;
 
 import app.model.Order;
 import app.utility.AppUtility;
+import app.view.Main;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +21,19 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class OrderService extends BaseService {
+
+    private static OrderService instance;
+
+    public static OrderService getInstance() {
+        if (instance == null) {
+            instance = new OrderService();
+        }
+        return instance;
+    }
+
+    private OrderService() {
+        super();
+    }
 
     @Override
     public String getTableName() {
@@ -244,8 +259,122 @@ public class OrderService extends BaseService {
     public PreparedStatement getPrepareStmtAllOrderDone() {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("select * from " + getTableName() + " where Status=?");
+            ps = conn.prepareStatement("select * from " + getTableName() + " where IsDeleted=0 and Status=?");
             ps.setInt(1, Order.STATUS_DONE);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getTopCustomerOrder(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select Top "+Main.LIMIT+" CustomerID,Sum(Price * Quantity) as total from " + getTableName()+ " where IsDeleted=0 and [Status]=3 and (Created between ? and ?) group by CustomerID order by total desc";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getTopCustomerOrderAll(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select CustomerID,Sum(Price * Quantity) as total from " + getTableName()+ " where IsDeleted=0 and [Status]=3 and (Created between ? and ?) group by CustomerID order by total desc";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getTopDealerOrder(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select Top "+Main.LIMIT+" DealerID,Sum(Price * Quantity) as total from " + getTableName()+ " where IsDeleted=0 and [Status]=3 and (Created between ? and ?) group by DealerID order by total desc";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+    
+     public PreparedStatement getTopDealerOrderAll(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select DealerID,Sum(Price * Quantity) as total from " + getTableName()+ " where IsDeleted=0 and [Status]=3 and (Created between ? and ?) group by DealerID order by total desc";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getTopVehicleOrderAll(Date from, Date to) {
+       PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select VehicleID,Sum(Quantity) as totalquantity,Sum(Price * Quantity) as total from " + getTableName()+ " where IsDeleted=0 and [Status]=3 and (Created between ? and ?) group by VehicleID order by totalquantity";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+
+    public PreparedStatement getStatusOrderAll(Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select [Status],Count(*) as total from " + getTableName()+ " where IsDeleted=0 and (Created between ? and ?) group by [Status] ";
+            ps = conn.prepareStatement(query);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
         } catch (SQLException ex) {
             Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
         }

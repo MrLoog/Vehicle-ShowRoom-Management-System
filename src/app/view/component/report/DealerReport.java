@@ -38,8 +38,8 @@ public class DealerReport extends javax.swing.JPanel {
      */
     public DealerReport() {
         initComponents();
-        orderService = new OrderService();
-        customerService = new CustomerService();
+        orderService = OrderService.getInstance();
+        customerService = CustomerService.getInstance();
     }
 
     /**

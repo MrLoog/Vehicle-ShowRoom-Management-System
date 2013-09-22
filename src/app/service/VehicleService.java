@@ -5,13 +5,10 @@
 package app.service;
 
 import app.model.Vehicle;
-import app.utility.AppUtility;
 import app.view.Main;
 import java.sql.PreparedStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,12 +20,22 @@ import java.util.logging.Logger;
  */
 public class VehicleService extends BaseService {
 
-    public VehicleService() {
+    private static VehicleService instance;
+
+    public static VehicleService getInstance() {
+        if (instance == null) {
+            instance = new VehicleService();
+        }
+        return instance;
+    }
+
+    private VehicleService() {
         super();
     }
 
-    public String getByModelNumberQuery(String modelNumber) {
-        return "getVehicleByModelNumber '" + modelNumber + "'";
+    public String getByModelNumberQueryNew(String modelNumber) {
+        return "select * from "+getTableName()+" where ModelNumber like '"+modelNumber+"' ";
+//        return "getVehicleByModelNumber '" + modelNumber + "'";
     }
 
     @Override
@@ -348,8 +355,8 @@ public class VehicleService extends BaseService {
     }
 
     public String getQuerySearchVehicle(String search) {
-       String sql="select * from "+getTableName()+" where ModelNumber like 'search' ";
-       sql=sql.replaceAll("search", search);
-       return sql;
+        String sql = "select * from " + getTableName() + " where ModelNumber like 'search' ";
+        sql = sql.replaceAll("search", search);
+        return sql;
     }
 }
