@@ -162,9 +162,10 @@ public class CustomerTable extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 35));
-        jPanel1.setLayout(new java.awt.FlowLayout(0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        comboCustomer.setPreferredSize(new java.awt.Dimension(28, 41));
         comboCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 comboCustomerMouseClicked(evt);
@@ -189,9 +190,10 @@ public class CustomerTable extends javax.swing.JPanel {
 
         txtKeyword.setText(" ");
         txtKeyword.setMinimumSize(new java.awt.Dimension(6, 80));
-        txtKeyword.setPreferredSize(new java.awt.Dimension(100, 25));
+        txtKeyword.setPreferredSize(new java.awt.Dimension(100, 41));
         jPanel1.add(txtKeyword);
 
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,6 +202,7 @@ public class CustomerTable extends javax.swing.JPanel {
         });
         jPanel1.add(btnSearch);
 
+        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/add.png"))); // NOI18N
         btnNew.setText("New");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,6 +211,7 @@ public class CustomerTable extends javax.swing.JPanel {
         });
         jPanel1.add(btnNew);
 
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/edit.png"))); // NOI18N
         btnEdit.setText("Edit");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,6 +220,7 @@ public class CustomerTable extends javax.swing.JPanel {
         });
         jPanel1.add(btnEdit);
 
+        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/refresh.png"))); // NOI18N
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

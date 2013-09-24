@@ -327,13 +327,17 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel2.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jPanel4.setLayout(new java.awt.FlowLayout(0));
+        jPanel4.setPreferredSize(new java.awt.Dimension(355, 50));
+        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jComboBox1.setPreferredSize(new java.awt.Dimension(28, 41));
         jPanel4.add(jComboBox1);
 
         jTextField1.setMinimumSize(new java.awt.Dimension(10, 20));
-        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 41));
         jPanel4.add(jTextField1);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
         jButton1.setText("Search");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,6 +346,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(jButton1);
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/refresh.png"))); // NOI18N
         jButton3.setText("Refresh");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,6 +355,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(jButton3);
 
+        cbbrand.setPreferredSize(new java.awt.Dimension(28, 41));
         cbbrand.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbrandItemStateChanged(evt);
@@ -357,6 +363,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(cbbrand);
 
+        cbbcategory.setPreferredSize(new java.awt.Dimension(28, 41));
         cbbcategory.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbcategoryItemStateChanged(evt);

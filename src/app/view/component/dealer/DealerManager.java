@@ -151,9 +151,10 @@ public class DealerManager extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
-        jPanel1.setLayout(new java.awt.FlowLayout(0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        comboDealer.setPreferredSize(new java.awt.Dimension(28, 41));
         comboDealer.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboDealerItemStateChanged(evt);
@@ -167,9 +168,10 @@ public class DealerManager extends javax.swing.JPanel {
         jPanel1.add(comboDealer);
 
         jtxtsearch.setMinimumSize(new java.awt.Dimension(30, 20));
-        jtxtsearch.setPreferredSize(new java.awt.Dimension(100, 25));
+        jtxtsearch.setPreferredSize(new java.awt.Dimension(100, 41));
         jPanel1.add(jtxtsearch);
 
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
         btnSearch.setText("Search");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,6 +180,7 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(btnSearch);
 
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/add.png"))); // NOI18N
         btnAdd.setText("New");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,6 +189,7 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(btnAdd);
 
+        btnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/lock_edit.png"))); // NOI18N
         btnDel.setText("(Un)Lock");
         btnDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,6 +198,7 @@ public class DealerManager extends javax.swing.JPanel {
         });
         jPanel1.add(btnDel);
 
+        btnUpgrade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/report_user.png"))); // NOI18N
         btnUpgrade.setText("(Un) Set Manager");
         btnUpgrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
