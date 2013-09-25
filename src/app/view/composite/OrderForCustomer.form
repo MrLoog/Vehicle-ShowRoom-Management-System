@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[700, 500]"/>
+    </Property>
+  </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -53,7 +58,7 @@
             <Component class="javax.swing.JComboBox" name="jComboBox1">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[28, 41]"/>
+                  <Dimension value="[50, 25]"/>
                 </Property>
               </Properties>
             </Component>
@@ -63,7 +68,7 @@
                   <Dimension value="[10, 20]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[100, 41]"/>
+                  <Dimension value="[100, 25]"/>
                 </Property>
               </Properties>
             </Component>
@@ -92,7 +97,7 @@
             <Component class="javax.swing.JComboBox" name="cbbrand">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[28, 41]"/>
+                  <Dimension value="[100, 25]"/>
                 </Property>
               </Properties>
               <Events>
@@ -102,7 +107,7 @@
             <Component class="javax.swing.JComboBox" name="cbbcategory">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[28, 41]"/>
+                  <Dimension value="[100, 25]"/>
                 </Property>
               </Properties>
               <Events>

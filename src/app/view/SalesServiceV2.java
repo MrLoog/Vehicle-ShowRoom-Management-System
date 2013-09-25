@@ -60,7 +60,6 @@ public class SalesServiceV2 extends javax.swing.JPanel {
         if (report == null) {
             report = new DealerReport();
         }
-        report.setModel(Main.activeUser);
         activePanel = report;
         mainpanel.removeAll();
         mainpanel.add(report);
@@ -89,6 +88,7 @@ public class SalesServiceV2 extends javax.swing.JPanel {
         btnReport = new javax.swing.JButton();
         btnCreateOrder = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(700, 500));
         setLayout(new java.awt.BorderLayout());
 
         mainpanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
