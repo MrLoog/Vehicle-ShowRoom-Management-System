@@ -5,6 +5,10 @@
 package app.utility;
 
 import app.model.Order;
+import app.view.DialogConfig;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -25,8 +29,6 @@ public class AppUtility {
 
     private static Connection conn;
 //    private static final String username = "admin";
-    private static final String username = "sa";
-    private static final String password = "123456";
 
     public static Connection getConnection() {
         if (conn == null) {
@@ -36,13 +38,23 @@ public class AppUtility {
     }
 
     private static void loadConnection() {
+        BufferedReader br = null;
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ShowRoom", username, password);
+            br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
+            String driver = br.readLine();
+            String url = br.readLine();
+            String username = br.readLine();
+            String password = br.readLine();
+            String databasename = br.readLine();
+            url = url +";database="+ databasename;
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url+databasename, username, password);
         } catch (SQLException ex) {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception e){
+            Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
