@@ -9,6 +9,7 @@ import app.service.DealerService;
 import app.utility.AppUtility;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,12 +18,12 @@ import javax.swing.JFrame;
 public class DealerLogin extends javax.swing.JPanel {
 
     private DealerService dealerService;
-    private boolean isOpenDb=false;
+    private boolean isOpenDb = false;
 
     public boolean isIsOpenDb() {
         return isOpenDb;
     }
-    
+
     /**
      * Creates new form DealerLogin
      */
@@ -33,7 +34,7 @@ public class DealerLogin extends javax.swing.JPanel {
 
     public void openDatabase() {
         dealerService = DealerService.getInstance();
-        isOpenDb=true;
+        isOpenDb = true;
     }
 
     /**
@@ -120,6 +121,7 @@ public class DealerLogin extends javax.swing.JPanel {
                     for (Dealer d : matchdealer) {
                         if (d.getPassword().equals(AppUtility.EncryptPassword(new String(jPasswordField1.getPassword())))) {
 //                    if (d.getPassword().equals(new String(jPasswordField1.getPassword()))) {
+
                             return d;
                         }
                     }

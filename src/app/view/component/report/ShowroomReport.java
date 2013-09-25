@@ -143,6 +143,7 @@ public class ShowroomReport extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         jPanel2.setLayout(new java.awt.BorderLayout());
+        add(jPanel2, java.awt.BorderLayout.CENTER);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 100));
 
@@ -214,9 +215,7 @@ public class ShowroomReport extends javax.swing.JPanel {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        jPanel2.add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        add(jPanel2, java.awt.BorderLayout.CENTER);
+        add(jPanel1, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
