@@ -7,6 +7,7 @@ package app.utility;
 import app.model.Order;
 import app.view.DialogConfig;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -39,6 +40,14 @@ public class AppUtility {
 
     private static void loadConnection(){
         BufferedReader br = null;
+        File f = new File("src\\databaseconnection.vsm");
+        if(!f.exists()){
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         try {
             br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
             String driver = br.readLine();
