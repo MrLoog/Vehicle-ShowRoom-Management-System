@@ -152,6 +152,7 @@ public class OrderUpdateStatus extends javax.swing.JPanel {
 
         jLabel19.setText("Status :");
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/update.png"))); // NOI18N
         jButton1.setText("Update");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

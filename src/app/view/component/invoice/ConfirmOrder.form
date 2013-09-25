@@ -129,7 +129,7 @@
                   <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel24" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="8" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -252,6 +252,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/app/view/resource/accept.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Confirm"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
@@ -276,6 +279,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButton2">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/app/view/resource/cancel.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Cancel"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>

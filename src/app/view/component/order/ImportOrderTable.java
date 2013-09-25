@@ -152,12 +152,16 @@ public class ImportOrderTable extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(345, 50));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jComboBox1.setPreferredSize(new java.awt.Dimension(28, 41));
         jPanel1.add(jComboBox1);
 
-        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 41));
         jPanel1.add(jTextField1);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
         jButton1.setText("Search");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,6 +170,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         });
         jPanel1.add(jButton1);
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/edit.png"))); // NOI18N
         jButton3.setText("Edit");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,6 +179,7 @@ public class ImportOrderTable extends javax.swing.JPanel {
         });
         jPanel1.add(jButton3);
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/refresh.png"))); // NOI18N
         jButton4.setText("Refresh");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

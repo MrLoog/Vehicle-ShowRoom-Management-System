@@ -9,12 +9,13 @@ package app.view.component.customer;
  * @author kiendv
  */
 public class test extends javax.swing.JFrame {
-
+CustomerTable tb = new CustomerTable();
     /**
      * Creates new form test
      */
     public test() {
         initComponents();
+        this.add(tb);
     }
 
     /**
@@ -26,10 +27,8 @@ public class test extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        customerTable1 = new app.view.component.customer.CustomerTable();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().add(customerTable1, java.awt.BorderLayout.CENTER);
+        setPreferredSize(new java.awt.Dimension(400, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -69,6 +68,5 @@ public class test extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private app.view.component.customer.CustomerTable customerTable1;
     // End of variables declaration//GEN-END:variables
 }

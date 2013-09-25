@@ -183,12 +183,16 @@ public class SalesOrder extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setLayout(new java.awt.FlowLayout(0));
+        jPanel3.setPreferredSize(new java.awt.Dimension(367, 50));
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        jComboBox1.setPreferredSize(new java.awt.Dimension(28, 41));
         jPanel3.add(jComboBox1);
 
-        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 41));
         jPanel3.add(jTextField1);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
         jButton1.setText("Search");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +205,7 @@ public class SalesOrder extends javax.swing.JPanel {
         jCheckBox1.setText("Wait Only");
         jPanel3.add(jCheckBox1);
 
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/refresh.png"))); // NOI18N
         jButton5.setText("Refresh");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -108,6 +108,7 @@ public class ConfirmOrder extends javax.swing.JPanel {
 
         jLabel19.setText("Status :");
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/accept.png"))); // NOI18N
         jButton1.setText("Confirm");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -122,6 +123,7 @@ public class ConfirmOrder extends javax.swing.JPanel {
 
         jLabel22.setText("No Info");
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/cancel.png"))); // NOI18N
         jButton2.setText("Cancel");
         jButton2.setEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -227,7 +229,7 @@ public class ConfirmOrder extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(jLabel24))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(jLabel20))

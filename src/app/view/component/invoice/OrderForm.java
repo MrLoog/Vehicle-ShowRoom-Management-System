@@ -245,6 +245,7 @@ public class OrderForm extends javax.swing.JPanel {
 
         jLabel12.setText("No Info");
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/cart_put.png"))); // NOI18N
         jButton1.setText("Purchase");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,6 +253,7 @@ public class OrderForm extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/page_refresh.png"))); // NOI18N
         jButton2.setText("Reset");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,6 +261,7 @@ public class OrderForm extends javax.swing.JPanel {
             }
         });
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/cancel.png"))); // NOI18N
         jButton3.setText("Cancel");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,7 +392,7 @@ public class OrderForm extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

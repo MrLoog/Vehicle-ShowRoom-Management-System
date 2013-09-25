@@ -110,7 +110,8 @@ Customer cu = null;
 
         btnChange.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnChange.setForeground(new java.awt.Color(0, 102, 102));
-        btnChange.setText("Edit");
+        btnChange.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/save_as.png"))); // NOI18N
+        btnChange.setText("OK");
         btnChange.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangeActionPerformed(evt);
@@ -119,6 +120,7 @@ Customer cu = null;
 
         btnCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnCancel.setForeground(new java.awt.Color(204, 0, 0));
+        btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/cancel.png"))); // NOI18N
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,8 +156,8 @@ Customer cu = null;
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(96, 96, 96)
-                        .addComponent(btnChange, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
+                        .addComponent(btnChange)
+                        .addGap(45, 45, 45)
                         .addComponent(btnCancel))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
@@ -172,7 +174,7 @@ Customer cu = null;
                             .addComponent(eAddress)
                             .addComponent(ePhone)
                             .addComponent(lbOK))))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,7 +197,7 @@ Customer cu = null;
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ePhone)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(lbOK)
                 .addGap(54, 54, 54)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
