@@ -52,6 +52,7 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -65,24 +66,16 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 500));
-        setPreferredSize(new java.awt.Dimension(900, 500));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 100));
         jPanel2.setMinimumSize(new java.awt.Dimension(100, 100));
         jPanel2.setName(""); // NOI18N
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 70));
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 150));
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 695, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 96, Short.MAX_VALUE)
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/AutoBanner2.jpg"))); // NOI18N
+        jPanel2.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -256,6 +249,7 @@ public class Main extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
