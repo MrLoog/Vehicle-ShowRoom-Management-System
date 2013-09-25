@@ -8,6 +8,12 @@ import app.model.Dealer;
 import app.view.component.vehicle.VehicleManagement;
 import app.view.composite.CustomerManage;
 import app.view.composite.PersonalDialog;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
@@ -18,9 +24,9 @@ import javax.swing.border.Border;
 public class Main extends javax.swing.JFrame {
 
     public static Dealer activeUser;
-    public static final int PerPage = 5;
+    public static  int PerPage = 5;
     public static final String ALL = "All";
-    public static final int LIMIT = 5;
+    public static  int LIMIT = 5;
     private SalesServiceV2 viewsales;
     private ManageShowroomV2 viewshowroom;
     private LoginFrame loginFrame;
@@ -39,7 +45,23 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        loadSettings();
         ViewSalesService();
+    }
+
+    private void loadSettings() {
+
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("src\\config.settings"));
+            String perpage = br.readLine();
+            String statistictop = br.readLine();
+            Main.PerPage=Integer.parseInt(perpage.split("=")[1]);
+             Main.LIMIT=Integer.parseInt(statistictop.split("=")[1]);
+        } catch (IOException ex) {
+            Main.PerPage=5;
+            Main.LIMIT=5;
+        } 
     }
 
     /**
@@ -52,12 +74,14 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -65,24 +89,16 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 500));
-        setPreferredSize(new java.awt.Dimension(900, 500));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 100));
         jPanel2.setMinimumSize(new java.awt.Dimension(100, 100));
         jPanel2.setName(""); // NOI18N
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 70));
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 150));
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 695, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 96, Short.MAX_VALUE)
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/AutoBanner2.jpg"))); // NOI18N
+        jPanel2.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -110,6 +126,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setText("settings");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
 
         jMenuBar1.add(jMenu2);
 
@@ -185,6 +209,13 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        ConfigDialog dialog=new ConfigDialog(this, true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     public void ViewSalesService() {
         if (viewsales == null) {
             viewsales = new SalesServiceV2();
@@ -256,6 +287,7 @@ public class Main extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -265,6 +297,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables

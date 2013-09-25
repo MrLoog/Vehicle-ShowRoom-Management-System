@@ -85,18 +85,6 @@ public class DealerService extends BaseService {
     protected String getQueryUpdate() {
         return "update " + getTableName() + " set Name=?,LoginName=?,Password=?,IsManager=?,Created=?,Modified=?,IsDeleted=? where ID=?";
     }
-
-    public int updaterole(String status, int id) {
-        String sql = "update Dealers set IsManager='" + status + "' where ID=" + id;
-        try {
-            Statement stm = AppUtility.getConnection().createStatement();
-            return stm.executeUpdate(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        }
-    }
-
     @Override
     protected void setParameterForUpdate(Object obj) {
         try {

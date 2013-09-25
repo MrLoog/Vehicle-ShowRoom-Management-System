@@ -6,8 +6,10 @@ package app.view;
 
 import app.model.Dealer;
 import app.service.DealerService;
+import app.utility.AppUtility;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -16,7 +18,6 @@ import javax.swing.Timer;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-  
     /**
      * Creates new form LoginFrame
      */
@@ -81,9 +82,17 @@ public class LoginFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private boolean testConn = false;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        testConn = AppUtility.testConnection();
+        if (!testConn) {
+            JOptionPane.showMessageDialog(this, "Can not connect database");
+            return;
+        }
+        if (!dealerLogin1.isIsOpenDb()) {
+            dealerLogin1.openDatabase();
+        }
         Dealer d = dealerLogin1.login();
         if (d == null) {
             return;
@@ -99,7 +108,7 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         // TODO add your handling code here:
+        // TODO add your handling code here:
         DialogConfig dc = new DialogConfig(this, true);
         dc.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed

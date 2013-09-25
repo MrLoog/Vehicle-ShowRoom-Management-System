@@ -109,21 +109,24 @@ public class DealerLogin extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public Dealer login() {
-        jLabel4.setText("");
-        jLabel5.setText("");
-        if (valid()) {
-            List<Dealer> matchdealer = dealerService.executeQuery("select * from " + dealerService.getTableName() + " where LoginName='" + jTextField1.getText() + "' and IsDeleted=0");
-            if (matchdealer.size() <= 0) {
-                jLabel4.setText("Login Name is not exists or lock");
-            } else {
-                for (Dealer d : matchdealer) {
-                    if (d.getPassword().equals(AppUtility.EncryptPassword(new String(jPasswordField1.getPassword())))) {
+        try {
+            jLabel4.setText("");
+            jLabel5.setText("");
+            if (valid()) {
+                List<Dealer> matchdealer = dealerService.executeQuery("select * from " + dealerService.getTableName() + " where LoginName='" + jTextField1.getText() + "' and IsDeleted=0");
+                if (matchdealer.size() <= 0) {
+                    jLabel4.setText("Login Name is not exists or lock");
+                } else {
+                    for (Dealer d : matchdealer) {
+                        if (d.getPassword().equals(AppUtility.EncryptPassword(new String(jPasswordField1.getPassword())))) {
 //                    if (d.getPassword().equals(new String(jPasswordField1.getPassword()))) {
-                        return d;
+                            return d;
+                        }
                     }
+                    jLabel5.setText("Wrong password.");
                 }
-                jLabel5.setText("Wrong password.");
             }
+        } catch (Exception e) {
         }
         return null;
     }
