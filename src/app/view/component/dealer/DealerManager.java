@@ -251,11 +251,11 @@ public class DealerManager extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Select a row to perform this action.");
             return;
         }
-        if ("sa".equals(d.getLoginName())) {
+        if ("admin".equals(d.getLoginName())) {
             JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
             return;
         }
-        if (!"sa".equals(Main.activeUser.getLoginName())) {
+        if (!"admin".equals(Main.activeUser.getLoginName())) {
 
             if (!Main.activeUser.isIsManager() || d.isIsManager()) {
                 JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
@@ -278,11 +278,11 @@ public class DealerManager extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Select a row to perform this action.");
             return;
         }
-         if ("sa".equals(d.getLoginName())) {
+         if ("admin".equals(d.getLoginName())) {
             JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");
             return;
         }
-        if (!"sa".equals(Main.activeUser.getLoginName())) {
+        if (!"admin".equals(Main.activeUser.getLoginName())) {
 
             if (!Main.activeUser.isIsManager() || d.isIsManager()) {
                 JOptionPane.showMessageDialog(null, "You don't have permission to perform this action.");

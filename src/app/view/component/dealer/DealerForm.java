@@ -19,36 +19,35 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class DealerForm extends javax.swing.JPanel {
-    
+
     private ActionListener saveListener;
 
     public void setSaveListener(ActionListener saveListener) {
         this.saveListener = saveListener;
     }
-    
     private DealerService dealerService;
     private boolean isEdit = false;
     private Dealer model;
-    
+
     public void setEditMode(boolean isEdit) {
         this.isEdit = isEdit;
     }
-    
+
     public Dealer getModel() {
         return model;
     }
-    
+
     public void setModel(Dealer model) {
         this.model = model;
         setDefaultValue(model);
     }
-    
+
     private void setDefaultValue(Dealer d) {
         jTextField1.setText(d.getName());
         jTextField2.setText(d.getLoginName());
         jCheckBox1.setSelected(d.isIsManager());
     }
-    
+
     private void clear() {
         if (isEdit) {
             setModel(model);
@@ -60,7 +59,7 @@ public class DealerForm extends javax.swing.JPanel {
             setModel(v);
         }
     }
-    
+
     private void loadDataToModel() {
         if (model == null) {
             model = new Dealer();
@@ -69,7 +68,7 @@ public class DealerForm extends javax.swing.JPanel {
         model.setLoginName(jTextField2.getText());
         model.setIsManager(jCheckBox1.isSelected());
     }
-    
+
     private boolean isFormValid() {
         boolean output = true;
         String name = jTextField1.getText();
@@ -90,7 +89,7 @@ public class DealerForm extends javax.swing.JPanel {
         }
         return output;
     }
-    
+
     private void clearErrorMes() {
         jLabel4.setText("");
         jLabel5.setText("");
@@ -217,6 +216,10 @@ public class DealerForm extends javax.swing.JPanel {
             if (confirm == JOptionPane.NO_OPTION) {
                 return;
             }
+            if (model.getLoginName().equals("admin") && !jTextField2.getText().equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Can not change login name of administrator.");
+                jTextField2.setText("admin");
+            }
             loadDataToModel();
             Date date = new Date();
             java.sql.Date inputdate = new java.sql.Date(date.getTime());
@@ -233,21 +236,20 @@ public class DealerForm extends javax.swing.JPanel {
                 }
             } catch (Exception e) {
             }
-            
-            if(saveListener!=null){
+
+            if (saveListener != null) {
                 saveListener.actionPerformed(evt);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         clear();
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_jTextField2FocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
