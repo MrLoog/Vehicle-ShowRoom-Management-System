@@ -359,4 +359,24 @@ public class VehicleService extends BaseService {
         sql = sql.replaceAll("search", search);
         return sql;
     }
+
+    public PreparedStatement getVehicleByCategory() {
+         PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select Category,Sum(Quantity) as total from " + getTableName() + " where Quantity>0 group by Category ");
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
+    
+    public PreparedStatement getVehicleByBrand() {
+         PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("select Brand,Sum(Quantity) as total from " + getTableName() + " where Quantity>0 group by Brand ");
+        } catch (SQLException ex) {
+            Logger.getLogger(VehicleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
 }

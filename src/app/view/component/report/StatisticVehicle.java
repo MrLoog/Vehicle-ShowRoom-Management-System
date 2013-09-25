@@ -165,7 +165,7 @@ public class StatisticVehicle extends javax.swing.JPanel {
                 if (rs != null) {
                     rs.close();
                 }
-                if(ps!=null){
+                if (ps != null) {
                     ps.close();
                 }
             } catch (SQLException ex) {
@@ -180,6 +180,94 @@ public class StatisticVehicle extends javax.swing.JPanel {
         changePanelReport(chartpanel);
     }
 
+    private void showVehicleCategory() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        
+        
+        PreparedStatement ps = vehicleService.getVehicleByCategory();
+        ResultSet rs = null;
+        try {
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                 dataset.setValue(rs.getString("Category"), rs.getInt("total"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StatisticCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(StatisticVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        JFreeChart chart = ChartFactory.createPieChart3D("Vehicle In Store by category", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false);
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator(
+                "Category {0} : {2}({1})", new DecimalFormat("0"), new DecimalFormat("0.00%"));
+        plot.setLabelGenerator(generator);
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        changePanelReport(chartPanel);
+    }
+
+    private void showVehicleBrand() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        
+        
+        PreparedStatement ps = vehicleService.getVehicleByBrand();
+        ResultSet rs = null;
+        try {
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                 dataset.setValue(rs.getString("Brand"), rs.getInt("total"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StatisticCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(StatisticVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        JFreeChart chart = ChartFactory.createPieChart3D("Vehicle In Store by brand", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false);
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator(
+                "Brand {0} : {2}({1})", new DecimalFormat("0"), new DecimalFormat("0.00%"));
+        plot.setLabelGenerator(generator);
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        changePanelReport(chartPanel);
+    }
+
     public void showStatistic(int showwat) {
         switch (showwat) {
             case StatisticLib.CATEGORY_VEHICLE_IN_STORE:
@@ -187,6 +275,12 @@ public class StatisticVehicle extends javax.swing.JPanel {
                 break;
             case StatisticLib.CATEGORY_VEHICLE_SELL:
                 showVehicleSell();
+                break;
+            case StatisticLib.CATEGORY_VEHICLE_CATEGORY:
+                showVehicleCategory();
+                break;
+            case StatisticLib.CATEGORY_VEHICLE_BRAND:
+                showVehicleBrand();
                 break;
             default:
                 break;

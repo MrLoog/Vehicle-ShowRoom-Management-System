@@ -34,6 +34,8 @@ public class StatisticLib {
     //constant label statistic
     public static final int CATEGORY_VEHICLE_IN_STORE = 6;
     public static final int CATEGORY_VEHICLE_SELL = 7;
+    public static final int CATEGORY_VEHICLE_CATEGORY = 8;
+    public static final int CATEGORY_VEHICLE_BRAND = 9;
     public static final int CATEGORY_ORDER_REVENUE = 11;
     public static final int CATEGORY_ORDER_STATUS = 12;
     public static final int CATEGORY_IMPORTORDER_VEHICLE_QUANTITY_PERIOD = 16;
@@ -56,6 +58,8 @@ public class StatisticLib {
 
         lst.put(CATEGORY_VEHICLE_IN_STORE, getStringForConstant(CATEGORY_VEHICLE_IN_STORE));
         lst.put(CATEGORY_VEHICLE_SELL, getStringForConstant(CATEGORY_VEHICLE_SELL));
+        lst.put(CATEGORY_VEHICLE_CATEGORY, getStringForConstant(CATEGORY_VEHICLE_CATEGORY));
+        lst.put(CATEGORY_VEHICLE_BRAND, getStringForConstant(CATEGORY_VEHICLE_BRAND));
 
         lst.put(CATEGORY_ORDER_REVENUE, getStringForConstant(CATEGORY_ORDER_REVENUE));
         lst.put(CATEGORY_ORDER_STATUS, getStringForConstant(CATEGORY_ORDER_STATUS));
@@ -91,6 +95,10 @@ public class StatisticLib {
                 return "Vehicle in Store";
             case CATEGORY_VEHICLE_SELL:
                 return "Vehicle Sell";
+            case CATEGORY_VEHICLE_CATEGORY:
+                return "Vehicle in store By Category";
+            case CATEGORY_VEHICLE_BRAND:
+                return "Vehicle in store by Brand";
             case CATEGORY_ORDER_REVENUE:
                 return "Revenue Over Period";
             case CATEGORY_ORDER_STATUS:
@@ -132,6 +140,8 @@ public class StatisticLib {
             case CATEGORY_VEHICLE:
                 lst.add(getStringForConstant(CATEGORY_VEHICLE_IN_STORE));
                 lst.add(getStringForConstant(CATEGORY_VEHICLE_SELL));
+                lst.add(getStringForConstant(CATEGORY_VEHICLE_CATEGORY));
+                lst.add(getStringForConstant(CATEGORY_VEHICLE_BRAND));
                 break;
             case CATEGORY_ORDER:
                 lst.add(getStringForConstant(CATEGORY_ORDER_REVENUE));
