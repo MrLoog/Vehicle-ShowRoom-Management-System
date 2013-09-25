@@ -181,9 +181,9 @@ public class VehicleManagement extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 50));
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jPanel1.setLayout(new java.awt.FlowLayout(0));
 
-        comboVehicle.setPreferredSize(new java.awt.Dimension(28, 41));
+        comboVehicle.setPreferredSize(new java.awt.Dimension(50, 25));
         comboVehicle.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboVehicleItemStateChanged(evt);
@@ -196,7 +196,7 @@ public class VehicleManagement extends javax.swing.JPanel {
         });
         jPanel1.add(comboVehicle);
 
-        txtKeyword.setPreferredSize(new java.awt.Dimension(100, 41));
+        txtKeyword.setPreferredSize(new java.awt.Dimension(100, 25));
         txtKeyword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtKeywordActionPerformed(evt);
@@ -214,11 +214,11 @@ public class VehicleManagement extends javax.swing.JPanel {
         jPanel1.add(btnSearch);
 
         cbbrand.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbbrand.setPreferredSize(new java.awt.Dimension(56, 41));
+        cbbrand.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel1.add(cbbrand);
 
         cbbcategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbbcategory.setPreferredSize(new java.awt.Dimension(56, 41));
+        cbbcategory.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel1.add(cbbcategory);
 
         btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/add.png"))); // NOI18N

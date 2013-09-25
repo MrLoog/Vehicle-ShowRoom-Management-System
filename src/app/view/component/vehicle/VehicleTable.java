@@ -77,6 +77,7 @@ public class VehicleTable extends javax.swing.JPanel implements IPanelTable {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
+        setPreferredSize(new java.awt.Dimension(700, 402));
         setLayout(new java.awt.BorderLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(

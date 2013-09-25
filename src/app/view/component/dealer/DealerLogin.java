@@ -17,13 +17,23 @@ import javax.swing.JFrame;
 public class DealerLogin extends javax.swing.JPanel {
 
     private DealerService dealerService;
+    private boolean isOpenDb=false;
 
+    public boolean isIsOpenDb() {
+        return isOpenDb;
+    }
+    
     /**
      * Creates new form DealerLogin
      */
     public DealerLogin() {
         initComponents();
+
+    }
+
+    public void openDatabase() {
         dealerService = DealerService.getInstance();
+        isOpenDb=true;
     }
 
     /**

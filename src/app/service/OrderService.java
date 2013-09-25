@@ -380,4 +380,24 @@ public class OrderService extends BaseService {
         }
         return ps;
     }
+
+    public PreparedStatement getStatusOrderByDealerID(int id, Date from, Date to) {
+        PreparedStatement ps = null;
+        if(from==null){
+            from=new Date(0);
+        }
+        if(to==null){
+            to=new Date(new java.util.Date().getTime());
+        }
+        try {
+            String query="select [Status],Count(*) as total from " + getTableName()+ " where DealerID=? and IsDeleted=0 and (Created between ? and ?) group by [Status] ";
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.setDate(2, from);
+            ps.setDate(3, to);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ps;
+    }
 }

@@ -320,6 +320,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         cbbcategory = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
 
+        setPreferredSize(new java.awt.Dimension(700, 500));
         setLayout(new java.awt.BorderLayout());
 
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -328,13 +329,13 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel2.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel4.setPreferredSize(new java.awt.Dimension(355, 50));
-        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jPanel4.setLayout(new java.awt.FlowLayout(0));
 
-        jComboBox1.setPreferredSize(new java.awt.Dimension(28, 41));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(50, 25));
         jPanel4.add(jComboBox1);
 
         jTextField1.setMinimumSize(new java.awt.Dimension(10, 20));
-        jTextField1.setPreferredSize(new java.awt.Dimension(100, 41));
+        jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel4.add(jTextField1);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/app/view/resource/find.png"))); // NOI18N
@@ -355,7 +356,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(jButton3);
 
-        cbbrand.setPreferredSize(new java.awt.Dimension(28, 41));
+        cbbrand.setPreferredSize(new java.awt.Dimension(100, 25));
         cbbrand.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbrandItemStateChanged(evt);
@@ -363,7 +364,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(cbbrand);
 
-        cbbcategory.setPreferredSize(new java.awt.Dimension(28, 41));
+        cbbcategory.setPreferredSize(new java.awt.Dimension(100, 25));
         cbbcategory.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbcategoryItemStateChanged(evt);
