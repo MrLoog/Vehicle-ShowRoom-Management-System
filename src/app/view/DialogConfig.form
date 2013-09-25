@@ -37,7 +37,7 @@
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -71,15 +71,15 @@
                       <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="txtDB" alignment="0" max="32767" attributes="1"/>
-                      <Component id="pwd" alignment="0" max="32767" attributes="1"/>
-                      <Component id="txtDriver" alignment="0" max="32767" attributes="1"/>
-                      <Component id="txtURL" alignment="0" max="32767" attributes="1"/>
-                      <Component id="txtUserName" alignment="0" max="32767" attributes="1"/>
+                      <Component id="txtURL" alignment="1" pref="0" max="32767" attributes="1"/>
+                      <Component id="txtUserName" alignment="1" max="32767" attributes="1"/>
+                      <Component id="pwd" alignment="1" max="32767" attributes="1"/>
+                      <Component id="txtDB" max="32767" attributes="1"/>
+                      <Component id="txtDriver" pref="285" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace min="-2" pref="130" max="-2" attributes="0"/>
+                  <EmptySpace pref="130" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
