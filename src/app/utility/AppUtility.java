@@ -48,7 +48,7 @@ public class AppUtility {
             String databasename = br.readLine();
             url = url +";database="+ databasename;
             Class.forName(driver);
-            conn = DriverManager.getConnection(url+databasename, username, password);
+            conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException ex) {
             Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
