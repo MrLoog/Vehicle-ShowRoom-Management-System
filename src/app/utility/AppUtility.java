@@ -193,4 +193,8 @@ public class AppUtility {
         }
         return output;
     }
+    public String getCurrentDir(){
+        String currentDir = System.getProperty("user.dir");
+        return currentDir;
+    }
 }

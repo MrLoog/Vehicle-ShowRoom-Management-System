@@ -99,7 +99,7 @@ public class SalesOrder extends javax.swing.JPanel {
         if (search.equals("")) {
             pagingsql = orderService.BuildPagingSql(orderService.getTableName(), orderService.getConditionSearchWithStatusAndJoin(Main.activeUser.getId(), new ArrayList<Integer>(), new ArrayList<Integer>(), jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         } else {
-            List<Vehicle> lst1 = vehicleService.executeQuery("select * from " + vehicleService.getTableName() + " where " + vehicleService.getConditionSearch(search, Main.ALL, Main.ALL));
+            List<Vehicle> lst1 = vehicleService.executeQuery("select * from " + vehicleService.getTableName() + " where " + vehicleService.getConditionSearch(search, Main.ALL, Main.ALL,false));
             List<Customer> lst2 = customerService.executeQuery("select * from " + customerService.getTableName() + " where " + customerService.getConditionSearch(search));
             List<Integer> lstintv = new ArrayList<Integer>();
             List<Integer> lstintc = new ArrayList<Integer>();

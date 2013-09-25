@@ -30,11 +30,12 @@ import javax.swing.JPanel;
  * @author Administrator
  */
 public class OrderForCustomer extends javax.swing.JPanel {
-    
+
     private VehicleService vehicleService;
     private OrderService orderService;
     private CustomerService customerService;
     private DealerService dealerService;
+
     /**
      * Creates new form OrderStep1
      */
@@ -43,22 +44,22 @@ public class OrderForCustomer extends javax.swing.JPanel {
         vehicleService = VehicleService.getInstance();
         orderService = OrderService.getInstance();
         customerService = CustomerService.getInstance();
-        dealerService=DealerService.getInstance();
+        dealerService = DealerService.getInstance();
         initCbbFilter();
         viewTableVehicle();
         viewVehicleDetails();
     }
-    
+
     private void showCbbFilter() {
         cbbrand.setVisible(true);
         cbbcategory.setVisible(true);
     }
-    
+
     private void hideCbbFilter() {
         cbbrand.setVisible(false);
         cbbcategory.setVisible(false);
     }
-    
+
     private void initCbbFilter() {
         cbbrand.removeAllItems();
         List<String> brands = vehicleService.getListBrandName();
@@ -68,7 +69,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         }
         cbbrand.revalidate();
         cbbrand.repaint();
-        
+
         cbbcategory.removeAllItems();
         List<String> categorys = vehicleService.getListCategoryName();
         cbbcategory.addItem(Main.ALL);
@@ -79,12 +80,12 @@ public class OrderForCustomer extends javax.swing.JPanel {
     AtomicReference<Integer> totalpage = new AtomicReference<Integer>(0);
     int curpage = 1;
     String search = "";
-    
+
     public void setTotalpage(Integer totalpage) {
         this.totalpage.set(totalpage);
         fillPage();
     }
-    
+
     public void setCurpage(int curpage) {
         this.curpage = curpage;
         if (activeTable instanceof VehicleTable) {
@@ -93,20 +94,20 @@ public class OrderForCustomer extends javax.swing.JPanel {
             fillDataCustomer(curpage);
         }
     }
-    
+
     private void fillDataVehicle(int page) {
         String pagingsql = "";
         String brand = (String) cbbrand.getSelectedItem();
         String category = (String) cbbcategory.getSelectedItem();
         if (search.equals("")) {
-            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionFilter(brand, category), Main.PerPage, page, totalpage);
+            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionFilter(brand, category, jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         } else {
-            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionSearch(search, brand, category), Main.PerPage, page, totalpage);
+            pagingsql = vehicleService.BuildPagingSql(vehicleService.getTableName(), vehicleService.getConditionSearch(search, brand, category, jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         }
         List<Vehicle> lst = vehicleService.executeQuery(pagingsql);
         vehicleTable.setModel(lst);
     }
-    
+
     private void fillDataCustomer(int page) {
         String pagingsql = "";
         if (search.equals("")) {
@@ -116,11 +117,11 @@ public class OrderForCustomer extends javax.swing.JPanel {
         }
         List<Customer> lst = customerService.executeQuery(pagingsql);
         for (Customer customer : lst) {
-            customer.setDealer((Dealer)dealerService.getById(customer.getDealerId()));
+            customer.setDealer((Dealer) dealerService.getById(customer.getDealerId()));
         }
         customerTable.setModel(lst);
     }
-    
+
     private int getTotalPage() {
         int temptotal = totalpage.get();
         int temp = temptotal % Main.PerPage;
@@ -130,7 +131,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
             return (temptotal / Main.PerPage) + 1;
         }
     }
-    
+
     private void fillPage() {
         jComboBox1.removeAllItems();
         for (int i = 1; i <= getTotalPage(); i++) {
@@ -152,7 +153,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
     private VehicleTable vehicleTable;
     private CustomerTableForSales customerTable;
     private IPanelTable activeTable;
-    
+
     public void viewTableVehicle() {
         if (vehicleTable == null) {
             vehicleTable = new VehicleTable();
@@ -165,7 +166,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel1.revalidate();
         jPanel1.repaint();
     }
-    
+
     private void reloadTableVehicle() {
         fillDataVehicle(1);
         fillPage();
@@ -176,7 +177,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
             }
         });
     }
-    
+
     public void viewTableCustomer() {
         if (customerTable == null) {
             customerTable = new CustomerTableForSales();
@@ -189,7 +190,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel1.revalidate();
         jPanel1.repaint();
     }
-    
+
     private void reloadTableCustomer() {
         fillDataCustomer(1);
         fillPage();
@@ -203,7 +204,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
     private VehicleDetails vehicleDetails;
     private OrderForm orderForm;
     private JPanel activeForm;
-    
+
     private void viewVehicleDetails() {
         if (vehicleDetails == null) {
             vehicleDetails = new VehicleDetails();
@@ -220,7 +221,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel3.revalidate();
         jPanel3.repaint();
     }
-    
+
     private void viewOrderForm() {
         if (orderForm == null) {
             orderForm = new OrderForm();
@@ -249,22 +250,22 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel3.revalidate();
         jPanel3.repaint();
     }
-    
+
     private void actionOrderPerform(ActionEvent obj) {
         viewTableCustomer();
         viewOrderForm();
         orderForm.setDataModel(vehicleDetails.getModel());
         orderForm.setBuyQuantity(vehicleDetails.getBuyquantity());
     }
-    
+
     private void actionPurchasePerformed(ActionEvent ae) {
     }
-    
+
     private void actionCancelPerformed(ActionEvent ae) {
         viewTableVehicle();
         viewVehicleDetails();
     }
-    
+
     private void actionSelectVehiclePerformed(ActionEvent ae) {
         Vehicle selectobj = vehicleTable.getSelectedVehicle();
         if (selectobj != null) {
@@ -272,7 +273,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
             vehicleDetails.setDataModel((Vehicle) selectobj);
         }
     }
-    
+
     private void actionSelectCustomerPerformed(ActionEvent ae) {
         Customer selectobj = customerTable.getSelectedCustomer();
         if (selectobj != null) {
@@ -280,14 +281,14 @@ public class OrderForCustomer extends javax.swing.JPanel {
             orderForm.setDataModel((Customer) selectobj);
         }
     }
-    
+
     private void actionOrderSuccessPerformed(ActionEvent ae) {
         reloadTableVehicle();
         reloadTableCustomer();
         viewTableVehicle();
         viewVehicleDetails();
     }
-    
+
     private void actionSearch() {
         search = jTextField1.getText();
         if (activeTable instanceof VehicleTable) {
@@ -313,11 +314,12 @@ public class OrderForCustomer extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox();
+        cbbrand = new javax.swing.JComboBox();
+        cbbcategory = new javax.swing.JComboBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        cbbrand = new javax.swing.JComboBox();
-        cbbcategory = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(700, 500));
@@ -333,6 +335,30 @@ public class OrderForCustomer extends javax.swing.JPanel {
 
         jComboBox1.setPreferredSize(new java.awt.Dimension(50, 25));
         jPanel4.add(jComboBox1);
+
+        cbbrand.setPreferredSize(new java.awt.Dimension(100, 25));
+        cbbrand.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbrandItemStateChanged(evt);
+            }
+        });
+        jPanel4.add(cbbrand);
+
+        cbbcategory.setPreferredSize(new java.awt.Dimension(100, 25));
+        cbbcategory.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbcategoryItemStateChanged(evt);
+            }
+        });
+        jPanel4.add(cbbcategory);
+
+        jCheckBox1.setText("Avaiable");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jCheckBox1);
 
         jTextField1.setMinimumSize(new java.awt.Dimension(10, 20));
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -356,22 +382,6 @@ public class OrderForCustomer extends javax.swing.JPanel {
         });
         jPanel4.add(jButton3);
 
-        cbbrand.setPreferredSize(new java.awt.Dimension(100, 25));
-        cbbrand.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbbrandItemStateChanged(evt);
-            }
-        });
-        jPanel4.add(cbbrand);
-
-        cbbcategory.setPreferredSize(new java.awt.Dimension(100, 25));
-        cbbcategory.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbbcategoryItemStateChanged(evt);
-            }
-        });
-        jPanel4.add(cbbcategory);
-
         jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -382,7 +392,7 @@ public class OrderForCustomer extends javax.swing.JPanel {
         // TODO add your handling code here:
         actionSearch();
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         search = "";
@@ -396,21 +406,30 @@ public class OrderForCustomer extends javax.swing.JPanel {
             reloadTableCustomer();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     private void cbbrandItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbrandItemStateChanged
         // TODO add your handling code here:
         actionSearch();
     }//GEN-LAST:event_cbbrandItemStateChanged
-    
+
     private void cbbcategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbcategoryItemStateChanged
         // TODO add your handling code here:
         actionSearch();
     }//GEN-LAST:event_cbbcategoryItemStateChanged
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+        if (activeTable instanceof VehicleTable) {
+            fillDataVehicle(1);
+            fillPage();
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbbcategory;
     private javax.swing.JComboBox cbbrand;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

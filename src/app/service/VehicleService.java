@@ -301,7 +301,7 @@ public class VehicleService extends BaseService {
 //        return customers;
 //    }
 
-    public String getConditionSearch(String search, String brand, String category) {
+    public String getConditionSearch(String search, String brand, String category,boolean avaiableonly) {
         String pre = "";
         if (!brand.equals(Main.ALL)) {
             pre += " (Brand like '" + brand + "') and ";
@@ -310,11 +310,14 @@ public class VehicleService extends BaseService {
             pre += " (Category like '" + category + "') and ";
         }
         pre += " (Name like '%search%' or ModelNumber like '%search%') ";
+        if(avaiableonly){
+            pre+=" and Quantity>0 ";
+        }
         String result = pre.replaceAll("search", search);
         return result;
     }
 
-    public String getConditionFilter(String brand, String category) {
+    public String getConditionFilter(String brand, String category,boolean avaiableonly) {
         String pre = "";
         if (!brand.equals(Main.ALL)) {
             pre += " (Brand like '" + brand + "') and ";
@@ -323,6 +326,9 @@ public class VehicleService extends BaseService {
             pre += " (Category like '" + category + "') and ";
         }
         pre += " 1=1 ";
+         if(avaiableonly){
+            pre+=" and Quantity>0 ";
+        }
         return pre;
     }
 

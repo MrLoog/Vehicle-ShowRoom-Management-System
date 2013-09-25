@@ -73,9 +73,9 @@ public class VehicleManagement extends javax.swing.JPanel {
         String brand = (String) cbbrand.getSelectedItem();
         String category = (String) cbbcategory.getSelectedItem();
         if (search.equals("")) {
-            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionFilter(brand, category), Main.PerPage, page, totalpage);
+            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionFilter(brand, category,jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         } else {
-            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionSearch(search, brand, category), Main.PerPage, page, totalpage);
+            pagingsql = service.BuildPagingSql(service.getTableName(), service.getConditionSearch(search, brand, category,jCheckBox1.isSelected()), Main.PerPage, page, totalpage);
         }
         List<Vehicle> lst = service.executeQuery(pagingsql);
         tableModel.setData(lst);
@@ -156,6 +156,7 @@ public class VehicleManagement extends javax.swing.JPanel {
         comboVehicle = new javax.swing.JComboBox();
         txtKeyword = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
         cbbrand = new javax.swing.JComboBox();
         cbbcategory = new javax.swing.JComboBox();
         btnNew = new javax.swing.JButton();
@@ -212,6 +213,14 @@ public class VehicleManagement extends javax.swing.JPanel {
             }
         });
         jPanel1.add(btnSearch);
+
+        jCheckBox1.setText("Avaible");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jCheckBox1);
 
         cbbrand.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbbrand.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -346,6 +355,12 @@ public class VehicleManagement extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKeywordActionPerformed
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+        fillData(1);
+        fillPage();
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
@@ -355,6 +370,7 @@ public class VehicleManagement extends javax.swing.JPanel {
     private javax.swing.JComboBox cbbrand;
     private javax.swing.JComboBox comboVehicle;
     private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableVehicle;
