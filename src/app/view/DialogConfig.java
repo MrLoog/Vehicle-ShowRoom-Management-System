@@ -10,8 +10,10 @@
  */
 package app.view;
 
+import app.utility.AppUtility;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -194,6 +196,14 @@ public class DialogConfig extends javax.swing.JDialog {
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
     private void read(){
+        File f = new File("src\\databaseconnection.vsm");
+        if(!f.exists()){
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
