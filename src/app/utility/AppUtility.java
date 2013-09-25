@@ -31,17 +31,17 @@ public class AppUtility {
     private static Connection conn;
 //    private static final String username = "admin";
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         if (conn == null) {
             loadConnection();
         }
         return conn;
     }
 
-    private static void loadConnection(){
+    private static void loadConnection() {
         BufferedReader br = null;
-        File f = new File("src\\databaseconnection.vsm");
-        if(!f.exists()){
+        File f = new File(AppUtility.getCurrentDir() + "\\databaseconnection.vsm");
+        if (!f.exists()) {
             try {
                 f.createNewFile();
             } catch (IOException ex) {
@@ -49,44 +49,53 @@ public class AppUtility {
             }
         }
         try {
-            br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
+            br = new BufferedReader(new FileReader(AppUtility.getCurrentDir() + "\\databaseconnection.vsm"));
             String driver = br.readLine();
             String url = br.readLine();
             String username = br.readLine();
             String password = br.readLine();
             String databasename = br.readLine();
-            url = url +";database="+ databasename;
+            url = url + ";database=" + databasename;
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
-        } catch(Exception e){
-        } 
-    }
-    
-    public static boolean testConnection(){
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
-            String driver = br.readLine();
-            String url = br.readLine();
-            String username = br.readLine();
-            String password = br.readLine();
-            String databasename = br.readLine();
-            url = url +";database="+ databasename;
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
-        } catch(Exception e){
-          return false;
+        } catch (Exception e) {
         }
-        if(conn!=null){
+    }
+
+    public static boolean testConnection() {
+        BufferedReader br = null;
+        File f = new File(AppUtility.getCurrentDir() + "\\databaseconnection.vsm");
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            br = new BufferedReader(new FileReader(AppUtility.getCurrentDir() + "\\databaseconnection.vsm"));
+            String driver = br.readLine();
+            String url = br.readLine();
+            String username = br.readLine();
+            String password = br.readLine();
+            String databasename = br.readLine();
+            url = url + ";database=" + databasename;
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, username, password);
+        } catch (Exception e) {
+            return false;
+        }
+        if (conn != null) {
             try {
                 conn.close();
-                conn=null;
+                conn = null;
             } catch (SQLException ex) {
                 Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return true;
     }
+
     public static boolean isNumber(String s) {
         try {
             Integer.parseInt(s);
@@ -202,7 +211,8 @@ public class AppUtility {
         }
         return output;
     }
-    public String getCurrentDir(){
+
+    public static String getCurrentDir() {
         String currentDir = System.getProperty("user.dir");
         return currentDir;
     }

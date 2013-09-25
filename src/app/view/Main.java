@@ -56,7 +56,7 @@ public class Main extends javax.swing.JFrame {
             br = new BufferedReader(new FileReader("src\\config.settings"));
             String perpage = br.readLine();
             String statistictop = br.readLine();
-            Main.PerPage=Integer.parseInt(perpage.split("=")[1]);
+             Main.PerPage=Integer.parseInt(perpage.split("=")[1]);
              Main.LIMIT=Integer.parseInt(statistictop.split("=")[1]);
         } catch (IOException ex) {
             Main.PerPage=5;

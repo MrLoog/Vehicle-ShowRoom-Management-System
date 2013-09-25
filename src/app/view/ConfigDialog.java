@@ -4,7 +4,9 @@
  */
 package app.view;
 
+import app.utility.AppUtility;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -161,6 +163,14 @@ public class ConfigDialog extends javax.swing.JDialog {
             perpage = Integer.parseInt(jTextField1.getText());
             top = Integer.parseInt(jTextField2.getText());
             BufferedWriter bw = null;
+            File f = new File(AppUtility.getCurrentDir() + "\\config.settings");
+            if (!f.exists()) {
+                try {
+                    f.createNewFile();
+                } catch (IOException ex) {
+                    Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             try {
                 bw = new BufferedWriter(new FileWriter("src\\config.settings"));
                 bw.write("PerPage=" + perpage + "\r\n");

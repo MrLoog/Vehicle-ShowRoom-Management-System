@@ -28,13 +28,17 @@ import java.util.logging.Logger;
  */
 public class DialogConfig extends javax.swing.JDialog {
     /** Creates new form DialogConfig */
+    private static final String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    private static final String servername="jdbc:sqlserver://localhost";
+    private static final String database ="ShowRoom";
+    private static final String username ="sa";
+    private static final String password ="123456";
     public DialogConfig(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         read();
         this.setLocationRelativeTo(parent);
     }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -57,6 +61,7 @@ public class DialogConfig extends javax.swing.JDialog {
         pwd = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -96,10 +101,10 @@ public class DialogConfig extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtDB)
                     .addComponent(pwd)
-                    .addComponent(txtDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                    .addComponent(txtDriver)
                     .addComponent(txtURL)
                     .addComponent(txtUserName))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(130, 130, 130))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,17 +147,30 @@ public class DialogConfig extends javax.swing.JDialog {
             }
         });
 
+        jButton3.setText("Default");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(156, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(35, 35, 35)
-                .addComponent(jButton2)
-                .addGap(137, 137, 137))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +179,8 @@ public class DialogConfig extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -176,6 +195,15 @@ public class DialogConfig extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        txtDriver.setText(driver);
+        txtURL.setText(servername);
+        txtDB.setText(database);
+        txtUserName.setText(username);
+        pwd.setText(password);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -183,6 +211,7 @@ public class DialogConfig extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -196,7 +225,7 @@ public class DialogConfig extends javax.swing.JDialog {
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
     private void read(){
-        File f = new File("src\\databaseconnection.vsm");
+        File f = new File(AppUtility.getCurrentDir()+"\\databaseconnection.vsm");
         if(!f.exists()){
             try {
                 f.createNewFile();
@@ -206,7 +235,7 @@ public class DialogConfig extends javax.swing.JDialog {
         }
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
+            br = new BufferedReader(new FileReader(AppUtility.getCurrentDir()+"\\databaseconnection.vsm"));
             String driver = br.readLine();
             String url = br.readLine();
             String userName = br.readLine();
@@ -235,7 +264,7 @@ public class DialogConfig extends javax.swing.JDialog {
             String userName = txtUserName.getText();
             String password = new String(pwd.getPassword());
             String databasename = txtDB.getText();
-            bw =new BufferedWriter(new FileWriter("src\\databaseconnection.vsm"));
+            bw =new BufferedWriter(new FileWriter(AppUtility.getCurrentDir()+"\\databaseconnection.vsm"));
             bw.write(driver+"\r\n");
             bw.write(url+"\r\n");
             bw.write(userName+"\r\n");
