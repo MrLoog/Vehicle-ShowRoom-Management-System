@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -153,6 +154,27 @@ public class AppUtility {
     }
 
     public static String EncryptPassword(String password) {
+        String s = "";
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            try {
+                md.update(password.getBytes("iso-8859-1"));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            byte[] hash = md.digest();
+            StringBuilder sb = new StringBuilder(2*hash.length); 
+            for(byte b : hash){ 
+                sb.append(String.format("%02x", b&0xff)); 
+            } 
+            s = sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return s;
+    }
+    
+    public static String EncryptPasswordOld(String password) {
         String s = "";
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

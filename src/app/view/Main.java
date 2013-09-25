@@ -224,6 +224,8 @@ public class Main extends javax.swing.JFrame {
             viewsales = new SalesServiceV2();
         }
         jPanel3.removeAll();
+        viewshowroom=null;
+        adminManage=null;
         jPanel3.add(viewsales);
         BodyChanged();
     }
@@ -232,6 +234,8 @@ public class Main extends javax.swing.JFrame {
         if (viewshowroom == null) {
             viewshowroom = new ManageShowroomV2();
         }
+        viewsales=null;
+        adminManage=null;
         jPanel3.removeAll();
         jPanel3.add(viewshowroom);
         BodyChanged();
@@ -241,6 +245,8 @@ public class Main extends javax.swing.JFrame {
         if (adminManage == null) {
             adminManage = new AdminManageV2();
         }
+        viewsales=null;
+        viewshowroom=null;
         jPanel3.removeAll();
         jPanel3.add(adminManage);
         BodyChanged();

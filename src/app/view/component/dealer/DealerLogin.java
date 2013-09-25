@@ -119,6 +119,7 @@ public class DealerLogin extends javax.swing.JPanel {
                     jLabel4.setText("Login Name is not exists or lock");
                 } else {
                     for (Dealer d : matchdealer) {
+                        
                         if (d.getPassword().equals(AppUtility.EncryptPassword(new String(jPasswordField1.getPassword())))) {
 //                    if (d.getPassword().equals(new String(jPasswordField1.getPassword()))) {
 

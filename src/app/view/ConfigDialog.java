@@ -172,7 +172,7 @@ public class ConfigDialog extends javax.swing.JDialog {
                 }
             }
             try {
-                bw = new BufferedWriter(new FileWriter("src\\config.settings"));
+                bw = new BufferedWriter(new FileWriter(AppUtility.getCurrentDir() +"\\config.settings"));
                 bw.write("PerPage=" + perpage + "\r\n");
                 bw.write("LIMIT=" + top + "\r\n");
                 JOptionPane.showMessageDialog(this, "Save settings success.");
