@@ -216,39 +216,39 @@ Customer cu = null;
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeActionPerformed
-        String name = txtName.getText();
-        String addr = txtAddress.getText();
-        String phone = txtPhone.getText();
-        boolean flag = true;
-        if (name == "" || name.length() < 4 || name.length()>100) {
-            eName.setText("Name invalid, min: 5 chars, max: 100 chars");
-            flag = false;
-        }
-        if (addr == "" || addr.length() < 6 || addr.length()>100) {
-            eAddress.setText("Address invalid, min 6 chars, max: 100 chars");
-            flag = false;
-        }
-        if (phone == "" || phone.length() < 5 || phone.length()>20 || !isNumeric(phone)) {
-            ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars.");
-            flag = false;
-        }
-        if (flag == true) {
-            reset();
-            boolean r = AppUtility.isExistAnObject("SELECT * FROM Customers WHERE name = N'" + name + "' and phone = '" + phone + "'", AppUtility.getConnection());
-            System.out.println("K: "+r);
-            if (r) {
-                JOptionPane.showMessageDialog(rootPane, "Existed "+name+" with phone number: "+phone+"! Can not update.");
-            }else{
-            cu.setName(name);
-            cu.setAddress(addr);
-            cu.setPhone(phone);
-            if(sv.update(cu)){
-                lbOK.setText("Changed to: "+name);
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Error! Can not update.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            }
-        }
+//        String name = txtName.getText();
+//        String addr = txtAddress.getText();
+//        String phone = txtPhone.getText();
+//        boolean flag = true;
+//        if (name == "" || name.length() < 4 || name.length()>100) {
+//            eName.setText("Name invalid, min: 5 chars, max: 100 chars");
+//            flag = false;
+//        }
+//        if (addr == "" || addr.length() < 6 || addr.length()>100) {
+//            eAddress.setText("Address invalid, min 6 chars, max: 100 chars");
+//            flag = false;
+//        }
+//        if (phone == "" || phone.length() < 5 || phone.length()>20 || !isNumeric(phone)) {
+//            ePhone.setText("Phone number invalid, min: 6 numbers, max: 20 chars.");
+//            flag = false;
+//        }
+//        if (flag == true) {
+//            reset();
+//            boolean r = AppUtility.isExistAnObject("SELECT * FROM Customers WHERE name = N'" + name + "' and phone = '" + phone + "'", AppUtility.getConnection());
+//            System.out.println("K: "+r);
+//            if (r) {
+//                JOptionPane.showMessageDialog(rootPane, "Existed "+name+" with phone number: "+phone+"! Can not update.");
+//            }else{
+//            cu.setName(name);
+//            cu.setAddress(addr);
+//            cu.setPhone(phone);
+//            if(sv.update(cu)){
+//                lbOK.setText("Changed to: "+name);
+//            }else{
+//                JOptionPane.showMessageDialog(rootPane, "Error! Can not update.", "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//            }
+//        }
     }//GEN-LAST:event_btnChangeActionPerformed
     
     /**

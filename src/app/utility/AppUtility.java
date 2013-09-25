@@ -30,14 +30,14 @@ public class AppUtility {
     private static Connection conn;
 //    private static final String username = "admin";
 
-    public static Connection getConnection() {
+    public static Connection getConnection(){
         if (conn == null) {
             loadConnection();
         }
         return conn;
     }
 
-    private static void loadConnection() {
+    private static void loadConnection(){
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
@@ -49,15 +49,35 @@ public class AppUtility {
             url = url +";database="+ databasename;
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
-        } catch (SQLException ex) {
-            Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
-        }catch(Exception e){
-            Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, e);
-        }
+        } catch(Exception e){
+        } 
     }
-
+    
+    public static boolean testConnection(){
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("src\\databaseconnection.vsm"));
+            String driver = br.readLine();
+            String url = br.readLine();
+            String username = br.readLine();
+            String password = br.readLine();
+            String databasename = br.readLine();
+            url = url +";database="+ databasename;
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, username, password);
+        } catch(Exception e){
+          return false;
+        }
+        if(conn!=null){
+            try {
+                conn.close();
+                conn=null;
+            } catch (SQLException ex) {
+                Logger.getLogger(AppUtility.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return true;
+    }
     public static boolean isNumber(String s) {
         try {
             Integer.parseInt(s);
